@@ -191,6 +191,13 @@
   .scelto{background:var(--surface);border:2px solid var(--teal);border-radius:18px;padding:14px 16px;margin:12px 0;box-shadow:var(--shadow)}
   .scelto .nome{font-weight:700;font-size:1.1rem}
   .riga.sel{border:2px solid var(--teal)}
+
+  /* orologi Italia / Giappone */
+  .orologi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+  .orologi div{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+  .orologi span{display:block;font-size:.85rem;font-weight:600;color:var(--muted)}
+  .orologi b{display:block;font-family:var(--disp);font-weight:800;font-size:1.7rem;line-height:1.15}
+  .orologi i{display:block;font-style:normal;font-size:.85rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -209,7 +216,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '1.8.1';
+const VERSIONE = '1.9.0';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -470,6 +477,26 @@ function bottoneCuore(k, rec){
   return `<button class="cuore ${haCuore(rec) ? 'on' : ''}" data-a="pref" data-k="${k}" data-id="${rec.id}" aria-label="Preferito">${ic('cuore')}${n || ''}</button>`;
 }
 
+/* ---------- orologi Italia / Giappone ---------- */
+const FUSI = [['it', 'Italia', 'Europe/Rome'], ['jp', 'Giappone', 'Asia/Tokyo']];
+function oraIn(tz){
+  const d = new Date();
+  return { ora: d.toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit', timeZone:tz }),
+    giorno: d.toLocaleDateString('it-IT', { weekday:'short', day:'numeric', month:'short', timeZone:tz }) };
+}
+function orologiHTML(){
+  return `<div class="orologi">${FUSI.map(([k, nome, tz]) => { const o = oraIn(tz);
+    return `<div><span>${nome}</span><b id="ora-${k}" class="num">${o.ora}</b><i id="giorno-${k}">${o.giorno}</i></div>`; }).join('')}</div>`;
+}
+function aggiornaOrologi(){
+  for(const [k, , tz] of FUSI){
+    const b = document.getElementById('ora-' + k), i = document.getElementById('giorno-' + k);
+    if(!b) return;
+    const o = oraIn(tz); b.textContent = o.ora; i.textContent = o.giorno;
+  }
+}
+setInterval(aggiornaOrologi, 15000);
+
 /* ---------- programma ---------- */
 function vistaProgramma(){
   const v = D.viaggio || {}, oggi = oggiISO();
@@ -485,7 +512,7 @@ function vistaProgramma(){
     return `<div style="--n:${n};--c:${esc(t.colore)}"><b>${esc(t.citta)}</b><span>${n} ${n === 1 ? 'notte' : 'notti'}</span></div>`; }).join('');
   const gOggi = giorni.find(g => g.data === oggi);
   return `<div class="titolo">Il viaggio</div>
-    <div class="hero"><div class="grande">${grande}</div><div class="sotto">${sotto}</div><div class="tappe">${tappe}</div></div>
+    <div class="hero"><div class="grande">${grande}</div><div class="sotto">${sotto}</div>${orologiHTML()}<div class="tappe">${tappe}</div></div>
     ${gOggi ? sezione('Oggi') + rigaGiorno(gOggi, giorni.indexOf(gOggi), oggi) : ''}
     ${sezione('Giorno per giorno', piu('nuovoGiorno', '', 'Aggiungi'))}
     ${giorni.map((g, i) => rigaGiorno(g, i, oggi)).join('')}`;
