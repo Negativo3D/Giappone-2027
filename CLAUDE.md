@@ -27,7 +27,7 @@ Gli utenti modificano quasi tutto dall'app. Ricostruire il blocco cifrato serve 
 
 ## Modello dei dati
 
-Raccolte: `viaggiatori`, `tappe`, `giorni` (con `voci` collegate ai `luoghi` tramite `l`), `alloggi`, `voli`, `luoghi`, `todo`, `budget`, `spese`, `info`, più l'oggetto `viaggio`.
+Raccolte: `viaggiatori`, `tappe`, `giorni` (con `voci` collegate ai `luoghi` tramite `l`), `alloggi`, `voli`, `luoghi`, `info`, più l'oggetto `viaggio`. Le sezioni Spese e Da fare sono state tolte su richiesta dell'utente: `todo`, `budget` e `spese` restano nei dati ma non si vedono.
 - Ogni elemento ha `id`, `agg` (ora dell'ultima modifica), `da` (chi l'ha fatta) e, se eliminato, `del: true`.
 - Nell'unione tra telefono, cloud e blocco cifrato vince, elemento per elemento, la modifica più recente (funzione `unisci`).
 
@@ -44,6 +44,10 @@ Usa Supabase via REST, di default sulla stessa tabella di CHO (`cho_sync`: `codi
 - Quando cambia l'app, aumenta `VERSIONE` in `index.html` e il nome di `CACHE` in `sw.js`.
 - Provala su un telefono simulato (Playwright, viewport iPhone) servendo la cartella con `python3 -m http.server`.
 - Per la sincronizzazione, intercetta le chiamate a Supabase con un finto server in memoria, come in `strumenti/prova.mjs`.
+
+## Spirito dell'app
+
+L'app è un **compagno di viaggio pratico**: dice dove andare oggi, apre la mappa, ricorda l'hotel della notte. Non deve essere assillante: niente scadenze in evidenza, contatori, avvisi rossi, promemoria o liste di cose da fare. Le sezioni Spese e Da fare sono state tolte apposta. Prima di aggiungere qualcosa chiediti: serve davvero mentre si è in giro?
 
 ## Stile grafico
 

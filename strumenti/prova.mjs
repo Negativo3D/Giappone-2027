@@ -61,14 +61,7 @@ await A.click('[data-a=statoH][data-id=h09][data-v=prenotato]'); await A.waitFor
 await shot(A, '07-hotel');
 await A.click('[data-a=chiudi]');
 await A.click('[data-a=altre][data-v=hakone]'); await A.click('[data-a=dett][data-id=h10]'); await A.waitForTimeout(300); await shot(A, '07b-hotel-avviso'); await A.click('[data-a=chiudi]');
-await A.click('[data-a=tab][data-v=todo]'); await A.waitForTimeout(400); await shot(A, '08-todo');
-await A.click('[data-a=todo][data-id=t02]');
-await A.click('[data-a=tab][data-v=spese]');
-await A.click('[data-a=nuovo][data-k=spese]');
-await A.fill('[name=descr]', 'Cena Chibo'); await A.fill('[name=importo]', '9800'); await A.selectOption('[name=valuta]', 'JPY');
-await A.click('[data-a=salvaModulo]');
-await A.waitForTimeout(2500);
-await shot(A, '09-spese');
+await A.waitForTimeout(2500); // sincronizzazione automatica
 await A.click('[data-a=tab][data-v=programma]'); await A.waitForTimeout(300);
 
 // --- telefono B: entra con il link d'invito e vede le modifiche di A
@@ -81,13 +74,13 @@ await B.click('[data-a=chiudi]');
 await B.waitForTimeout(1500);
 const vistaB = await B.evaluate(() => ({
   nota: trova('giorni', 'g04').note, pref: trova('luoghi', 'l13').pref, hakone: trova('alloggi', 'h09').stato,
-  todo: trova('todo', 't02').fatto, spese: vis('spese').map(s => s.descr), hash: location.hash
+  hash: location.hash
 }));
 // B modifica, A riceve
-await B.evaluate(() => { const r = { ...trova('todo', 't03') }; r.fatto = true; salva('todo', r); });
+await B.evaluate(() => { const r = { ...trova('luoghi', 'l01') }; r.note = 'Andiamoci la prima sera'; salva('luoghi', r); });
 await B.waitForTimeout(2500);
 await A.evaluate(() => syncOra(true)); await A.waitForTimeout(1500);
-const vistaA = await A.evaluate(() => ({ t03: trova('todo', 't03').fatto, daChi: nomeDi(trova('todo', 't03').da) }));
+const vistaA = await A.evaluate(() => ({ notaL01: trova('luoghi', 'l01').note, daChi: nomeDi(trova('luoghi', 'l01').da) }));
 const cloud = [...db.values()][0];
 console.log(JSON.stringify({ vistaB, vistaA, cloudCifrato: !/Hakone|Ichinoyu/.test(cloud.dati), invito: invito.replace(/c=[^&]+/, 'c=…'), errori }, null, 1));
 await browser.close();

@@ -198,7 +198,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '1.2.0';
+const VERSIONE = '1.4.0';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -388,7 +388,7 @@ const ICO = {
 const ic = (n, cls) => `<svg viewBox="0 0 24 24"${cls ? ` class="${cls}"` : ''}>${ICO[n] || ''}</svg>`;
 
 const TABS = [
-  ['programma','cal','Programma'], ['luoghi','pin','Luoghi'], ['viaggio','aereo','Voli e hotel'], ['todo','check','Da fare'], ['spese','wallet','Spese']
+  ['programma','cal','Programma'], ['luoghi','pin','Luoghi'], ['viaggio','aereo','Voli e hotel']
 ];
 const sezione = (titolo, azione) => `<div class="sec">${titolo}${azione || ''}</div>`;
 const piu = (a, k, t) => `<button class="agg" data-a="${a}"${k ? ` data-k="${k}"` : ''}>${ic('piu')}${t}</button>`;
@@ -406,7 +406,7 @@ function render(){
   S.anim = S.animProssimo; S.animProssimo = false;
   const app = document.getElementById('app');
   if(!cfg.codice || !D){ app.innerHTML = vistaBlocco(); return; }
-  const corpo = { programma:vistaProgramma, luoghi:vistaLuoghi, viaggio:vistaViaggio, todo:vistaTodo, spese:vistaSpese }[S.tab]();
+  const corpo = ({ programma:vistaProgramma, luoghi:vistaLuoghi, viaggio:vistaViaggio }[S.tab] || vistaProgramma)();
   app.innerHTML = `
     <header class="topbar"><div class="wrap">
       <span class="dot"></span><div class="brand">${esc((D.viaggio && D.viaggio.titolo) || 'Giappone 2027')}</div>
@@ -458,14 +458,10 @@ function vistaProgramma(){
   else{ grande = 'Bentornati!'; sotto = `${giorni.length} giorni in Giappone`; }
   const tappe = tappeNotte().map(t => { const n = giorniTra(t.dal, t.al);
     return `<div style="--n:${n};--c:${esc(t.colore)}"><b>${esc(t.citta)}</b><span>${n} ${n === 1 ? 'notte' : 'notti'}</span></div>`; }).join('');
-  const aperte = vis('todo').filter(t => !t.fatto).length;
   const gOggi = giorni.find(g => g.data === oggi);
   return `<div class="titolo">Il viaggio</div>
     <div class="hero"><div class="grande">${grande}</div><div class="sotto">${sotto}</div><div class="tappe">${tappe}</div></div>
     ${gOggi ? sezione('Oggi') + rigaGiorno(gOggi, giorni.indexOf(gOggi), oggi) : ''}
-    ${prima && aperte ? `<div style="margin-top:12px"><button class="riga" data-a="tab" data-v="todo" style="--c:var(--c-orange)">
-      <div class="ic">${ic('check')}</div><div class="testo"><div class="nome">${aperte} cose da preparare</div>
-      <div class="info">Prenotazioni e scadenze</div></div><span class="vai">${ic('chev-r')}</span></button></div>` : ''}
     ${sezione('Giorno per giorno', piu('nuovoGiorno', '', 'Aggiungi'))}
     ${giorni.map((g, i) => rigaGiorno(g, i, oggi)).join('')}`;
 }
@@ -511,7 +507,7 @@ function vistaViaggio(){
       (sc ? rigaAlloggio(sc) : '') +
       (altre.length ? (sc && !aperte ? `<button class="altre" data-a="altre" data-v="${t.id}">${ic('chev')}Vedi altre ${altre.length} proposte</button>` : altre.map(rigaAlloggio).join('')) : '');
   }).join('');
-  return `<div class="titolo">Voli e hotel</div><p class="sottotitolo">Tocca un hotel per sceglierlo o segnarlo come prenotato.</p>
+  return `<div class="titolo">Voli e hotel</div><p class="sottotitolo">Tocca un volo o un hotel per i dettagli.</p>
     ${sezione('Voli', piu('nuovo', 'voli', 'Aggiungi'))}
     ${voli.map(rigaVolo).join('') || '<div class="vuoto">Nessun volo inserito.</div>'}
     ${sezione('Hotel', piu('nuovo', 'alloggi', 'Aggiungi'))}
@@ -522,12 +518,11 @@ function vistaViaggio(){
 }
 function rigaVolo(v){
   const ora = s => s ? s.slice(11, 16) : '';
-  const vuoto = !v.numero && !v.compagnia;
   return `<button class="riga" style="--c:${v.tipo === 'ritorno' ? 'var(--c-purple)' : 'var(--c-blue)'}" data-a="dett" data-k="voli" data-id="${v.id}">
     <div class="ic">${ic('aereo')}</div>
     <div class="testo"><div class="nome">${esc(v.tipo === 'ritorno' ? 'Ritorno' : v.tipo === 'andata' ? 'Andata' : 'Volo')} · ${fmtD(v.data, { day:'numeric', month:'long' })}</div>
       <div class="info">${esc(v.da)} → ${esc(v.a)}${ora(v.partenza) ? ' · ' + ora(v.partenza) : ''}</div>
-      ${vuoto ? '<span class="badge giallo">Da completare</span>' : ''}</div>
+      </div>
     <span class="vai">${ic('chev-r')}</span></button>`;
 }
 function rigaAlloggio(h){
@@ -539,62 +534,6 @@ function rigaAlloggio(h){
       ${att ? '<span class="badge giallo">Leggi l’avviso</span>' : ''}
       ${quantiCuori(h).length ? `<span class="badge rosso">${quantiCuori(h).length} ♥</span>` : ''}</div>
     ${h.prezzo ? `<div class="prezzo num">${eur(h.prezzo)}</div>` : ''}</button>`;
-}
-
-/* ---------- da fare ---------- */
-function rigaTodo(t){
-  const oggi = oggiISO(), n = t.entro ? giorniTra(oggi, t.entro) : null;
-  const quando = t.fatto ? (t.da && nomeDi(t.da) ? 'Fatto da ' + esc(nomeDi(t.da)) : 'Fatto') :
-    n == null ? '' : n < 0 ? 'Scaduto il ' + fmtD(t.entro) : n === 0 ? 'Entro oggi' : 'Entro il ' + fmtD(t.entro) + (n <= 30 ? ` (tra ${n} giorni)` : '');
-  return `<div class="riga ${t.fatto ? 'fatto' : ''}">
-    <button class="spunta ${t.fatto ? 'on' : ''}" data-a="todo" data-id="${t.id}" aria-label="Segna come fatto">${t.fatto ? ic('ok') : ''}</button>
-    <button class="testo" data-a="mod" data-k="todo" data-id="${t.id}"><div class="nome" style="font-weight:600">${esc(t.testo)}</div>
-      ${quando ? `<div class="scad ${!t.fatto && n != null && n <= 7 ? 'rossa' : ''}">${quando}</div>` : ''}</button></div>`;
-}
-function vistaTodo(){
-  const T = vis('todo'), fatti = T.filter(t => t.fatto).length, pc = T.length ? Math.round(100 * fatti / T.length) : 0;
-  const daFare = T.filter(t => !t.fatto).sort((a, b) => (a.entro || '9').localeCompare(b.entro || '9'));
-  const fatte = T.filter(t => t.fatto);
-  return `<div class="titolo">Da fare</div><p class="sottotitolo">${fatti} fatte su ${T.length}. Tocca il quadrato quando hai finito.</p>
-    <div class="barra"><i style="width:${pc}%"></i></div>
-    ${sezione('Da preparare', piu('nuovo', 'todo', 'Aggiungi'))}
-    ${daFare.map(rigaTodo).join('') || '<div class="vuoto">Tutto fatto!</div>'}
-    ${fatte.length ? sezione('Già fatte') + fatte.map(rigaTodo).join('') : ''}`;
-}
-
-/* ---------- spese ---------- */
-function previstoAlloggi(){
-  let tot = 0, stima = false;
-  for(const t of tappeNotte()){
-    const opz = vis('alloggi').filter(h => h.tappa === t.id && h.prezzo);
-    const s = alloggioDiTappa(t.id);
-    if(s && s.prezzo) tot += Number(s.prezzo);
-    else if(opz.length){ tot += Math.min(...opz.map(h => Number(h.prezzo))); stima = true; }
-  }
-  return { tot, stima };
-}
-const COL_BUDGET = ['var(--teal)', 'var(--c-orange)', 'var(--c-blue)', 'var(--c-purple)', 'var(--c-amber)', 'var(--c-cyan)'];
-function vistaSpese(){
-  const B = vis('budget'), SP = vis('spese').sort((a, b) => (b.data || '').localeCompare(a.data || '') || (b.agg || 0) - (a.agg || 0));
-  const pa = previstoAlloggi();
-  const prev = b => b.auto ? pa.tot : Number(b.previsto || 0);
-  const speso = id => SP.filter(s => s.cat === id).reduce((n, s) => n + inEuro(s), 0);
-  const totPrev = B.reduce((n, b) => n + prev(b), 0), totSpeso = SP.reduce((n, s) => n + inEuro(s), 0);
-  return `<div class="titolo">Spese</div><p class="sottotitolo">Per tutta la famiglia, voli esclusi.</p>
-    <div class="hero"><div class="grande num">${eur(totSpeso)}</div><div class="sotto">spesi finora, su ${eur(totPrev)} previsti</div>
-      <div class="barra" style="margin-top:14px"><i class="${totSpeso > totPrev ? 'oltre' : ''}" style="width:${totPrev ? Math.min(100, 100 * totSpeso / totPrev) : 0}%"></i></div></div>
-    <button class="btn primary full" style="margin-top:14px" data-a="nuovo" data-k="spese">${ic('piu')}Aggiungi una spesa</button>
-    ${sezione('Per categoria')}
-    ${B.map((b, i) => { const p = prev(b), s = speso(b.id);
-      return `<button class="riga" style="--c:${COL_BUDGET[i % COL_BUDGET.length]};display:block" data-a="${b.auto ? 'tab' : 'mod'}" ${b.auto ? 'data-v="viaggio"' : `data-k="budget" data-id="${b.id}"`}>
-        <div style="display:flex;align-items:baseline;gap:8px"><span class="nome" style="flex:1">${esc(b.nome)}</span>
-          <b class="num">${eur(s)}</b><span class="info num">di ${eur(p)}</span></div>
-        <div class="barra" style="margin-top:10px"><i class="${s > p && p ? 'oltre' : ''}" style="width:${p ? Math.min(100, 100 * s / p) : 0}%;background:${s > p && p ? '' : 'var(--c)'}"></i></div></button>`; }).join('')}
-    ${SP.length ? sezione('Ultime spese') + SP.map(s => { const b = trova('budget', s.cat);
-      return `<button class="riga" data-a="mod" data-k="spese" data-id="${s.id}">
-        <div class="testo"><div class="nome">${esc(s.descr)}</div><div class="info">${[fmtD(s.data, { day:'numeric', month:'short' }), b && esc(b.nome), s.chi && esc(nomeDi(s.chi))].filter(Boolean).join(' · ')}</div></div>
-        <div class="prezzo num">${s.valuta === 'JPY' ? yen(s.importo) : eur(s.importo)}${s.valuta === 'JPY' ? `<div class="info" style="font-weight:500">${eur(inEuro(s))}</div>` : ''}</div></button>`; }).join('') : ''}
-    <p class="nota-pie">Cambio usato: 1 € = ${cambio()} ¥. Si cambia dalle impostazioni.</p>`;
 }
 
 /* =========================== FOGLI =========================== */
@@ -722,7 +661,7 @@ function foglioDettaglio(){
         <div style="flex:1"><div class="etichetta">Partenza</div><p><b>${esc(r.da)}</b></p><div class="titolo num" style="margin:4px 0 0;font-size:1.5rem">${ora(r.partenza)}</div></div>
         <div style="flex:1;text-align:right"><div class="etichetta">Arrivo</div><p><b>${esc(r.a)}</b></p><div class="titolo num" style="margin:4px 0 0;font-size:1.5rem">${ora(r.arrivo)}</div></div></div>
       ${righe.length ? `<div class="blocco">${righe.map(([e, v]) => `<div class="etichetta" style="margin-top:8px">${e}</div><p>${esc(v)}</p>`).join('')}</div>`
-        : `<div class="avviso">${ic('allerta')}<span>Mancano i dati del biglietto: tocca Modifica e inserisci compagnia, numero del volo e orari.</span></div>`}
+        : `<div class="blocco"><p style="color:var(--muted)">Quando avete i biglietti, tocca Modifica e aggiungi compagnia, numero del volo e orari.</p></div>`}
       ${modifica}`;
   }
   if(k === 'info') return `${testaFoglio(esc(r.titolo))}<div class="blocco"><p style="white-space:pre-line">${esc(r.testo)}</p></div>${modifica}`;
@@ -773,7 +712,6 @@ function foglioImpostazioni(){
     <button class="btn full" data-a="syncManuale">${ic('sync')}Sincronizza ora</button>
     ${S.esitoImp ? `<p class="esito">${esc(S.esitoImp)}</p>` : ''}
     <div class="sec">Altro</div>
-    <label class="campo"><span>Cambio: quanti yen per 1 €</span><input type="number" step="0.1" inputmode="decimal" data-ed="viaggio||cambio" value="${esc(cambio())}"></label>
     <div class="due"><button class="btn" data-a="esporta">${ic('giu')}Salva copia</button><button class="btn" data-a="importa">${ic('su')}Carica copia</button></div>
     <button class="btn danger full" style="margin-top:12px" data-a="esci">Esci da questo telefono</button>
     <p class="nota-pie">Versione ${VERSIONE}</p>`;
