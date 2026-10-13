@@ -28,7 +28,7 @@ Gli utenti modificano quasi tutto dall'app. Ricostruire il blocco cifrato serve 
 ## Modello dei dati
 
 Raccolte: `viaggiatori`, `tappe`, `giorni` (con `voci` collegate ai `luoghi` tramite `l`), `alloggi`, `voli`, `luoghi`, `info`, più l'oggetto `viaggio`. Le sezioni Spese e Da fare sono state tolte su richiesta dell'utente: `todo`, `budget` e `spese` restano nei dati ma non si vedono.
-- Ogni elemento ha `id`, `agg` (ora dell'ultima modifica), `da` (chi l'ha fatta) e, se eliminato, `del: true`.
+- Ogni elemento ha `id`, `agg` (ora dell'ultima modifica), `da` (chi l'ha fatta) e, se eliminato, `del: true`. Questi nomi sono riservati: non usarli come campi dei dati (i voli usano `origine` e `destinazione`).
 - Nell'unione tra telefono, cloud e blocco cifrato vince, elemento per elemento, la modifica più recente (funzione `unisci`).
 
 ## Sincronizzazione
@@ -57,5 +57,9 @@ Lo stile è **Odoo** (palette e font delle app O&M dell'utente), in versione **g
 - titoli in **Archivo**, testo in **IBM Plex Sans** a 17px; niente etichette minuscole o in monospazio;
 - **poche informazioni per schermata**: gli elenchi mostrano icona, nome, una riga di contesto e al massimo un'azione; i dettagli stanno in una scheda che si apre al tocco (`foglioDettaglio`, `foglioGiornoVista`);
 - pulsanti alti almeno 46–48px, icone a linea SVG (oggetto `ICO`) in riquadri colorati con `color-mix`, niente emoji nell'interfaccia.
+
+La scheda **Luoghi** si apre su una mappa Google incorporata e fissa in alto (`#mappa-box`, fuori da `#app` per non ricaricarla a ogni tocco); toccando una città o un luogo la mappa si sposta lì. Negli hotel non si mostrano i prezzi; toccando l'hotel si apre il suo sito.
+
+L'animazione d'apertura (samurai originale con kimono bianco, hakama indaco e fascia rossa, che salta e taglia una lanterna) dura circa 4,5 secondi e si salta con un tocco. Non va trasformata in un personaggio esistente.
 
 L'icona dell'app è originale, in stile anime: il sorgente è `strumenti/icona.svg` e i PNG si rigenerano da lì.
