@@ -1,0 +1,5 @@
+# Dati del viaggio in chiaro: MAI nel repository (è pubblico).
+privato/
+.codice
+node_modules/
+.DS_Store
