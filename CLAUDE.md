@@ -60,6 +60,6 @@ Lo stile è **Odoo** (palette e font delle app O&M dell'utente), in versione **g
 
 La scheda **Luoghi** si apre su una mappa Google incorporata e fissa in alto (`#mappa-box`, fuori da `#app` per non ricaricarla a ogni tocco); toccando una città o un luogo la mappa si sposta lì. Negli hotel non si mostrano i prezzi; toccando l'hotel si apre il suo sito.
 
-L'animazione d'apertura (samurai originale con kimono bianco, hakama indaco e fascia rossa, che salta e taglia una lanterna) dura circa 4,5 secondi e si salta con un tocco. Non va trasformata in un personaggio esistente.
+L'animazione d'apertura della samurai è stata tolta perché non piaceva. Se l'utente fornisce un video suo (MP4 verticale, muto, pochi secondi), va mostrato all'avvio con `<video autoplay muted playsinline>`, saltabile con un tocco. Non usare spezzoni o personaggi di film.
 
 L'icona dell'app è originale, in stile anime: il sorgente è `strumenti/icona.svg` e i PNG si rigenerano da lì.
