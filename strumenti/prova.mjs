@@ -29,13 +29,13 @@ const shot = (p, n) => p.screenshot({ path: `${DIR}/${n}.png`, fullPage: false }
 
 // --- telefono A: codice sbagliato, poi giusto
 const A = await telefono('A');
-await A.goto(PAGINA);
+await A.goto(PAGINA); await A.waitForSelector('#taglio', { state:'detached' });
 await A.fill('#codice-in', 'AAAA-BBBB-CCCC-DDDD'); await A.click('[data-a=sblocca]');
 await A.waitForSelector('text=Codice non corretto');
 await shot(A, '01-blocco');
 await A.fill('#codice-in', CODICE.toLowerCase()); await A.click('[data-a=sblocca]');
-await A.waitForSelector('text=Impostazioni');
-await shot(A, '02-chi-sei');
+await A.waitForSelector('text=Giorno per giorno');
+await A.click('[data-a=impostazioni]'); await A.waitForSelector('text=Impostazioni');
 await A.selectOption('[data-cfg=io]', 'p1');
 await A.fill('[data-cfg=url]', 'https://finto.supabase.co'); await A.dispatchEvent('[data-cfg=url]', 'change');
 await A.fill('[data-cfg=key]', 'anon-finta'); await A.dispatchEvent('[data-cfg=key]', 'change');
@@ -44,48 +44,45 @@ await A.waitForSelector('text=Sincronizzato alle');
 await A.click('[data-a=chiudi]');
 await shot(A, '03-programma');
 await A.click('[data-a=apriGiorno][data-id=g04]');
-await A.waitForTimeout(300);
-await A.locator('.area.open').first().screenshot({ path: `${DIR}/04-giorno-aperto.png` });
-// nota condivisa
+await A.waitForSelector('.foglio');
+await A.waitForTimeout(400);
+await shot(A, '04-giorno');
 await A.fill('[data-ed="giorni|g04|note"]', 'Sveglia alle 5:45!'); await A.dispatchEvent('[data-ed="giorni|g04|note"]', 'change');
-await A.click('[data-a=tab][data-v=luoghi]'); await shot(A, '05-luoghi');
-await A.click('[data-a=pref][data-id=l13]');
-await A.click('[data-a=tab][data-v=viaggio]'); await shot(A, '06-voli-hotel');
-await A.click('[data-a=statoH][data-id=h09]');
-await A.click('[data-a=statoH][data-id=h09][data-v=prenotato]');
-await A.locator('text=Hakone').first().scrollIntoViewIfNeeded();
-await shot(A, '07-hotel-hakone');
-await A.click('[data-a=tab][data-v=todo]'); await shot(A, '08-todo');
-await A.click('[data-a=todo][data-id=t02]');
-await A.click('[data-a=tab][data-v=spese]');
-await A.click('[data-a=nuovo][data-k=spese]');
-await A.fill('[name=descr]', 'Cena Chibo'); await A.fill('[name=importo]', '9800'); await A.selectOption('[name=valuta]', 'JPY');
-await A.click('[data-a=salvaModulo]');
-await A.waitForTimeout(2500); // sync automatica
-await shot(A, '09-spese');
-await A.click('[data-a=tab][data-v=programma]');
-await A.click('[data-a=modGiorno][data-id=g04]').catch(async () => { await A.click('[data-a=apriGiorno][data-id=g04]'); await A.click('[data-a=modGiorno][data-id=g04]'); });
-await A.waitForSelector('text=Modifica giorno');
+await A.click('.foglio [data-a=modGiorno]'); await A.waitForSelector('text=Modifica giorno'); await A.waitForTimeout(300);
 await shot(A, '10-modifica-giorno');
 await A.click('[data-a=chiudi]');
+await A.click('[data-a=tab][data-v=luoghi]'); await A.waitForTimeout(400); await shot(A, '05-luoghi');
+await A.click('[data-a=pref][data-id=l13]');
+await A.click('[data-a=dett][data-id=l13] >> nth=1'); await A.waitForSelector('.foglio'); await A.waitForTimeout(300); await shot(A, '05b-luogo');
+await A.click('[data-a=chiudi]');
+await A.click('[data-a=tab][data-v=viaggio]'); await A.waitForTimeout(400); await shot(A, '06-voli-hotel');
+await A.click('[data-a=dett][data-id=h09]'); await A.waitForSelector('.foglio');
+await A.click('[data-a=statoH][data-id=h09][data-v=prenotato]'); await A.waitForTimeout(300);
+await shot(A, '07-hotel');
+await A.click('[data-a=chiudi]');
+await A.click('[data-a=altre][data-v=hakone]'); await A.click('[data-a=dett][data-id=h10]'); await A.waitForTimeout(300); await shot(A, '07b-hotel-avviso'); await A.click('[data-a=chiudi]');
+await A.waitForTimeout(2500); // sincronizzazione automatica
+await A.click('[data-a=tab][data-v=programma]'); await A.waitForTimeout(300);
 
 // --- telefono B: entra con il link d'invito e vede le modifiche di A
 const invito = await A.evaluate(() => linkInvito());
 const B = await telefono('B');
-await B.goto(invito);
-await B.waitForSelector('text=Impostazioni');
-await B.selectOption('[data-cfg=io]', 'p2');
-await B.click('[data-a=chiudi]');
+await B.goto(invito); await B.waitForSelector('#taglio', { state:'detached' });
+await B.waitForSelector('text=Giorno per giorno');
+await B.click('[data-a=tab][data-v=luoghi]');
+await B.click('[data-a=pref][data-id=l14]');
+await B.waitForSelector('text=Chi sei?'); await shot(B, '11-chi-sei');
+await B.click('[data-a=sonoIo][data-id=p2]');
 await B.waitForTimeout(1500);
-const vistaB = await B.evaluate(() => ({
+const vistaB = await B.evaluate(() => ({ sheetChiuso: !S.sheet, cuoreB: trova('luoghi', 'l14').pref,
   nota: trova('giorni', 'g04').note, pref: trova('luoghi', 'l13').pref, hakone: trova('alloggi', 'h09').stato,
-  todo: trova('todo', 't02').fatto, spese: vis('spese').map(s => s.descr), hash: location.hash
+  hash: location.hash
 }));
 // B modifica, A riceve
-await B.evaluate(() => { const r = { ...trova('todo', 't03') }; r.fatto = true; salva('todo', r); });
+await B.evaluate(() => { const r = { ...trova('luoghi', 'l01') }; r.note = 'Andiamoci la prima sera'; salva('luoghi', r); });
 await B.waitForTimeout(2500);
 await A.evaluate(() => syncOra(true)); await A.waitForTimeout(1500);
-const vistaA = await A.evaluate(() => ({ t03: trova('todo', 't03').fatto, daChi: nomeDi(trova('todo', 't03').da) }));
+const vistaA = await A.evaluate(() => ({ notaL01: trova('luoghi', 'l01').note, daChi: nomeDi(trova('luoghi', 'l01').da) }));
 const cloud = [...db.values()][0];
 console.log(JSON.stringify({ vistaB, vistaA, cloudCifrato: !/Hakone|Ichinoyu/.test(cloud.dati), invito: invito.replace(/c=[^&]+/, 'c=…'), errori }, null, 1));
 await browser.close();

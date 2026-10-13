@@ -27,7 +27,7 @@ Gli utenti modificano quasi tutto dall'app. Ricostruire il blocco cifrato serve 
 
 ## Modello dei dati
 
-Raccolte: `viaggiatori`, `tappe`, `giorni` (con `voci` collegate ai `luoghi` tramite `l`), `alloggi`, `voli`, `luoghi`, `todo`, `budget`, `spese`, `info`, più l'oggetto `viaggio`.
+Raccolte: `viaggiatori`, `tappe`, `giorni` (con `voci` collegate ai `luoghi` tramite `l`), `alloggi`, `voli`, `luoghi`, `info`, più l'oggetto `viaggio`. Le sezioni Spese e Da fare sono state tolte su richiesta dell'utente: `todo`, `budget` e `spese` restano nei dati ma non si vedono.
 - Ogni elemento ha `id`, `agg` (ora dell'ultima modifica), `da` (chi l'ha fatta) e, se eliminato, `del: true`.
 - Nell'unione tra telefono, cloud e blocco cifrato vince, elemento per elemento, la modifica più recente (funzione `unisci`).
 
@@ -45,12 +45,17 @@ Usa Supabase via REST, di default sulla stessa tabella di CHO (`cho_sync`: `codi
 - Provala su un telefono simulato (Playwright, viewport iPhone) servendo la cartella con `python3 -m http.server`.
 - Per la sincronizzazione, intercetta le chiamate a Supabase con un finto server in memoria, come in `strumenti/prova.mjs`.
 
+## Spirito dell'app
+
+L'app è un **compagno di viaggio pratico**: dice dove andare oggi, apre la mappa, ricorda l'hotel della notte. Non deve essere assillante: niente scadenze in evidenza, contatori, avvisi rossi, promemoria o liste di cose da fare. Le sezioni Spese e Da fare sono state tolte apposta. Prima di aggiungere qualcosa chiediti: serve davvero mentre si è in giro?
+
 ## Stile grafico
 
-Lo stile è **Odoo**, come le app O&M dell'utente, ed è una scelta già fissata. Va mantenuto in ogni modifica:
-- fondo `#eef4f9` con superfici bianche, bordi `#e4ebf3` e accento teal `#0f8f9a`;
-- titoli in **Archivo**, testo in **IBM Plex Sans**, etichette piccole in **IBM Plex Mono** maiuscolo;
-- icone a linea SVG (oggetto `ICO`) dentro riquadri arrotondati colorati con `color-mix` del colore di categoria. Niente emoji nell'interfaccia;
-- riquadri contatori (`.kpi`), tile (`.app`), righe espandibili (`.area`) e intestazioni di sezione (`.sec-h`).
+Lo stile è **Odoo** (palette e font delle app O&M dell'utente), in versione **grande, ariosa e sempre chiara**. L'utente ha bocciato la versione densa e piccola, quindi va mantenuto così in ogni modifica:
+- **solo tema chiaro**: niente modalità scura, anche se il telefono è impostato in scuro;
+- fondo `#eef4f9`, superfici bianche, bordi `#e4ebf3`, accento teal `#0f8f9a`;
+- titoli in **Archivo**, testo in **IBM Plex Sans** a 17px; niente etichette minuscole o in monospazio;
+- **poche informazioni per schermata**: gli elenchi mostrano icona, nome, una riga di contesto e al massimo un'azione; i dettagli stanno in una scheda che si apre al tocco (`foglioDettaglio`, `foglioGiornoVista`);
+- pulsanti alti almeno 46–48px, icone a linea SVG (oggetto `ICO`) in riquadri colorati con `color-mix`, niente emoji nell'interfaccia.
 
 L'icona dell'app è originale, in stile anime: il sorgente è `strumenti/icona.svg` e i PNG si rigenerano da lì.
