@@ -182,43 +182,7 @@
   .accesso .dot{display:block;width:84px;height:84px;border-radius:22px;margin-bottom:18px}
   .accesso input{text-align:center;letter-spacing:.12em;text-transform:uppercase;font-size:20px}
 
-  /* animazione d'apertura (originale): circa 4,5 secondi, si salta con un tocco */
-  #taglio{position:fixed;inset:0;z-index:100;background:#12040a;animation:t-entra .5s ease both, t-via .6s ease 4s forwards;cursor:pointer}
-  #taglio svg{width:100%;height:100%;display:block}
-  #taglio .t-samurai{transform-box:fill-box;transform-origin:50% 100%;animation:t-salto 2.6s cubic-bezier(.45,0,.35,1) .7s both}
-  #taglio .t-corpo{transform-box:fill-box;transform-origin:50% 60%;animation:t-giro .5s ease-in-out 1.75s both}
-  #taglio .t-coda{transform-box:fill-box;transform-origin:100% 0;animation:t-vento .5s ease-in-out infinite alternate}
-  #taglio .t-lama{stroke-dasharray:520;stroke-dashoffset:520;animation:t-fendente .28s cubic-bezier(.7,0,.3,1) 1.95s forwards, t-spegni .6s ease 2.45s forwards}
-  #taglio .t-meta-su{animation:t-su 1.1s cubic-bezier(.2,.7,.2,1) 2.2s forwards}
-  #taglio .t-meta-giu{animation:t-giu 1.1s cubic-bezier(.2,.7,.2,1) 2.2s forwards}
-  #taglio .t-petali ellipse{opacity:0;transform-box:fill-box;transform-origin:center;animation:t-petalo 1.6s ease-out 2.2s forwards}
-  #taglio .t-luna{animation:t-pulsa 4s ease-in-out both}
-  #taglio .t-titolo{position:absolute;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom));text-align:center;color:#ffe7c4;
-    font-family:var(--disp);font-weight:800;font-size:1.8rem;letter-spacing:.04em;opacity:0;animation:t-titolo .7s ease 2.9s forwards}
-  #taglio .t-salta{position:absolute;left:0;right:0;bottom:calc(46px + env(safe-area-inset-bottom));text-align:center;color:#ffd9c7;
-    font-size:.9rem;opacity:0;animation:t-titolo .6s ease 1s forwards}
-  @keyframes t-entra{from{opacity:0}to{opacity:1}}
-  @keyframes t-salto{
-    0%{transform:none}
-    18%{transform:translate(0,6px) scale(1.04,.9)}
-    30%{transform:translate(30px,-90px) rotate(-6deg)}
-    45%{transform:translate(105px,-330px) rotate(-12deg)}
-    55%{transform:translate(150px,-345px) rotate(4deg)}
-    78%{transform:translate(178px,-40px) rotate(8deg)}
-    86%{transform:translate(185px,6px) scale(1.04,.92)}
-    100%{transform:translate(185px,0)}
-  }
-  @keyframes t-giro{from{transform:none}to{transform:rotate(360deg)}}
-  @keyframes t-vento{from{transform:rotate(-6deg)}to{transform:rotate(10deg)}}
-  @keyframes t-fendente{to{stroke-dashoffset:0}}
-  @keyframes t-spegni{to{opacity:0}}
-  @keyframes t-su{to{transform:translate(-28px,-40px) rotate(-8deg)}}
-  @keyframes t-giu{to{transform:translate(34px,70px) rotate(10deg);opacity:.9}}
-  @keyframes t-petalo{0%{opacity:0;transform:none}12%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
-  @keyframes t-pulsa{0%{opacity:.2}55%{opacity:.75}100%{opacity:.55}}
-  @keyframes t-titolo{to{opacity:1}}
-  @keyframes t-via{to{opacity:0;visibility:hidden}}
-  @media (prefers-reduced-motion:reduce){ #taglio{display:none} }
+
 
   /* mappa fissa nella scheda Luoghi */
   #mappa-box{position:fixed;left:0;right:0;top:calc(63px + env(safe-area-inset-top));height:40vh;z-index:15;background:#dfe7ef;border-bottom:1px solid var(--line)}
@@ -230,81 +194,6 @@
 </style>
 </head>
 <body>
-<!-- Animazione d'apertura (originale): una samurai salta e taglia una lanterna. Si salta con un tocco. -->
-<div id="taglio" aria-hidden="true">
-  <svg viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice">
-    <defs>
-      <linearGradient id="t-cielo" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#12040a"/><stop offset=".45" stop-color="#5e0b1c"/>
-        <stop offset=".78" stop-color="#c2262f"/><stop offset="1" stop-color="#f0a14a"/>
-      </linearGradient>
-      <radialGradient id="t-luna" cx=".5" cy=".5" r=".5">
-        <stop offset="0" stop-color="#fff4dc"/><stop offset=".7" stop-color="#ffd9a8"/><stop offset="1" stop-color="#ffb07a" stop-opacity="0"/>
-      </radialGradient>
-      <clipPath id="t-sopra"><path d="M0 0 H390 V170 L0 470 Z"/></clipPath>
-      <clipPath id="t-sotto"><path d="M0 470 L390 170 V844 H0 Z"/></clipPath>
-      <g id="t-lanterna">
-        <rect x="222" y="226" width="56" height="12" rx="3" fill="#1a0b0e"/>
-        <rect x="222" y="362" width="56" height="12" rx="3" fill="#1a0b0e"/>
-        <ellipse cx="250" cy="300" rx="62" ry="68" fill="#d8323b"/>
-        <ellipse cx="236" cy="290" rx="30" ry="50" fill="#f0565c" opacity=".55"/>
-        <g stroke="#9e1b25" stroke-width="2" fill="none" opacity=".8">
-          <path d="M190 270 Q250 262 310 270"/><path d="M188 300 Q250 292 312 300"/><path d="M190 330 Q250 322 310 330"/>
-        </g>
-        <text x="250" y="312" text-anchor="middle" font-family="serif" font-size="40" fill="#1a0b0e" opacity=".85">旅</text>
-      </g>
-    </defs>
-
-    <rect width="390" height="844" fill="url(#t-cielo)"/>
-    <circle class="t-luna" cx="250" cy="300" r="150" fill="url(#t-luna)" opacity=".55"/>
-    <circle cx="250" cy="300" r="118" fill="#ffe7c4" opacity=".9"/>
-
-    <g class="t-meta-su" clip-path="url(#t-sopra)"><use href="#t-lanterna"/></g>
-    <g class="t-meta-giu" clip-path="url(#t-sotto)"><use href="#t-lanterna"/></g>
-
-    <path d="M0 720 Q120 690 220 716 T390 700 V844 H0 Z" fill="#0b0306"/>
-
-    <!-- samurai (disegno originale): kimono bianco, hakama indaco, fascia rossa -->
-    <g transform="translate(95 742)">
-      <g class="t-samurai">
-        <g class="t-corpo">
-          <path class="t-coda" d="M-9 -176 Q-44 -172 -58 -138 Q-40 -154 -12 -166 Z" fill="#140a0c"/>
-          <path d="M-36 0 L-7 0 L0 -58 L7 0 L36 0 L23 -96 L-23 -96 Z" fill="#2b2f6b"/>
-          <path d="M0 -58 L0 -2" stroke="#1d2050" stroke-width="2"/>
-          <path d="M-23 -106 L23 -106 L18 -150 L-18 -150 Z" fill="#f2ede4"/>
-          <rect x="-24" y="-108" width="48" height="13" rx="2" fill="#c8242f"/>
-          <path d="M-9 -150 L0 -130 L9 -150" stroke="#c8242f" stroke-width="3" fill="none"/>
-          <path d="M-18 -146 L-36 -112 L-28 -107 L-11 -138 Z" fill="#f2ede4"/>
-          <rect x="-4" y="-156" width="8" height="8" fill="#f1c7a5"/>
-          <circle cx="0" cy="-166" r="14" fill="#140a0c"/>
-          <ellipse cx="4" cy="-163" rx="9" ry="10" fill="#f1c7a5"/>
-          <rect x="-15" y="-180" width="7" height="5" rx="1" fill="#c8242f"/>
-          <path d="M16 -146 L42 -172 L48 -165 L22 -138 Z" fill="#f2ede4"/>
-          <circle cx="46" cy="-170" r="4.5" fill="#f1c7a5"/>
-          <path d="M44 -167 L58 -183" stroke="#140a0c" stroke-width="5" stroke-linecap="round"/>
-          <path d="M58 -183 Q92 -222 118 -268" stroke="#e9eef5" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        </g>
-      </g>
-    </g>
-
-    <!-- fendente -->
-    <path class="t-lama" d="M40 520 L380 168" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none"/>
-    <path class="t-lama" d="M40 520 L380 168" stroke="#ffe0e6" stroke-width="22" stroke-linecap="round" fill="none" opacity=".35"/>
-
-    <g class="t-petali" fill="#ffc9da">
-      <ellipse cx="250" cy="300" rx="5" ry="8" style="--x:-120px;--y:-140px;--r:200deg"/>
-      <ellipse cx="250" cy="300" rx="4" ry="7" style="--x:110px;--y:-170px;--r:-160deg"/>
-      <ellipse cx="250" cy="300" rx="5" ry="8" style="--x:150px;--y:60px;--r:240deg"/>
-      <ellipse cx="250" cy="300" rx="4" ry="6" style="--x:-160px;--y:40px;--r:-220deg"/>
-      <ellipse cx="250" cy="300" rx="5" ry="7" style="--x:-40px;--y:-200px;--r:120deg"/>
-      <ellipse cx="250" cy="300" rx="4" ry="7" style="--x:60px;--y:170px;--r:-140deg"/>
-      <ellipse cx="250" cy="300" rx="5" ry="8" style="--x:-90px;--y:150px;--r:160deg"/>
-      <ellipse cx="250" cy="300" rx="4" ry="6" style="--x:170px;--y:-60px;--r:-200deg"/>
-    </g>
-  </svg>
-  <div class="t-titolo">Giappone 2027</div>
-  <div class="t-salta">tocca per entrare</div>
-</div>
 <div id="app"></div>
 <div id="mappa-box" hidden><iframe id="mappa-fr" title="Mappa dei luoghi" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
 
@@ -320,7 +209,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '1.7.0';
+const VERSIONE = '1.8.1';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -694,7 +583,7 @@ const SCHEMI = {
     { k:'tipo', l:'Tipo', t:'sel', o:() => [['andata','Andata'], ['ritorno','Ritorno'], ['interno','Volo interno'], ['scalo','Scalo']] },
     { k:'data', l:'Data', t:'date' }, { k:'origine', l:'Da', req:1 }, { k:'destinazione', l:'A', req:1 },
     { k:'partenza', l:'Partenza (ora locale)', t:'dt' }, { k:'arrivo', l:'Arrivo (ora locale)', t:'dt' },
-    { k:'compagnia', l:'Compagnia aerea' }, { k:'numero', l:'Numero del volo' }, { k:'terminal', l:'Terminal' },
+    { k:'compagnia', l:'Compagnia aerea' }, { k:'numero', l:'Numero del volo (es. AZ 784)' }, { k:'sitoCompagnia', l:'Sito della compagnia (facoltativo)', t:'url' }, { k:'terminal', l:'Terminal' },
     { k:'prenotazione', l:'Codice di prenotazione' }, { k:'bagaglio', l:'Bagaglio' }, { k:'note', l:'Note', t:'area' } ] },
   todo:{ titolo:'cosa da fare', campi:[ { k:'testo', l:'Cosa', req:1, t:'area' }, { k:'entro', l:'Entro il', t:'date' } ] },
   spese:{ titolo:'spesa', campi:[
@@ -755,6 +644,25 @@ function foglioGiornoVista(){
     <button class="btn full" style="margin-top:14px" data-a="modGiorno" data-id="${g.id}">${ic('edit')}Modifica questo giorno</button>`;
 }
 
+/* compagnie aeree frequenti tra Italia e Giappone: codice IATA → nome e sito */
+const COMPAGNIE = {
+  AZ:['ITA Airways','https://www.ita-airways.com'], JL:['Japan Airlines','https://www.jal.co.jp/en/'], NH:['ANA','https://www.ana.co.jp/en/'],
+  EK:['Emirates','https://www.emirates.com'], QR:['Qatar Airways','https://www.qatarairways.com'], TK:['Turkish Airlines','https://www.turkishairlines.com'],
+  LH:['Lufthansa','https://www.lufthansa.com'], AF:['Air France','https://www.airfrance.it'], KL:['KLM','https://www.klm.it'],
+  AY:['Finnair','https://www.finnair.com'], LX:['Swiss','https://www.swiss.com'], EY:['Etihad','https://www.etihad.com'],
+  CX:['Cathay Pacific','https://www.cathaypacific.com'], KE:['Korean Air','https://www.koreanair.com'], SQ:['Singapore Airlines','https://www.singaporeair.com'],
+  TG:['Thai Airways','https://www.thaiairways.com'], MU:['China Eastern','https://us.ceair.com'], CA:['Air China','https://www.airchina.com'],
+  BA:['British Airways','https://www.britishairways.com'], OS:['Austrian','https://www.austrian.com'], LO:['LOT','https://www.lot.com']
+};
+function compagniaDi(v){
+  if(linkOk(v.sitoCompagnia)) return [v.compagnia || 'compagnia aerea', linkOk(v.sitoCompagnia)];
+  const cod = String(v.numero || '').toUpperCase().replace(/\s+/g, '').slice(0, 2);
+  if(COMPAGNIE[cod]) return COMPAGNIE[cod];
+  const nome = String(v.compagnia || '').toLowerCase().trim();
+  if(!nome) return null;
+  return Object.values(COMPAGNIE).find(([n]) => n.toLowerCase().includes(nome) || nome.includes(n.toLowerCase())) || null;
+}
+
 /* dettaglio di luogo, hotel, volo, info */
 function foglioDettaglio(){
   const { k, id } = S.sheet, r = trova(k, id);
@@ -801,8 +709,9 @@ function foglioDettaglio(){
         <div style="flex:1;text-align:right"><div class="etichetta">Arrivo</div><p><b>${esc(r.destinazione)}</b></p><div class="titolo num" style="margin:4px 0 0;font-size:1.5rem">${ora(r.arrivo)}</div></div></div>
       ${righe.length ? `<div class="blocco">${righe.map(([e, v]) => `<div class="etichetta" style="margin-top:8px">${e}</div><p>${esc(v)}</p>`).join('')}</div>`
         : `<div class="blocco"><p style="color:var(--muted)">Quando avete i biglietti, tocca Modifica e aggiungi compagnia, numero del volo e orari.</p></div>`}
+      ${(() => { const c = compagniaDi(r); return c ? `<div style="margin-bottom:12px">${ext(c[1], 'primary full', ic('aereo') + 'Apri il sito di ' + esc(c[0]))}</div>` : ''; })()}
       ${r.numero ? `<div class="etichetta" style="margin:4px 2px 8px">Stato del volo in tempo reale</div>
-        <div class="bottoni" style="margin-top:0">${ext('https://www.google.com/search?q=' + encodeURIComponent('volo ' + [r.compagnia, r.numero].filter(Boolean).join(' ')), 'primary', ic('aereo') + 'Stato su Google')}
+        <div class="bottoni" style="margin-top:0">${ext('https://www.google.com/search?q=' + encodeURIComponent('volo ' + [r.compagnia, r.numero].filter(Boolean).join(' ')), 'maps', ic('aereo') + 'Stato su Google')}
         ${ext('https://www.flightradar24.com/data/flights/' + encodeURIComponent(String(r.numero).replace(/\s+/g, '').toLowerCase()), '', ic('mappa') + 'Flightradar24')}</div>` : ''}
       ${modifica}`;
   }
@@ -999,8 +908,6 @@ document.addEventListener('visibilitychange', () => { if(document.visibilityStat
 setInterval(() => { if(document.visibilityState === 'visible' && cfg.codice && D && !inSync) syncOra(); }, 60000);
 
 (async function avvio(){
-  const taglio = document.getElementById('taglio');
-  if(taglio){ const via = () => taglio.remove(); taglio.addEventListener('click', via); setTimeout(via, 4700); }
   leggiInvito();
   if(cfg.codice){
     try{ await applicaSeme(cfg.codice); }
