@@ -1,7 +1,7 @@
 /* Service worker: tiene una copia dell'app per usarla anche senza rete
    (in Giappone, in metro o senza eSIM). Prima prova la rete, se non c'è
    usa la copia salvata. I dati del viaggio stanno nel telefono, non qui. */
-const CACHE = 'giappone-2027-v2';
+const CACHE = 'giappone-2027-v3';
 const FILE = ['./', './index.html', './manifest.webmanifest', './icona-180.png', './icona-192.png', './icona-512.png'];
 
 self.addEventListener('install', e => {

@@ -4,199 +4,183 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Giappone 2027</title>
-<meta name="theme-color" content="#0f8f9a">
+<meta name="theme-color" content="#eef4f9">
+<meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Giappone">
 <meta name="robots" content="noindex">
-<link rel="apple-touch-icon" href="icona-180.png">
-<link rel="icon" href="icona-180.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icona-180.png?v=3">
+<link rel="icon" type="image/png" sizes="192x192" href="icona-192.png?v=3">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-  /* Stile Odoo come nelle app O&M: tile uniformi, molta aria, gerarchia pulita,
-     Archivo per i titoli, IBM Plex per testo ed etichette, accento teal. */
+  /* Stile Odoo, versione grande e ariosa: sempre chiaro, testi leggibili,
+     poche informazioni per schermata, dettagli in una scheda a parte. */
   :root{
+    color-scheme:light;
     --bg:#eef4f9; --surface:#ffffff; --surface-2:#f4f8fc; --sunken:#e7eef6;
-    --line:#e4ebf3; --line-2:#eef2f7; --ink:#132133; --muted:#5b6b81; --faint:#93a1b3;
+    --line:#e4ebf3; --line-2:#eef2f7; --ink:#132133; --muted:#4f5f75; --faint:#8494a8;
     --teal:#0f8f9a; --teal-2:#0c6f79; --teal-soft:#dcf1f3;
     --c-blue:#2f77d6; --c-orange:#e07a1a; --c-purple:#7c3aed; --c-red:#dc2626; --c-green:#2e9e5b; --c-cyan:#0891b2; --c-amber:#d69412;
     --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
     --disp:"Archivo",var(--sans); --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
     --shadow:0 1px 2px rgba(19,33,51,.04),0 8px 24px rgba(19,33,51,.06);
-    --shadow-h:0 6px 14px rgba(19,33,51,.08),0 18px 40px rgba(19,33,51,.10);
   }
-  @media (prefers-color-scheme:dark){ :root{
-    --bg:#0b1520; --surface:#132030; --surface-2:#18273a; --sunken:#0e1926; --line:#22344a; --line-2:#1b2c40;
-    --ink:#e7eef6; --muted:#9fb2c6; --faint:#6d8296; --teal:#39b6bf; --teal-2:#5fccd3; --teal-soft:#12333a;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4); --shadow-h:0 10px 30px rgba(0,0,0,.5);
-  }}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased;
-    -webkit-text-size-adjust:100%;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.45;-webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;padding-bottom:calc(84px + env(safe-area-inset-bottom))}
   button,input,select,textarea{font:inherit;color:inherit}
-  button{cursor:pointer;border:0;background:none;padding:0;transition:transform .12s ease}
-  button:active{transform:scale(.97)}
+  button{cursor:pointer;border:0;background:none;padding:0;text-align:inherit;transition:transform .12s ease}
+  button:active{transform:scale(.98)}
   a{color:inherit}
-  svg{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+  svg{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
   @keyframes su{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .anim .hello,.anim .kpis,.anim .apps,.anim .card,.anim .area{animation:su .3s ease both}
-  .wrap{max-width:720px;margin:0 auto;padding:0 16px}
+  .anim>*{animation:su .3s ease both}
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px}
 
   /* barra in alto */
-  .topbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 84%,transparent);
-    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
-  .topbar .wrap{display:flex;align-items:center;gap:10px;height:56px}
-  .brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
-  .dot{width:30px;height:30px;border-radius:8px;flex:none;background:#2a2263 url(icona-180.png) center/cover;box-shadow:0 1px 3px rgba(19,33,51,.18)}
-  .brand b{font-family:var(--disp);font-weight:700;font-size:1.02rem;display:block;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .brand small{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;color:var(--faint);text-transform:uppercase}
-  .pill{font-family:var(--mono);font-size:.62rem;letter-spacing:.04em;font-weight:600;padding:6px 9px;border-radius:999px;background:var(--surface);
-    border:1px solid var(--line);color:var(--muted);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;text-transform:uppercase}
-  .pill.ok{color:var(--c-green)} .pill.err{color:var(--c-red)}
-  .iconbtn{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--muted);flex:none;font-size:1rem}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(238,244,249,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+  .topbar .wrap{display:flex;align-items:center;gap:12px;height:62px}
+  .dot{width:38px;height:38px;border-radius:11px;flex:none;background:#2a2263 url(icona-180.png) center/cover;box-shadow:0 1px 3px rgba(19,33,51,.18)}
+  .brand{flex:1;min-width:0;font-family:var(--disp);font-weight:800;font-size:1.25rem;letter-spacing:-.01em}
+  .stato-sync{width:12px;height:12px;border-radius:50%;background:var(--faint);flex:none}
+  .stato-sync.ok{background:var(--c-green)} .stato-sync.err{background:var(--c-red)} .stato-sync.corso{background:var(--c-amber)}
+  .iconbtn{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--muted);flex:none;font-size:1.3rem}
 
   /* intestazioni */
-  .hello{font-family:var(--disp);font-weight:800;font-size:1.6rem;letter-spacing:-.02em;margin:18px 0 2px;line-height:1.15}
-  .hello-sub{color:var(--muted);margin:0 0 16px}
-  .sec-h{display:flex;align-items:baseline;gap:10px;margin:24px 2px 10px}
-  .sec-h h2{font-family:var(--disp);font-weight:700;font-size:1.02rem;margin:0;letter-spacing:-.01em}
-  .sec-h .hint{margin-left:auto;font-size:.78rem;color:var(--faint);white-space:nowrap}
-  .sec-h button.hint{color:var(--teal-2);font-weight:600;display:inline-flex;align-items:center;gap:4px}
+  .titolo{font-family:var(--disp);font-weight:800;font-size:1.75rem;letter-spacing:-.02em;margin:22px 0 4px;line-height:1.15}
+  .sottotitolo{color:var(--muted);margin:0 0 18px;font-size:1rem}
+  .sec{font-family:var(--disp);font-weight:700;font-size:1.2rem;margin:30px 2px 12px;display:flex;align-items:center;gap:10px}
+  .sec .agg{margin-left:auto;font-family:var(--sans);font-size:.95rem;font-weight:600;color:var(--teal-2);display:inline-flex;align-items:center;gap:6px;padding:8px 4px}
 
-  /* riquadri contatori */
-  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:11px;text-align:left;width:100%}
-  .ic{flex:none;display:grid;place-items:center;background:color-mix(in srgb,var(--c,var(--teal)) 14%,var(--surface));color:var(--c,var(--teal))}
-  .kpi .ic{width:32px;height:32px;border-radius:9px;font-size:.95rem}
-  .kpi .body{min-width:0;display:flex;flex-direction:column;gap:1px}
-  .lbl{font-family:var(--mono);font-size:.56rem;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
-  .kpi .val{font-family:var(--disp);font-weight:700;font-size:1.15rem;line-height:1.05;letter-spacing:-.01em}
-  .kpi .sub{font-size:.66rem;color:var(--muted)}
+  /* scheda grande in testa */
+  .hero{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px 20px;box-shadow:var(--shadow)}
+  .hero .grande{font-family:var(--disp);font-weight:800;font-size:2.1rem;line-height:1.1;letter-spacing:-.02em}
+  .hero .grande b{color:var(--teal)}
+  .hero .sotto{color:var(--muted);margin-top:6px;font-size:1rem}
+  .tappe{display:flex;gap:6px;margin-top:18px}
+  .tappe div{flex:1 1 0;min-width:0;border-radius:10px;padding:8px 9px;background:color-mix(in srgb,var(--c) 13%,var(--surface))}
+  .tappe b{display:block;font-size:.88rem;color:color-mix(in srgb,var(--c) 75%,var(--ink));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tappe span{font-size:.78rem;color:var(--muted);white-space:nowrap}
 
-  /* tile delle tappe */
-  .apps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .app{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 6px;box-shadow:var(--shadow);
-    display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center}
-  .app.ora{border-color:color-mix(in srgb,var(--c) 55%,var(--line));box-shadow:0 0 0 2px color-mix(in srgb,var(--c) 25%,transparent)}
-  .app .ic{width:40px;height:40px;border-radius:12px;font-size:1.15rem}
-  .app b{font-family:var(--disp);font-weight:700;font-size:.92rem}
-  .app span{font-family:var(--mono);font-size:.56rem;letter-spacing:.05em;color:var(--muted);text-transform:uppercase}
+  /* righe grandi (elenco) */
+  .riga{display:flex;align-items:center;gap:14px;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);text-align:left;text-decoration:none;color:inherit}
+  .riga.oggi{border:2px solid var(--teal)}
+  .ic{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:15px;font-size:1.45rem;
+    background:color-mix(in srgb,var(--c,var(--teal)) 14%,var(--surface));color:var(--c,var(--teal))}
+  .ic.data{flex-direction:column;line-height:1}
+  .ic.data b{font-family:var(--disp);font-size:1.3rem;font-weight:800}
+  .ic.data i{font-style:normal;font-size:.7rem;font-weight:700;text-transform:uppercase;margin-top:3px}
+  .riga .testo{flex:1;min-width:0}
+  .riga .nome{font-weight:700;font-size:1.05rem;line-height:1.3}
+  .riga .info{font-size:.9rem;color:var(--muted);margin-top:2px}
+  .riga .vai{color:var(--faint);font-size:1.3rem}
+  .riga.fatto .nome{text-decoration:line-through;color:var(--faint);font-weight:600}
 
-  /* card e righe */
-  .card,.area{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:10px}
-  .area .ah{display:flex;align-items:center;gap:12px;width:100%;text-align:left}
-  .area .ah>.ic{width:42px;height:42px;border-radius:12px;font-size:1.1rem}
-  .area b,.tit{font-family:var(--disp);font-weight:700;font-size:.98rem;line-height:1.25}
-  .asub{font-size:.74rem;color:var(--muted);margin-top:2px}
-  .cx{margin-left:auto;color:var(--faint);transition:.15s;font-size:1rem}
-  .area.open .cx{transform:rotate(180deg)}
-  .area.oggi{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal-soft),var(--shadow)}
-  .giorno-n{display:flex;flex-direction:column;line-height:1}
-  .giorno-n b{font-family:var(--disp);font-size:1.05rem;font-weight:800}
-  .giorno-n i{font-style:normal;font-family:var(--mono);font-size:.5rem;letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
-  .riga{display:flex;align-items:center;gap:10px}
-  .muto{color:var(--muted);font-size:.84rem;line-height:1.45}
-  .piccolo{font-size:.74rem;color:var(--muted)}
-  .vuoto{text-align:center;color:var(--faint);font-size:.85rem;padding:20px 10px}
-  .sep{margin-top:12px;padding-top:12px;border-top:1px solid var(--line-2)}
-
-  /* linea del giorno */
-  .voci{margin:0;padding:0;list-style:none}
-  .voci li{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2)}
-  .voci li:last-child{border-bottom:0}
-  .voci .ora{font-family:var(--mono);font-size:.66rem;font-weight:600;color:var(--teal-2);letter-spacing:.03em;text-transform:uppercase;padding-top:2px}
-  .voci .testo{font-size:.9rem;line-height:1.45}
-  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
-  .chip{font-size:.76rem;color:var(--teal-2);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;
-    display:inline-flex;align-items:center;gap:5px;text-decoration:none;font-weight:500}
-  .chip.maps{background:var(--teal-soft);border-color:color-mix(in srgb,var(--teal) 30%,var(--line))}
-  .nota-ospite{display:flex;gap:8px;align-items:center;margin-top:10px;padding:9px 11px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line);font-size:.8rem;color:var(--muted)}
-  textarea.nota{width:100%;min-height:58px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);padding:9px 11px;font-size:.88rem;resize:vertical;outline:none;margin-top:10px}
-  textarea.nota:focus{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal-soft)}
+  .badge{display:inline-block;font-size:.78rem;font-weight:700;padding:4px 10px;border-radius:999px;margin-top:6px;
+    background:color-mix(in srgb,var(--c,var(--teal)) 14%,var(--surface));color:color-mix(in srgb,var(--c,var(--teal)) 80%,var(--ink))}
+  .badge.prenotato{--c:var(--c-green)} .badge.scelto{--c:var(--c-blue)} .badge.giallo{--c:var(--c-amber)} .badge.rosso{--c:var(--c-red)}
+  .prezzo{font-family:var(--disp);font-weight:800;font-size:1.15rem;white-space:nowrap;text-align:right}
 
   /* pulsanti */
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 13px;border-radius:9px;font-size:.82rem;font-weight:600;
-    border:1px solid var(--line);background:var(--surface);color:var(--muted);text-decoration:none}
-  .btn.primary{background:linear-gradient(145deg,var(--teal),var(--teal-2));border-color:transparent;color:#fff}
-  .btn.danger{color:var(--c-red)}
-  .btn.full{width:100%;padding:12px;font-size:.9rem;border-radius:11px}
-  .btn.sq{width:34px;height:34px;padding:0;border-radius:9px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 16px;border-radius:14px;font-size:1rem;font-weight:600;
+    border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none}
+  .btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}
   .btn.maps{background:var(--teal-soft);border-color:transparent;color:var(--teal-2)}
-  .azioni{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .btn.danger{color:var(--c-red)}
+  .btn.full{width:100%}
+  .btn svg{font-size:1.2rem}
+  .bottoni{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  .bottoni .full2{grid-column:1/-1}
+  .cuore{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:52px;height:48px;padding:0 12px;border-radius:14px;
+    border:1px solid var(--line);background:var(--surface);color:var(--faint);font-weight:700;font-size:1rem;flex:none}
+  .cuore svg{font-size:1.35rem}
+  .cuore.on{color:var(--c-red);border-color:color-mix(in srgb,var(--c-red) 30%,var(--line));background:color-mix(in srgb,var(--c-red) 8%,var(--surface))}
+  .cuore.on svg{fill:currentColor}
+  .altre{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:16px;border:1.5px dashed #c9d6e3;
+    color:var(--teal-2);font-weight:600;font-size:.98rem;margin-bottom:10px}
 
   /* filtri */
-  .seg{display:flex;gap:6px;overflow-x:auto;padding:1px 1px 3px;scrollbar-width:none}
-  .seg::-webkit-scrollbar{display:none}
-  .seg button{flex:none;font-size:.8rem;font-weight:600;padding:7px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted);display:inline-flex;align-items:center;gap:5px}
-  .seg button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chips button{flex:none;font-size:.98rem;font-weight:600;padding:10px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted);
+    display:inline-flex;align-items:center;gap:6px}
+  .chips button.on{background:var(--teal);border-color:var(--teal);color:#fff}
 
-  /* stati, cuori, tag */
-  .stati{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
-  .stati button{flex:1;font-size:.78rem;font-weight:600;padding:8px 4px;color:var(--muted);border-left:1px solid var(--line)}
+  /* da fare */
+  .spunta{width:34px;height:34px;flex:none;border-radius:10px;border:2px solid #c9d6e3;background:var(--surface);display:grid;place-items:center;color:#fff;font-size:1.1rem}
+  .spunta.on{background:var(--c-green);border-color:var(--c-green)}
+  .scad{font-size:.88rem;color:var(--muted);margin-top:3px} .scad.rossa{color:var(--c-red);font-weight:600}
+  .barra{height:10px;border-radius:99px;background:var(--sunken);overflow:hidden}
+  .barra i{display:block;height:100%;background:var(--teal);border-radius:99px}
+  .barra i.oltre{background:var(--c-red)}
+  .num{font-variant-numeric:tabular-nums}
+  .vuoto{text-align:center;color:var(--faint);padding:24px 10px}
+  .nota-pie{font-size:.88rem;color:var(--muted);line-height:1.5;margin:10px 2px 0}
+
+  /* menu in basso */
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+  .tabbar .wrap{display:flex;padding:0 4px}
+  .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 9px;font-size:.78rem;font-weight:600;color:var(--faint);text-align:center}
+  .tabbar button svg{font-size:1.6rem}
+  .tabbar button.on{color:var(--teal-2)}
+  .tabbar button.on svg{stroke-width:2.3}
+
+  /* scheda di dettaglio / modulo */
+  .velo{position:fixed;inset:0;z-index:50;background:rgba(10,20,32,.4);display:flex;align-items:flex-end;justify-content:center;animation:appare .18s ease}
+  @keyframes appare{from{opacity:0}to{opacity:1}}
+  .foglio{width:100%;max-width:680px;max-height:94vh;overflow:auto;background:var(--bg);border-radius:22px 22px 0 0;
+    padding:0 18px calc(24px + env(safe-area-inset-bottom));animation:sale .25s cubic-bezier(.2,.8,.2,1)}
+  @keyframes sale{from{transform:translateY(30px)}to{transform:none}}
+  .foglio-h{position:sticky;top:0;background:var(--bg);display:flex;align-items:center;gap:12px;padding:16px 0 12px;z-index:2}
+  .foglio-h h2{font-family:var(--disp);font-weight:800;font-size:1.35rem;margin:0;flex:1;line-height:1.2}
+  .blocco{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+  .blocco p{margin:0;line-height:1.55}
+  .etichetta{font-size:.85rem;font-weight:600;color:var(--muted);margin-bottom:4px}
+  .avviso{display:flex;gap:10px;align-items:flex-start;padding:14px;border-radius:16px;margin-bottom:12px;line-height:1.5;
+    background:#fdf4e2;color:#7a5410;border:1px solid #f1dcae}
+  .avviso svg{font-size:1.3rem;margin-top:2px}
+  .stati{display:flex;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .stati button{flex:1;font-size:.98rem;font-weight:600;padding:13px 4px;color:var(--muted);border-left:1px solid var(--line);text-align:center}
   .stati button:first-child{border-left:0}
   .stati button.on{background:var(--teal);color:#fff}
   .stati button.on.scelto{background:var(--c-blue)} .stati button.on.prenotato{background:var(--c-green)}
-  .cuore{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:600;padding:6px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
-  .cuore.on{background:color-mix(in srgb,var(--c-red) 12%,var(--surface));border-color:color-mix(in srgb,var(--c-red) 30%,var(--line));color:var(--c-red)}
-  .cuore.on svg{fill:currentColor}
-  .tag{font-family:var(--mono);font-size:.56rem;font-weight:600;letter-spacing:.08em;padding:3px 7px;border-radius:6px;text-transform:uppercase;
-    background:color-mix(in srgb,var(--c,var(--teal)) 14%,var(--surface));color:var(--c,var(--teal))}
-  .avviso{display:flex;gap:8px;align-items:flex-start;margin-top:10px;padding:9px 11px;border-radius:10px;font-size:.8rem;line-height:1.45;
-    background:color-mix(in srgb,var(--c-amber) 12%,var(--surface));color:color-mix(in srgb,var(--c-amber) 70%,var(--ink));border:1px solid color-mix(in srgb,var(--c-amber) 30%,var(--line))}
-  .avviso svg{margin-top:2px}
-  .prezzo{font-family:var(--disp);font-weight:700;font-size:1.15rem;letter-spacing:-.01em;white-space:nowrap}
-  .scad{font-family:var(--mono);font-size:.62rem;letter-spacing:.03em;color:var(--muted);text-transform:uppercase}
-  .scad.rossa{color:var(--c-red)}
-  .num{font-variant-numeric:tabular-nums}
+  .attivita{list-style:none;margin:0;padding:0}
+  .attivita li{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px}
+  .attivita .ora{font-weight:700;color:var(--teal-2);font-size:.95rem;margin-bottom:2px}
+  .attivita .cosa{line-height:1.5}
+  .attivita .link{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .attivita .link .btn{min-height:42px;font-size:.95rem;padding:8px 14px}
+  textarea.nota{width:100%;min-height:90px;border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:12px 14px;font-size:1rem;resize:vertical;outline:none}
+  textarea.nota:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
 
-  .spunta{width:26px;height:26px;flex:none;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);display:grid;place-items:center;color:#fff;font-size:.85rem}
-  .spunta.on{background:var(--c-green);border-color:var(--c-green)}
-  .fatto .tit{text-decoration:line-through;color:var(--faint);font-weight:600}
-  .barra{height:6px;border-radius:99px;background:var(--sunken);overflow:hidden}
-  .barra i{display:block;height:100%;background:var(--teal);border-radius:99px}
-  .barra i.oltre{background:var(--c-red)}
-
-  /* menu in basso */
-  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--surface) 94%,transparent);
-    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-  .tabbar .wrap{display:flex;padding:0 4px}
-  .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;font-size:.66rem;font-weight:600;color:var(--faint);position:relative}
-  .tabbar button svg{font-size:1.3rem}
-  .tabbar button.on{color:var(--teal-2)}
-  .tabbar button.on::before{content:'';position:absolute;top:0;left:30%;right:30%;height:3px;border-radius:0 0 3px 3px;background:var(--teal)}
-
-  /* finestra modulo */
-  .velo{position:fixed;inset:0;z-index:50;background:rgba(10,20,32,.45);display:flex;align-items:flex-end;justify-content:center;animation:appare .18s ease}
-  @keyframes appare{from{opacity:0}to{opacity:1}}
-  .foglio{width:100%;max-width:720px;max-height:92vh;overflow:auto;background:var(--surface);border-radius:18px 18px 0 0;
-    padding:0 16px calc(20px + env(safe-area-inset-bottom));animation:sale .25s cubic-bezier(.2,.8,.2,1)}
-  @keyframes sale{from{transform:translateY(30px)}to{transform:none}}
-  .foglio-h{position:sticky;top:0;background:var(--surface);display:flex;align-items:center;gap:10px;padding:14px 0 12px;margin-bottom:8px;border-bottom:1px solid var(--line);z-index:2}
-  .foglio-h h2{font-family:var(--disp);font-weight:700;font-size:1.05rem;margin:0;flex:1}
-  .campo{display:block;margin-bottom:12px}
-  .campo>span{display:block;font-size:.78rem;font-weight:600;margin:0 0 4px;color:var(--ink)}
-  .campo input,.campo select,.campo textarea,.voce-ed input,.voce-ed select,.voce-ed textarea{width:100%;padding:10px 11px;border:1px solid #cbd5e1;border-radius:8px;
-    background:var(--surface);font-size:16px;outline:none;-webkit-appearance:none;appearance:none}
-  @media (prefers-color-scheme:dark){ .campo input,.campo select,.campo textarea,.voce-ed input,.voce-ed select,.voce-ed textarea{border-color:var(--line)} }
-  .campo textarea{min-height:76px;resize:vertical}
-  .campo input:focus,.campo select:focus,.campo textarea:focus,.voce-ed input:focus,.voce-ed select:focus,.voce-ed textarea:focus{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal-soft)}
+  .campo{display:block;margin-bottom:14px}
+  .campo>span{display:block;font-size:.92rem;font-weight:600;margin:0 0 6px 2px}
+  .campo input,.campo select,.campo textarea,.voce-ed input,.voce-ed select,.voce-ed textarea{width:100%;padding:13px 14px;border:1px solid #cbd5e1;border-radius:12px;
+    background:var(--surface);font-size:17px;outline:none;-webkit-appearance:none;appearance:none}
+  .campo textarea{min-height:90px;resize:vertical}
+  .campo input:focus,.campo select:focus,.campo textarea:focus,.voce-ed input:focus,.voce-ed select:focus,.voce-ed textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
   .due{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .voce-ed{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:9px}
-  .voce-ed textarea{min-height:56px;margin-top:7px;resize:vertical}
-  .voce-ed select,.voce-ed .link{margin-top:7px}
-  .esito{font-size:.82rem;font-weight:600;margin:8px 2px;line-height:1.4;color:var(--teal-2)}
-  .nota-pie{font-size:.74rem;color:var(--faint);line-height:1.55;margin:8px 2px 0}
+  .voce-ed{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px}
+  .voce-ed .riga-ed{display:flex;gap:8px;align-items:center}
+  .voce-ed textarea{min-height:70px;margin-top:8px;resize:vertical}
+  .voce-ed select,.voce-ed .link{margin-top:8px}
+  .mini{width:46px;height:46px;flex:none;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--muted);font-size:1.15rem}
+  .esito{font-size:.95rem;font-weight:600;margin:10px 2px;line-height:1.45;color:var(--teal-2)}
 
   /* accesso */
-  .accesso{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:24px 16px}
-  .accesso .scheda{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:22px 18px}
-  .accesso .dot{display:block;width:72px;height:72px;border-radius:18px;margin-bottom:16px}
-  .accesso input{text-align:center;letter-spacing:.18em;text-transform:uppercase;font-family:var(--mono)}
+  .accesso{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:24px 18px}
+  .accesso .scheda{background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:26px 20px}
+  .accesso .dot{display:block;width:84px;height:84px;border-radius:22px;margin-bottom:18px}
+  .accesso input{text-align:center;letter-spacing:.12em;text-transform:uppercase;font-size:20px}
 </style>
 </head>
 <body>
@@ -214,7 +198,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '1.1.0';
+const VERSIONE = '1.2.0';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -223,7 +207,7 @@ function leggiJSON(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e
 function scriviJSON(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
 let cfg = leggiJSON(CFG_KEY) || {};
 let D = leggiJSON(DATI_KEY);
-let S = { animProssimo:true, tab:'programma', aperto:null, sheet:null, citta:'tutte', cat:'tutti', soloPref:false,
+let S = { animProssimo:true, altre:{}, tab:'programma', aperto:null, sheet:null, citta:'tutte', cat:'tutti', soloPref:false,
   sync:{ stato:'', ora:null, errore:'' }, erroreBlocco:'', attesa:false, esitoImp:'' };
 function salvaCfg(){ scriviJSON(CFG_KEY, cfg); }
 function salvaLocale(){ if(!scriviJSON(DATI_KEY, D)) alert('Memoria del telefono piena: non riesco a salvare.'); }
@@ -341,14 +325,6 @@ async function syncOra(manuale){
     if(manuale && S.sheet && S.sheet.tipo === 'impostazioni') render();
   }
 }
-function pillHTML(){
-  const s = S.sync;
-  if(!syncAttiva()) return '<button class="pill" data-a="impostazioni">' + ic('nuvola') + 'Solo qui</button>';
-  if(s.stato === 'corso' || syncTimer && !s.ora) return '<span class="pill">Sincronizzo…</span>';
-  if(s.stato === 'errore') return '<button class="pill err" data-a="impostazioni">Non sincronizzato</button>';
-  if(s.ora) return '<button class="pill ok" data-a="sync">' + ic('ok') + new Date(s.ora).toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit' }) + '</button>';
-  return '<span class="pill">…</span>';
-}
 function aggiornaPill(){ const el = document.getElementById('pill'); if(el) el.innerHTML = pillHTML(); }
 function renderSicuro(){
   const a = document.activeElement;
@@ -376,7 +352,7 @@ function linkInvito(){
 }
 
 /* =========================== VISTE =========================== */
-/* Icone a linea (stesso tratto delle app O&M). */
+/* Icone a linea, stesso tratto delle app O&M. */
 const ICO = {
   cal:'<rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18M8 2v4M16 2v4"/>',
   pin:'<path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
@@ -400,6 +376,7 @@ const ICO = {
   su:'<path d="M12 20V8M7 13l5-5 5 5M5 4h14"/>',
   piu:'<path d="M12 5v14M5 12h14"/>',
   chev:'<path d="M6 9l6 6 6-6"/>',
+  'chev-r':'<path d="M9 6l6 6-6 6"/>',
   x:'<path d="M6 6l12 12M18 6L6 18"/>',
   freccia:'<path d="M12 19V5M5 12l7-7 7 7"/>',
   sync:'<path d="M21 12a9 9 0 0 1-15.5 6.2M3 12A9 9 0 0 1 18.5 5.8"/><path d="M21 4v5h-5M3 20v-5h5"/>',
@@ -413,20 +390,26 @@ const ic = (n, cls) => `<svg viewBox="0 0 24 24"${cls ? ` class="${cls}"` : ''}>
 const TABS = [
   ['programma','cal','Programma'], ['luoghi','pin','Luoghi'], ['viaggio','aereo','Voli e hotel'], ['todo','check','Da fare'], ['spese','wallet','Spese']
 ];
-const sezione = (titolo, azione) => `<div class="sec-h"><h2>${titolo}</h2>${azione || ''}</div>`;
-const piu = (a, k, t) => `<button class="hint" data-a="${a}"${k ? ` data-k="${k}"` : ''}>${ic('piu')}${t}</button>`;
+const sezione = (titolo, azione) => `<div class="sec">${titolo}${azione || ''}</div>`;
+const piu = (a, k, t) => `<button class="agg" data-a="${a}"${k ? ` data-k="${k}"` : ''}>${ic('piu')}${t}</button>`;
+const ext = (url, cls, contenuto) => `<a class="btn ${cls}" href="${esc(url)}" target="_blank" rel="noopener">${contenuto}</a>`;
+
+function pillHTML(){
+  const s = S.sync;
+  const cls = !syncAttiva() ? '' : s.stato === 'errore' ? 'err' : s.stato === 'corso' ? 'corso' : s.ora ? 'ok' : 'corso';
+  const tit = !syncAttiva() ? 'Condivisione non attiva' : s.stato === 'errore' ? 'Non sincronizzato' : s.ora ? 'Sincronizzato' : 'Sincronizzo';
+  return `<span class="stato-sync ${cls}" title="${tit}"></span>`;
+}
 
 function render(){
   S.renderInSospeso = false;
   S.anim = S.animProssimo; S.animProssimo = false;
   const app = document.getElementById('app');
   if(!cfg.codice || !D){ app.innerHTML = vistaBlocco(); return; }
-  const v = D.viaggio || {};
   const corpo = { programma:vistaProgramma, luoghi:vistaLuoghi, viaggio:vistaViaggio, todo:vistaTodo, spese:vistaSpese }[S.tab]();
   app.innerHTML = `
     <header class="topbar"><div class="wrap">
-      <div class="brand"><span class="dot"></span><div style="min-width:0"><b>${esc(v.titolo || 'Giappone 2027')}</b>
-        <small>${fmtD(v.partenza, { day:'numeric', month:'short' })} → ${fmtD(v.ritorno, { day:'numeric', month:'short', year:'numeric' })}</small></div></div>
+      <span class="dot"></span><div class="brand">${esc((D.viaggio && D.viaggio.titolo) || 'Giappone 2027')}</div>
       <span id="pill">${pillHTML()}</span>
       <button class="iconbtn" data-a="impostazioni" aria-label="Impostazioni">${ic('gear')}</button>
     </div></header>
@@ -439,213 +422,144 @@ function render(){
 function vistaBlocco(){
   return `<div class="accesso wrap"><div class="scheda">
     <span class="dot"></span>
-    <div class="hello" style="margin-top:0">Giappone 2027</div>
-    <p class="hello-sub">L'app del nostro viaggio. Inserisci il codice ricevuto da chi organizza, oppure apri il link d'invito.</p>
-    <label class="campo"><span>Codice del viaggio</span>
-      <input id="codice-in" autocomplete="off" autocapitalize="characters" placeholder="XXXX-XXXX-XXXX-XXXX" value="${esc(cfg.codice || '')}"></label>
+    <div class="titolo" style="margin-top:0">Giappone 2027</div>
+    <p class="sottotitolo">Scrivi il codice del viaggio che ti hanno mandato.</p>
+    <label class="campo"><input id="codice-in" autocomplete="off" autocapitalize="characters" placeholder="XXXX-XXXX-XXXX-XXXX" value="${esc(cfg.codice || '')}"></label>
     <button class="btn primary full" data-a="sblocca">${S.attesa ? 'Apro…' : 'Entra'}</button>
     ${S.erroreBlocco ? `<p class="esito" style="color:var(--c-red)">${esc(S.erroreBlocco)}</p>` : ''}
   </div></div>`;
 }
 
-/* ---------- programma ---------- */
+/* ---------- utilità di vista ---------- */
 function alloggioDiTappa(tid){
   const opz = vis('alloggi').filter(h => h.tappa === tid);
   return opz.find(h => h.stato === 'prenotato') || opz.find(h => h.stato === 'scelto') || null;
 }
 function tappaDellaNotte(data){ return tappeNotte().find(t => t.dal <= data && data < t.al); }
-function kpi(c, icona, lbl, val, sub, azione){
-  return `<button class="kpi" style="--c:${c}" ${azione ? `data-a="tab" data-v="${azione}"` : ''}><div class="ic">${ic(icona)}</div>
-    <div class="body"><div class="lbl">${lbl}</div><div class="val num">${val}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div></button>`;
+const CAT = { vedere:['torii','Da vedere','var(--c-blue)'], mangiare:['ciotola','Ristorante','var(--c-orange)'],
+  shopping:['borsa','Shopping','var(--c-purple)'], altro:['stella','Altro','var(--c-amber)'] };
+function haCuore(rec){ return !!(io() && rec.pref && rec.pref[io()]); }
+function quantiCuori(rec){ return Object.keys(rec.pref || {}).filter(p => rec.pref[p] && trova('viaggiatori', p)); }
+function bottoneCuore(k, rec){
+  const n = quantiCuori(rec).length;
+  return `<button class="cuore ${haCuore(rec) ? 'on' : ''}" data-a="pref" data-k="${k}" data-id="${rec.id}" aria-label="Preferito">${ic('cuore')}${n || ''}</button>`;
 }
+
+/* ---------- programma ---------- */
 function vistaProgramma(){
   const v = D.viaggio || {}, oggi = oggiISO();
   const giorni = vis('giorni').sort((a, b) => a.data.localeCompare(b.data));
   const prima = oggi < v.partenza, dopo = oggi > v.ritorno;
-  let titolo, sotto;
-  if(prima){ const n = giorniTra(oggi, v.partenza); titolo = `Mancano ${n} ${n === 1 ? 'giorno' : 'giorni'}`;
-    sotto = `${fmtD(v.partenza, { weekday:'long', day:'numeric', month:'long' })} → ${fmtD(v.ritorno, { day:'numeric', month:'long', year:'numeric' })}`; }
-  else if(!dopo){ const i = giorni.findIndex(g => g.data === oggi), g = giorni[i];
-    titolo = g ? esc(g.titolo) : 'Buon viaggio'; sotto = `Giorno ${i + 1} di ${giorni.length} · ${fmtD(oggi, { weekday:'long', day:'numeric', month:'long' })}`; }
-  else{ titolo = 'Bentornati'; sotto = `${giorni.length} giorni in Giappone`; }
-
-  const T = vis('todo'), aperte = T.filter(t => !t.fatto).length;
-  const tN = tappeNotte(), pren = tN.filter(t => (alloggioDiTappa(t.id) || {}).stato === 'prenotato').length;
-  const speso = vis('spese').reduce((n, s) => n + inEuro(s), 0);
-  const kp = `<div class="kpis">
-    ${kpi('var(--teal)', 'cal', 'Durata', `${giorni.length} giorni`, `${tN.reduce((n, t) => n + giorniTra(t.dal, t.al), 0)} notti`)}
-    ${kpi('var(--c-green)', 'letto', 'Hotel prenotati', `${pren} di ${tN.length}`, pren < tN.length ? 'da completare' : 'tutto a posto', 'viaggio')}
-    ${kpi('var(--c-orange)', 'check', 'Da fare', `${aperte}`, aperte ? 'cose aperte' : 'nulla in coda', 'todo')}
-    ${kpi('var(--c-purple)', 'wallet', 'Speso', eur(speso), 'voli esclusi', 'spese')}</div>`;
-
-  const tappeHTML = `<div class="apps">${tN.map(t => { const n = giorniTra(t.dal, t.al);
-    return `<div class="app ${t.dal <= oggi && oggi < t.al ? 'ora' : ''}" style="--c:${esc(t.colore)}"><div class="ic">${ic('pin')}</div><b>${esc(t.citta)}</b>
-      <span>${n} ${n === 1 ? 'notte' : 'notti'}</span></div>`; }).join('')}</div>`;
-
-  let scad = '';
-  if(prima){
-    const prossimi = T.filter(t => !t.fatto).sort((a, b) => (a.entro || '9').localeCompare(b.entro || '9')).slice(0, 3);
-    if(prossimi.length) scad = sezione('Prossime scadenze', `<button class="hint" data-a="tab" data-v="todo">tutte</button>`) + prossimi.map(rigaTodo).join('');
-  }
-  if(S.aperto == null && !prima && !dopo){ const g = giorni.find(x => x.data === oggi); if(g) S.aperto = g.id; }
-  return `<h1 class="hello">${titolo}</h1><p class="hello-sub">${sotto}</p>${kp}
-    ${sezione('Tappe', '<span class="hint">notti per città</span>')}${tappeHTML}${scad}
-    ${sezione('Giorno per giorno', piu('nuovoGiorno', '', 'giorno'))}
-    ${giorni.map((g, i) => cardGiorno(g, i, oggi)).join('')}`;
+  let grande, sotto;
+  if(prima){ const n = giorniTra(oggi, v.partenza); grande = `Mancano <b>${n}</b> ${n === 1 ? 'giorno' : 'giorni'}`;
+    sotto = `Si parte ${fmtD(v.partenza, { weekday:'long', day:'numeric', month:'long' })}`; }
+  else if(!dopo){ const i = giorni.findIndex(g => g.data === oggi); grande = `Giorno <b>${i + 1}</b> di ${giorni.length}`;
+    sotto = fmtD(oggi, { weekday:'long', day:'numeric', month:'long' }); }
+  else{ grande = 'Bentornati!'; sotto = `${giorni.length} giorni in Giappone`; }
+  const tappe = tappeNotte().map(t => { const n = giorniTra(t.dal, t.al);
+    return `<div style="--n:${n};--c:${esc(t.colore)}"><b>${esc(t.citta)}</b><span>${n} ${n === 1 ? 'notte' : 'notti'}</span></div>`; }).join('');
+  const aperte = vis('todo').filter(t => !t.fatto).length;
+  const gOggi = giorni.find(g => g.data === oggi);
+  return `<div class="titolo">Il viaggio</div>
+    <div class="hero"><div class="grande">${grande}</div><div class="sotto">${sotto}</div><div class="tappe">${tappe}</div></div>
+    ${gOggi ? sezione('Oggi') + rigaGiorno(gOggi, giorni.indexOf(gOggi), oggi) : ''}
+    ${prima && aperte ? `<div style="margin-top:12px"><button class="riga" data-a="tab" data-v="todo" style="--c:var(--c-orange)">
+      <div class="ic">${ic('check')}</div><div class="testo"><div class="nome">${aperte} cose da preparare</div>
+      <div class="info">Prenotazioni e scadenze</div></div><span class="vai">${ic('chev-r')}</span></button></div>` : ''}
+    ${sezione('Giorno per giorno', piu('nuovoGiorno', '', 'Aggiungi'))}
+    ${giorni.map((g, i) => rigaGiorno(g, i, oggi)).join('')}`;
 }
-function cardGiorno(g, i, oggi){
-  const t = tappa(g.tappa), aperto = S.aperto === g.id;
-  const notte = tappaDellaNotte(g.data), h = notte && alloggioDiTappa(notte.id);
-  const dd = new Date(g.data + 'T12:00:00');
-  let corpo = '';
-  if(aperto){
-    const luoghi = (g.voci || []).map(x => x.l && trova('luoghi', x.l)).filter(Boolean);
-    const percorso = luoghi.length >= 2 ? 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(luoghi[0].q) +
-      '&destination=' + encodeURIComponent(luoghi[luoghi.length - 1].q) +
-      (luoghi.length > 2 ? '&waypoints=' + encodeURIComponent(luoghi.slice(1, -1).slice(0, 8).map(l => l.q).join('|')) : '') : '';
-    corpo = `<div class="sep"><ul class="voci">${(g.voci || []).map(x => { const l = x.l && trova('luoghi', x.l), u = linkOk(x.u);
-      return `<li><div class="ora">${esc(x.ora || '')}</div><div><div class="testo">${esc(x.t)}</div>
-        ${l || u ? `<div class="chips">${l ? `<a class="chip maps" href="${esc(maps(l.q))}" target="_blank" rel="noopener">${ic('pin')}${esc(l.nome)}</a>` : ''}
-        ${u ? `<a class="chip" href="${esc(u)}" target="_blank" rel="noopener">${ic('link')}Sito</a>` : ''}</div>` : ''}</div></li>`; }).join('')}</ul>
-      ${h ? `<div class="nota-ospite">${ic('letto')}<span>Notte: <b>${esc(h.nome)}</b>${h.stato === 'prenotato' ? ' · prenotato' : ''}</span></div>` : ''}
-      <textarea class="nota" placeholder="Note condivise del giorno…" data-ed="giorni|${g.id}|note">${esc(g.note || '')}</textarea>
-      <div class="azioni" style="margin-top:10px">
-        ${percorso ? `<a class="btn maps" href="${esc(percorso)}" target="_blank" rel="noopener">${ic('mappa')}Percorso del giorno</a>` : ''}
-        <button class="btn" data-a="modGiorno" data-id="${g.id}">${ic('edit')}Modifica</button>
-        ${g.da && nomeDi(g.da) ? `<span class="piccolo" style="margin-left:auto">modificato da ${esc(nomeDi(g.da))}</span>` : ''}</div></div>`;
-  }
-  return `<div class="area ${aperto ? 'open' : ''} ${g.data === oggi ? 'oggi' : ''}" style="--c:${esc(t.colore)};animation-delay:${Math.min(i, 8) * 25}ms">
-    <button class="ah" data-a="apriGiorno" data-id="${g.id}">
-      <div class="ic"><div class="giorno-n"><b>${dd.getDate()}</b><i>${dd.toLocaleDateString('it-IT', { weekday:'short' })}</i></div></div>
-      <div style="flex:1;min-width:0"><b>${esc(g.titolo)}</b>
-        <div class="asub">${esc(t.citta)} · giorno ${i + 1}${h && !aperto ? ' · ' + esc(h.nome) : ''}</div></div>
-      <span class="cx">${ic('chev')}</span>
-    </button>${corpo}</div>`;
+function rigaGiorno(g, i, oggi){
+  const t = tappa(g.tappa), dd = new Date(g.data + 'T12:00:00');
+  return `<button class="riga ${g.data === oggi ? 'oggi' : ''}" style="--c:${esc(t.colore)}" data-a="apriGiorno" data-id="${g.id}">
+    <div class="ic data"><b>${dd.getDate()}</b><i>${dd.toLocaleDateString('it-IT', { weekday:'short' })}</i></div>
+    <div class="testo"><div class="nome">${esc(g.titolo)}</div><div class="info">${esc(t.citta)}</div></div>
+    <span class="vai">${ic('chev-r')}</span></button>`;
 }
 
 /* ---------- luoghi ---------- */
-const CAT = { vedere:['torii','Da vedere','var(--c-blue)'], mangiare:['ciotola','Ristoranti','var(--c-orange)'],
-  shopping:['borsa','Shopping','var(--c-purple)'], altro:['stella','Altro','var(--c-amber)'] };
-function cuori(rec, k){
-  const pref = rec.pref || {}, chi = Object.keys(pref).filter(p => pref[p] && trova('viaggiatori', p));
-  const mio = io() && pref[io()];
-  return `<button class="cuore ${mio ? 'on' : ''}" data-a="pref" data-k="${k}" data-id="${rec.id}">${ic('cuore')}${chi.length || ''}</button>
-    ${chi.length ? `<span class="piccolo">${chi.map(p => esc(nomeDi(p))).join(', ')}</span>` : ''}`;
-}
 function vistaLuoghi(){
   const citta = vis('tappe').sort((a, b) => a.dal.localeCompare(b.dal)).map(t => t.id);
   let L = vis('luoghi');
   if(S.citta !== 'tutte') L = L.filter(l => l.tappa === S.citta);
-  if(S.cat !== 'tutti') L = L.filter(l => l.cat === S.cat);
-  if(S.soloPref) L = L.filter(l => l.pref && Object.values(l.pref).some(Boolean));
-  return `<h1 class="hello">Luoghi</h1><p class="hello-sub">Cose da vedere e ristoranti, con Google Maps e i preferiti di ognuno.</p>
-    <div class="seg">${['tutte', ...citta].map(c => `<button class="${S.citta === c ? 'on' : ''}" data-a="filtro" data-f="citta" data-v="${c}">${c === 'tutte' ? 'Tutte le città' : esc(tappa(c).citta)}</button>`).join('')}</div>
-    <div class="seg" style="margin-top:6px"><button class="${S.cat === 'tutti' ? 'on' : ''}" data-a="filtro" data-f="cat" data-v="tutti">Tutti</button>
-      ${Object.entries(CAT).map(([k, v]) => `<button class="${S.cat === k ? 'on' : ''}" data-a="filtro" data-f="cat" data-v="${k}">${ic(v[0])}${v[1]}</button>`).join('')}
-      <button class="${S.soloPref ? 'on' : ''}" data-a="soloPref">${ic('cuore')}Preferiti</button></div>
-    ${sezione(`${L.length} ${L.length === 1 ? 'luogo' : 'luoghi'}`, piu('nuovo', 'luoghi', 'luogo'))}
-    ${L.length ? L.map(cardLuogo).join('') : '<div class="vuoto">Nessun luogo con questi filtri.</div>'}
-    <button class="btn full" style="margin-top:6px" data-a="csv">${ic('giu')}Scarica i luoghi per Google My Maps</button>
-    <p class="nota-pie">Su Google My Maps: crea una nuova mappa → Importa → scegli il file. Avrai un'unica mappa con tutti i luoghi, visibile anche nell'app Google Maps.</p>`;
+  if(S.cat === 'preferiti') L = L.filter(l => quantiCuori(l).length);
+  else if(S.cat !== 'tutti') L = L.filter(l => l.cat === S.cat);
+  return `<div class="titolo">Luoghi</div><p class="sottotitolo">Tocca un luogo per aprirlo su Google Maps.</p>
+    <div class="chips">${['tutte', ...citta].map(c => `<button class="${S.citta === c ? 'on' : ''}" data-a="filtro" data-f="citta" data-v="${c}">${c === 'tutte' ? 'Tutte le città' : esc(tappa(c).citta)}</button>`).join('')}</div>
+    <div class="chips" style="margin-top:4px">
+      ${[['tutti','Tutto', ''], ['vedere','Da vedere','torii'], ['mangiare','Ristoranti','ciotola'], ['preferiti','Preferiti','cuore']].map(([k, n, i]) =>
+        `<button class="${S.cat === k ? 'on' : ''}" data-a="filtro" data-f="cat" data-v="${k}">${i ? ic(i) : ''}${n}</button>`).join('')}</div>
+    ${sezione(`${L.length} ${L.length === 1 ? 'luogo' : 'luoghi'}`, piu('nuovo', 'luoghi', 'Aggiungi'))}
+    ${L.length ? L.map(rigaLuogo).join('') : '<div class="vuoto">Nessun luogo qui.</div>'}`;
 }
-function cardLuogo(l){
-  const u = linkOk(l.link), c = CAT[l.cat] || CAT.altro;
-  return `<div class="area ${l.visto ? 'fatto' : ''}" style="--c:${c[2]}">
-    <div class="ah"><div class="ic">${ic(c[0])}</div>
-      <div style="flex:1;min-width:0"><b class="tit">${esc(l.nome)}</b><div class="asub">${esc(tappa(l.tappa).citta)} · ${c[1]}</div></div>
-      <button class="spunta ${l.visto ? 'on' : ''}" data-a="visto" data-id="${l.id}" aria-label="Fatto">${l.visto ? ic('ok') : ''}</button></div>
-    ${l.note ? `<div class="muto" style="margin-top:9px">${esc(l.note)}</div>` : ''}
-    <div class="azioni sep" style="margin-top:10px;padding-top:10px">
-      <a class="btn maps" href="${esc(maps(l.q || l.nome + ' ' + tappa(l.tappa).citta))}" target="_blank" rel="noopener">${ic('pin')}Google Maps</a>
-      ${u ? `<a class="btn sq" href="${esc(u)}" target="_blank" rel="noopener" aria-label="Sito">${ic('link')}</a>` : ''}
-      <button class="btn sq" data-a="mod" data-k="luoghi" data-id="${l.id}" aria-label="Modifica">${ic('edit')}</button>
-      <span style="margin-left:auto" class="azioni">${cuori(l, 'luoghi')}</span></div></div>`;
+function rigaLuogo(l){
+  const c = CAT[l.cat] || CAT.altro;
+  return `<div class="riga ${l.visto ? 'fatto' : ''}" style="--c:${c[2]}">
+    <button class="ic" data-a="dett" data-k="luoghi" data-id="${l.id}" aria-label="Dettagli">${ic(c[0])}</button>
+    <button class="testo" data-a="dett" data-k="luoghi" data-id="${l.id}"><div class="nome">${esc(l.nome)}</div>
+      <div class="info">${esc(tappa(l.tappa).citta)} · ${c[1]}</div></button>
+    ${bottoneCuore('luoghi', l)}</div>`;
 }
 
 /* ---------- voli e hotel ---------- */
 function vistaViaggio(){
   const voli = vis('voli').sort((a, b) => (a.data || '').localeCompare(b.data || ''));
-  const blocchiH = tappeNotte().map(t => {
-    const n = giorniTra(t.dal, t.al), opz = vis('alloggi').filter(h => h.tappa === t.id)
-      .sort((a, b) => ({ prenotato:0, scelto:1 }[a.stato] ?? 2) - ({ prenotato:0, scelto:1 }[b.stato] ?? 2) || (a.prezzo || 0) - (b.prezzo || 0));
-    return sezione(`<span style="color:${esc(t.colore)}">●</span> ${esc(t.citta)}`,
-        `<span class="hint">${fmtD(t.dal, { day:'numeric', month:'short' })} → ${fmtD(t.al, { day:'numeric', month:'short' })} · ${n} ${n === 1 ? 'notte' : 'notti'}</span>`) +
-      (opz.map(h => cardAlloggio(h, n)).join('') || '<div class="vuoto">Nessuna proposta.</div>');
+  const hotel = tappeNotte().map(t => {
+    const n = giorniTra(t.dal, t.al), opz = vis('alloggi').filter(h => h.tappa === t.id).sort((a, b) => (a.prezzo || 0) - (b.prezzo || 0));
+    const sc = alloggioDiTappa(t.id), altre = sc ? opz.filter(h => h !== sc) : opz, aperte = S.altre[t.id];
+    return sezione(`${esc(t.citta)} <span style="font-family:var(--sans);font-weight:500;font-size:.92rem;color:var(--muted)">${fmtD(t.dal, { day:'numeric', month:'short' })} → ${fmtD(t.al, { day:'numeric', month:'short' })} · ${n} ${n === 1 ? 'notte' : 'notti'}</span>`) +
+      (sc ? rigaAlloggio(sc) : '') +
+      (altre.length ? (sc && !aperte ? `<button class="altre" data-a="altre" data-v="${t.id}">${ic('chev')}Vedi altre ${altre.length} proposte</button>` : altre.map(rigaAlloggio).join('')) : '');
   }).join('');
-  return `<h1 class="hello">Voli e hotel</h1><p class="hello-sub">Prezzi per l'intero soggiorno, tasse di soggiorno da pagare in loco.</p>
-    ${sezione('Voli', piu('nuovo', 'voli', 'volo'))}
-    ${voli.map(cardVolo).join('') || '<div class="vuoto">Nessun volo inserito.</div>'}
-    <div class="sec-h" style="margin-bottom:0"><h2>Alloggi</h2>${piu('nuovo', 'alloggi', 'hotel')}</div>
-    ${blocchiH}
-    ${sezione('Info utili', piu('nuovo', 'info', 'info'))}
-    ${vis('info').map(x => `<div class="area" style="--c:var(--c-cyan)"><div class="ah"><div class="ic">${ic('info')}</div>
-      <b style="flex:1">${esc(x.titolo)}</b><button class="btn sq" data-a="mod" data-k="info" data-id="${x.id}" aria-label="Modifica">${ic('edit')}</button></div>
-      <div class="muto" style="margin-top:9px;white-space:pre-line">${esc(x.testo)}</div></div>`).join('')}`;
+  return `<div class="titolo">Voli e hotel</div><p class="sottotitolo">Tocca un hotel per sceglierlo o segnarlo come prenotato.</p>
+    ${sezione('Voli', piu('nuovo', 'voli', 'Aggiungi'))}
+    ${voli.map(rigaVolo).join('') || '<div class="vuoto">Nessun volo inserito.</div>'}
+    ${sezione('Hotel', piu('nuovo', 'alloggi', 'Aggiungi'))}
+    ${hotel}
+    ${sezione('Info utili', piu('nuovo', 'info', 'Aggiungi'))}
+    ${vis('info').map(x => `<button class="riga" style="--c:var(--c-cyan)" data-a="dett" data-k="info" data-id="${x.id}">
+      <div class="ic">${ic('info')}</div><div class="testo"><div class="nome">${esc(x.titolo)}</div></div><span class="vai">${ic('chev-r')}</span></button>`).join('')}`;
 }
-function cardVolo(v){
-  const ora = s => s ? s.slice(11, 16) : '—';
+function rigaVolo(v){
+  const ora = s => s ? s.slice(11, 16) : '';
   const vuoto = !v.numero && !v.compagnia;
-  const c = v.tipo === 'ritorno' ? 'var(--c-purple)' : 'var(--c-blue)';
-  return `<div class="area" style="--c:${c}">
-    <div class="ah"><div class="ic">${ic('aereo')}</div>
-      <div style="flex:1;min-width:0"><span class="tag">${esc(v.tipo || 'volo')}</span>
-        <div class="asub" style="margin-top:4px">${fmtD(v.data, { weekday:'long', day:'numeric', month:'long' })}</div></div>
-      <button class="btn sq" data-a="mod" data-k="voli" data-id="${v.id}" aria-label="Modifica">${ic('edit')}</button></div>
-    <div class="riga sep" style="align-items:flex-start">
-      <div style="flex:1;min-width:0"><div class="lbl">Da</div><b class="tit">${esc(v.da)}</b><div class="prezzo num">${ora(v.partenza)}</div></div>
-      <div style="flex:1;min-width:0;text-align:right"><div class="lbl">A</div><b class="tit">${esc(v.a)}</b><div class="prezzo num">${ora(v.arrivo)}</div></div>
-    </div>
-    ${vuoto ? `<div class="avviso">${ic('allerta')}<span>Da completare: tocca modifica e inserisci compagnia, numero, orari e codice di prenotazione.</span></div>` :
-      `<div class="muto" style="margin-top:8px">${[esc([v.compagnia, v.numero].filter(Boolean).join(' ')), v.terminal && 'Terminal ' + esc(v.terminal),
-        v.prenotazione && 'Prenotazione <b>' + esc(v.prenotazione) + '</b>', v.bagaglio && 'Bagaglio: ' + esc(v.bagaglio)].filter(Boolean).join(' · ')}</div>
-      ${v.note ? `<div class="piccolo" style="margin-top:6px">${esc(v.note)}</div>` : ''}`}</div>`;
+  return `<button class="riga" style="--c:${v.tipo === 'ritorno' ? 'var(--c-purple)' : 'var(--c-blue)'}" data-a="dett" data-k="voli" data-id="${v.id}">
+    <div class="ic">${ic('aereo')}</div>
+    <div class="testo"><div class="nome">${esc(v.tipo === 'ritorno' ? 'Ritorno' : v.tipo === 'andata' ? 'Andata' : 'Volo')} · ${fmtD(v.data, { day:'numeric', month:'long' })}</div>
+      <div class="info">${esc(v.da)} → ${esc(v.a)}${ora(v.partenza) ? ' · ' + ora(v.partenza) : ''}</div>
+      ${vuoto ? '<span class="badge giallo">Da completare</span>' : ''}</div>
+    <span class="vai">${ic('chev-r')}</span></button>`;
 }
-function cardAlloggio(h, notti){
-  const u = linkOk(h.link), oggi = oggiISO();
+function rigaAlloggio(h){
   const att = /^attenzione/i.test(h.note || '');
-  const scad = h.rimborsabile ? giorniTra(oggi, h.rimborsabile) : null;
-  const c = h.stato === 'prenotato' ? 'var(--c-green)' : h.stato === 'scelto' ? 'var(--c-blue)' : 'var(--teal)';
-  return `<div class="area" style="--c:${c}">
-    <div class="ah" style="align-items:flex-start"><div class="ic">${ic('letto')}</div>
-      <div style="flex:1;min-width:0"><b>${esc(h.nome)}</b><div class="asub">${esc(h.camera)}</div></div>
-      ${h.prezzo ? `<div style="text-align:right"><div class="prezzo num">${eur(h.prezzo)}</div>${notti > 1 ? `<div class="piccolo num">${eur(h.prezzo / notti)} a notte</div>` : ''}</div>` : ''}</div>
-    ${h.rimborsabile ? `<div class="scad ${scad != null && scad < 30 ? 'rossa' : ''}" style="margin-top:10px">Cancellazione gratuita fino al ${fmtD(h.rimborsabile, { day:'numeric', month:'short', year:'numeric' })}</div>` : ''}
-    ${h.note ? (att ? `<div class="avviso">${ic('allerta')}<span>${esc(h.note)}</span></div>` : `<div class="muto" style="margin-top:8px">${esc(h.note)}</div>`) : ''}
-    ${h.stato === 'prenotato' && h.conferma ? `<div class="muto" style="margin-top:8px">Codice prenotazione: <b>${esc(h.conferma)}</b></div>` : ''}
-    <div class="stati" style="margin-top:12px">${[['proposta','Proposta'], ['scelto','Scelto'], ['prenotato','Prenotato']].map(([k, n]) =>
-      `<button class="${h.stato === k ? 'on ' + k : ''}" data-a="statoH" data-id="${h.id}" data-v="${k}">${n}</button>`).join('')}</div>
-    <div class="azioni" style="margin-top:10px">${cuori(h, 'alloggi')}
-      <span class="azioni" style="margin-left:auto">
-        <a class="btn sq maps" href="${esc(maps(h.indirizzo || h.nome + ' ' + tappa(h.tappa).citta))}" target="_blank" rel="noopener" aria-label="Google Maps">${ic('pin')}</a>
-        ${u ? `<a class="btn sq" href="${esc(u)}" target="_blank" rel="noopener" aria-label="Sito">${ic('link')}</a>` : ''}
-        <button class="btn sq" data-a="mod" data-k="alloggi" data-id="${h.id}" aria-label="Modifica">${ic('edit')}</button></span></div></div>`;
+  return `<button class="riga" style="--c:${h.stato === 'prenotato' ? 'var(--c-green)' : h.stato === 'scelto' ? 'var(--c-blue)' : 'var(--teal)'}" data-a="dett" data-k="alloggi" data-id="${h.id}">
+    <div class="ic">${ic('letto')}</div>
+    <div class="testo"><div class="nome">${esc(h.nome)}</div>
+      ${h.stato === 'prenotato' ? '<span class="badge prenotato">Prenotato</span>' : h.stato === 'scelto' ? '<span class="badge scelto">Scelto</span>' : ''}
+      ${att ? '<span class="badge giallo">Leggi l’avviso</span>' : ''}
+      ${quantiCuori(h).length ? `<span class="badge rosso">${quantiCuori(h).length} ♥</span>` : ''}</div>
+    ${h.prezzo ? `<div class="prezzo num">${eur(h.prezzo)}</div>` : ''}</button>`;
 }
 
 /* ---------- da fare ---------- */
 function rigaTodo(t){
   const oggi = oggiISO(), n = t.entro ? giorniTra(oggi, t.entro) : null;
   const quando = t.fatto ? (t.da && nomeDi(t.da) ? 'Fatto da ' + esc(nomeDi(t.da)) : 'Fatto') :
-    n == null ? '' : n < 0 ? 'Scaduto il ' + fmtD(t.entro) : n === 0 ? 'Entro oggi' : 'Entro il ' + fmtD(t.entro) + (n <= 30 ? ' · tra ' + n + ' g' : '');
-  return `<div class="area ${t.fatto ? 'fatto' : ''}" style="padding:12px 14px"><div class="ah" style="align-items:flex-start">
-    <button class="spunta ${t.fatto ? 'on' : ''}" data-a="todo" data-id="${t.id}" aria-label="Fatto">${t.fatto ? ic('ok') : ''}</button>
-    <div style="flex:1;min-width:0"><div class="tit" style="font-family:var(--sans);font-weight:600;font-size:.9rem">${esc(t.testo)}</div>
-      ${quando ? `<div class="scad ${!t.fatto && n != null && n <= 7 ? 'rossa' : ''}" style="margin-top:4px">${quando}</div>` : ''}</div>
-    <button class="btn sq" data-a="mod" data-k="todo" data-id="${t.id}" aria-label="Modifica">${ic('edit')}</button></div></div>`;
+    n == null ? '' : n < 0 ? 'Scaduto il ' + fmtD(t.entro) : n === 0 ? 'Entro oggi' : 'Entro il ' + fmtD(t.entro) + (n <= 30 ? ` (tra ${n} giorni)` : '');
+  return `<div class="riga ${t.fatto ? 'fatto' : ''}">
+    <button class="spunta ${t.fatto ? 'on' : ''}" data-a="todo" data-id="${t.id}" aria-label="Segna come fatto">${t.fatto ? ic('ok') : ''}</button>
+    <button class="testo" data-a="mod" data-k="todo" data-id="${t.id}"><div class="nome" style="font-weight:600">${esc(t.testo)}</div>
+      ${quando ? `<div class="scad ${!t.fatto && n != null && n <= 7 ? 'rossa' : ''}">${quando}</div>` : ''}</button></div>`;
 }
 function vistaTodo(){
   const T = vis('todo'), fatti = T.filter(t => t.fatto).length, pc = T.length ? Math.round(100 * fatti / T.length) : 0;
-  const ord = T.slice().sort((a, b) => (a.fatto - b.fatto) || (a.entro || '9').localeCompare(b.entro || '9'));
-  const canc = vis('alloggi').filter(h => (h.stato === 'scelto' || h.stato === 'prenotato') && h.rimborsabile)
-    .sort((a, b) => a.rimborsabile.localeCompare(b.rimborsabile));
-  return `<h1 class="hello">Da fare</h1><p class="hello-sub">Prenotazioni e preparativi, con le scadenze.</p>
-    <div class="card"><div class="riga"><span class="lbl" style="flex:1">Avanzamento</span><b class="num" style="font-family:var(--disp)">${fatti} di ${T.length} · ${pc}%</b></div>
-      <div class="barra" style="margin-top:10px"><i style="width:${pc}%"></i></div></div>
-    ${sezione('Cose da fare', piu('nuovo', 'todo', 'aggiungi'))}
-    ${ord.map(rigaTodo).join('') || '<div class="vuoto">Niente da fare.</div>'}
-    ${canc.length ? sezione('Cancellazione gratuita degli hotel scelti') + canc.map(h =>
-      `<div class="area" style="--c:var(--c-amber);padding:12px 14px"><div class="ah"><div class="ic" style="width:34px;height:34px;border-radius:10px">${ic('letto')}</div>
-        <div style="flex:1;min-width:0"><b style="font-size:.9rem">${esc(h.nome)}</b>
-        <div class="scad" style="margin-top:3px">Fino al ${fmtD(h.rimborsabile, { day:'numeric', month:'long', year:'numeric' })}</div></div></div></div>`).join('') : ''}`;
+  const daFare = T.filter(t => !t.fatto).sort((a, b) => (a.entro || '9').localeCompare(b.entro || '9'));
+  const fatte = T.filter(t => t.fatto);
+  return `<div class="titolo">Da fare</div><p class="sottotitolo">${fatti} fatte su ${T.length}. Tocca il quadrato quando hai finito.</p>
+    <div class="barra"><i style="width:${pc}%"></i></div>
+    ${sezione('Da preparare', piu('nuovo', 'todo', 'Aggiungi'))}
+    ${daFare.map(rigaTodo).join('') || '<div class="vuoto">Tutto fatto!</div>'}
+    ${fatte.length ? sezione('Già fatte') + fatte.map(rigaTodo).join('') : ''}`;
 }
 
 /* ---------- spese ---------- */
@@ -666,57 +580,50 @@ function vistaSpese(){
   const prev = b => b.auto ? pa.tot : Number(b.previsto || 0);
   const speso = id => SP.filter(s => s.cat === id).reduce((n, s) => n + inEuro(s), 0);
   const totPrev = B.reduce((n, b) => n + prev(b), 0), totSpeso = SP.reduce((n, s) => n + inEuro(s), 0);
-  const perChi = vis('viaggiatori').map(p => [p, SP.filter(s => s.chi === p.id).reduce((n, s) => n + inEuro(s), 0)]).filter(x => x[1] > 0);
-  return `<h1 class="hello">Spese</h1><p class="hello-sub">Per tutta la famiglia, voli esclusi · cambio 1 € = ${cambio()} ¥</p>
-    <div class="kpis">${kpi('var(--c-purple)', 'wallet', 'Speso', eur(totSpeso), SP.length + ' spese')}
-      ${kpi('var(--teal)', 'cal', 'Previsto', eur(totPrev), totPrev ? Math.round(100 * totSpeso / totPrev) + '% usato' : '')}</div>
-    ${sezione('Budget per categoria')}
-    ${B.map((b, i) => { const p = prev(b), s = speso(b.id), pc = p ? Math.min(100, 100 * s / p) : 0;
-      return `<div class="card" style="padding:12px 14px"><div class="riga"><b class="tit" style="flex:1;font-size:.92rem">${esc(b.nome)}</b>
-        <span class="num" style="font-weight:700">${eur(s)}</span><span class="piccolo num">/ ${eur(p)}</span>
-        ${b.auto ? '' : `<button class="btn sq" data-a="mod" data-k="budget" data-id="${b.id}" aria-label="Modifica">${ic('edit')}</button>`}</div>
-        <div class="barra" style="margin-top:9px"><i class="${s > p && p ? 'oltre' : ''}" style="width:${pc}%;background:${s > p && p ? '' : COL_BUDGET[i % COL_BUDGET.length]}"></i></div>
-        ${b.auto ? `<div class="piccolo" style="margin-top:6px">${pa.stima ? 'Dal preventivo: hotel scelti, altrimenti l’opzione più economica di ogni città.' : 'Dal preventivo: hotel scelti.'}</div>` : ''}</div>`; }).join('')}
-    ${perChi.length ? sezione('Chi ha pagato') + `<div class="card">${perChi.map(([p, n]) =>
-      `<div class="riga" style="padding:5px 0"><span style="flex:1">${esc(p.nome)}</span><b class="num">${eur(n)}</b></div>`).join('')}</div>` : ''}
-    ${sezione('Spese', piu('nuovo', 'spese', 'spesa'))}
-    ${SP.map(s => { const b = trova('budget', s.cat), i = B.indexOf(b);
-      return `<div class="area" style="--c:${COL_BUDGET[(i < 0 ? 0 : i) % COL_BUDGET.length]};padding:12px 14px"><div class="ah">
-        <div class="ic" style="width:34px;height:34px;border-radius:10px">${ic('wallet')}</div>
-        <div style="flex:1;min-width:0"><b style="font-size:.9rem">${esc(s.descr)}</b>
-          <div class="asub">${[fmtD(s.data, { day:'numeric', month:'short' }), b && esc(b.nome), s.chi && esc(nomeDi(s.chi))].filter(Boolean).join(' · ')}</div></div>
-        <div style="text-align:right"><div class="num" style="font-weight:700">${s.valuta === 'JPY' ? yen(s.importo) : eur(s.importo)}</div>
-          ${s.valuta === 'JPY' ? `<div class="piccolo num">${eur(inEuro(s))}</div>` : ''}</div>
-        <button class="btn sq" data-a="mod" data-k="spese" data-id="${s.id}" aria-label="Modifica">${ic('edit')}</button></div></div>`; }).join('') || '<div class="vuoto">Nessuna spesa registrata.</div>'}`;
+  return `<div class="titolo">Spese</div><p class="sottotitolo">Per tutta la famiglia, voli esclusi.</p>
+    <div class="hero"><div class="grande num">${eur(totSpeso)}</div><div class="sotto">spesi finora, su ${eur(totPrev)} previsti</div>
+      <div class="barra" style="margin-top:14px"><i class="${totSpeso > totPrev ? 'oltre' : ''}" style="width:${totPrev ? Math.min(100, 100 * totSpeso / totPrev) : 0}%"></i></div></div>
+    <button class="btn primary full" style="margin-top:14px" data-a="nuovo" data-k="spese">${ic('piu')}Aggiungi una spesa</button>
+    ${sezione('Per categoria')}
+    ${B.map((b, i) => { const p = prev(b), s = speso(b.id);
+      return `<button class="riga" style="--c:${COL_BUDGET[i % COL_BUDGET.length]};display:block" data-a="${b.auto ? 'tab' : 'mod'}" ${b.auto ? 'data-v="viaggio"' : `data-k="budget" data-id="${b.id}"`}>
+        <div style="display:flex;align-items:baseline;gap:8px"><span class="nome" style="flex:1">${esc(b.nome)}</span>
+          <b class="num">${eur(s)}</b><span class="info num">di ${eur(p)}</span></div>
+        <div class="barra" style="margin-top:10px"><i class="${s > p && p ? 'oltre' : ''}" style="width:${p ? Math.min(100, 100 * s / p) : 0}%;background:${s > p && p ? '' : 'var(--c)'}"></i></div></button>`; }).join('')}
+    ${SP.length ? sezione('Ultime spese') + SP.map(s => { const b = trova('budget', s.cat);
+      return `<button class="riga" data-a="mod" data-k="spese" data-id="${s.id}">
+        <div class="testo"><div class="nome">${esc(s.descr)}</div><div class="info">${[fmtD(s.data, { day:'numeric', month:'short' }), b && esc(b.nome), s.chi && esc(nomeDi(s.chi))].filter(Boolean).join(' · ')}</div></div>
+        <div class="prezzo num">${s.valuta === 'JPY' ? yen(s.importo) : eur(s.importo)}${s.valuta === 'JPY' ? `<div class="info" style="font-weight:500">${eur(inEuro(s))}</div>` : ''}</div></button>`; }).join('') : ''}
+    <p class="nota-pie">Cambio usato: 1 € = ${cambio()} ¥. Si cambia dalle impostazioni.</p>`;
 }
 
-/* =========================== FOGLI (moduli) =========================== */
+/* =========================== FOGLI =========================== */
 const opzTappe = (solo) => vis('tappe').filter(t => !solo || !t.solo).sort((a, b) => a.dal.localeCompare(b.dal)).map(t => [t.id, t.citta]);
 const SCHEMI = {
   luoghi:{ titolo:'luogo', campi:[
     { k:'nome', l:'Nome', req:1 }, { k:'tappa', l:'Città', t:'sel', o:() => opzTappe() },
     { k:'cat', l:'Tipo', t:'sel', o:() => Object.entries(CAT).map(([k, v]) => [k, v[1]]) },
-    { k:'q', l:'Ricerca su Google Maps (nome e città)', ph:'es. Ichiran Shibuya' },
-    { k:'link', l:'Sito web', t:'url' }, { k:'note', l:'Note', t:'area' } ] },
+    { k:'q', l:'Cosa cercare su Google Maps', ph:'es. Ichiran Shibuya' },
+    { k:'link', l:'Sito web (facoltativo)', t:'url' }, { k:'note', l:'Note', t:'area' } ] },
   alloggi:{ titolo:'hotel', campi:[
     { k:'nome', l:'Nome', req:1 }, { k:'tappa', l:'Città', t:'sel', o:() => opzTappe(true) },
     { k:'camera', l:'Camera e trattamento' }, { k:'prezzo', l:'Prezzo totale del soggiorno (€)', t:'num' },
     { k:'rimborsabile', l:'Cancellazione gratuita fino al', t:'date' },
     { k:'stato', l:'Stato', t:'sel', o:() => [['proposta','Proposta'], ['scelto','Scelto'], ['prenotato','Prenotato']] },
-    { k:'conferma', l:'Codice di prenotazione' }, { k:'indirizzo', l:'Indirizzo per Google Maps' },
+    { k:'conferma', l:'Codice di prenotazione' }, { k:'indirizzo', l:'Indirizzo (per Google Maps)' },
     { k:'link', l:'Sito web', t:'url' }, { k:'note', l:'Note', t:'area' } ] },
   voli:{ titolo:'volo', campi:[
     { k:'tipo', l:'Tipo', t:'sel', o:() => [['andata','Andata'], ['ritorno','Ritorno'], ['interno','Volo interno'], ['scalo','Scalo']] },
     { k:'data', l:'Data', t:'date' }, { k:'da', l:'Da', req:1 }, { k:'a', l:'A', req:1 },
     { k:'partenza', l:'Partenza (ora locale)', t:'dt' }, { k:'arrivo', l:'Arrivo (ora locale)', t:'dt' },
-    { k:'compagnia', l:'Compagnia' }, { k:'numero', l:'Numero volo' }, { k:'terminal', l:'Terminal' },
-    { k:'prenotazione', l:'Codice prenotazione (PNR)' }, { k:'bagaglio', l:'Bagaglio' }, { k:'note', l:'Note', t:'area' } ] },
+    { k:'compagnia', l:'Compagnia aerea' }, { k:'numero', l:'Numero del volo' }, { k:'terminal', l:'Terminal' },
+    { k:'prenotazione', l:'Codice di prenotazione' }, { k:'bagaglio', l:'Bagaglio' }, { k:'note', l:'Note', t:'area' } ] },
   todo:{ titolo:'cosa da fare', campi:[ { k:'testo', l:'Cosa', req:1, t:'area' }, { k:'entro', l:'Entro il', t:'date' } ] },
   spese:{ titolo:'spesa', campi:[
-    { k:'descr', l:'Descrizione', req:1 }, { k:'importo', l:'Importo', t:'num', req:1 },
+    { k:'descr', l:'Cosa hai pagato', req:1 }, { k:'importo', l:'Quanto', t:'num', req:1 },
     { k:'valuta', l:'Valuta', t:'sel', o:() => [['JPY','Yen (¥)'], ['EUR','Euro (€)']] },
     { k:'cat', l:'Categoria', t:'sel', o:() => vis('budget').map(b => [b.id, b.nome]) },
-    { k:'data', l:'Data', t:'date' }, { k:'chi', l:'Pagato da', t:'sel', o:() => [['', '—']].concat(vis('viaggiatori').map(p => [p.id, p.nome])) } ] },
+    { k:'data', l:'Data', t:'date' }, { k:'chi', l:'Chi ha pagato', t:'sel', o:() => [['', '—']].concat(vis('viaggiatori').map(p => [p.id, p.nome])) } ] },
   budget:{ titolo:'categoria', campi:[ { k:'nome', l:'Nome', req:1 }, { k:'previsto', l:'Previsto (€)', t:'num' } ] },
   info:{ titolo:'informazione', campi:[ { k:'titolo', l:'Titolo', req:1 }, { k:'testo', l:'Testo', t:'area' } ] }
 };
@@ -731,18 +638,98 @@ function campoHTML(c, val){
 const testaFoglio = t => `<div class="foglio-h"><h2>${t}</h2><button class="iconbtn" data-a="chiudi" aria-label="Chiudi">${ic('x')}</button></div>`;
 function vistaFoglio(){
   const sh = S.sheet;
-  let dentro = '';
+  let dentro;
   if(sh.tipo === 'impostazioni') dentro = foglioImpostazioni();
   else if(sh.tipo === 'giorno') dentro = foglioGiorno();
+  else if(sh.tipo === 'giornoVista') dentro = foglioGiornoVista();
+  else if(sh.tipo === 'dett') dentro = foglioDettaglio();
   else{
     const sc = SCHEMI[sh.k], rec = sh.id ? trova(sh.k, sh.id) || {} : (sh.base || {});
     dentro = `${testaFoglio((sh.id ? 'Modifica ' : 'Nuovo ') + sc.titolo)}
+      ${sh.k === 'todo' && sh.id ? `<button class="btn ${rec.fatto ? '' : 'primary'} full" style="margin-bottom:14px" data-a="todo" data-id="${sh.id}">${ic('ok')}${rec.fatto ? 'Segna come da fare' : 'Segna come fatto'}</button>` : ''}
       <form id="modulo" onsubmit="return false">${sc.campi.map(c => campoHTML(c, rec[c.k])).join('')}</form>
       <button class="btn primary full" data-a="salvaModulo">Salva</button>
-      ${sh.id ? `<button class="btn danger full" style="margin-top:8px" data-a="eliminaModulo">Elimina</button>` : ''}`;
+      ${sh.id ? `<button class="btn danger full" style="margin-top:10px" data-a="eliminaModulo">Elimina</button>` : ''}`;
   }
   return `<div class="velo" data-a="sfondo"><div class="foglio" role="dialog">${dentro}</div></div>`;
 }
+
+/* dettaglio di un giorno */
+function foglioGiornoVista(){
+  const g = trova('giorni', S.sheet.id); if(!g) return testaFoglio('Giorno eliminato');
+  const t = tappa(g.tappa), notte = tappaDellaNotte(g.data), h = notte && alloggioDiTappa(notte.id);
+  const luoghi = (g.voci || []).map(x => x.l && trova('luoghi', x.l)).filter(Boolean);
+  const percorso = luoghi.length >= 2 ? 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(luoghi[0].q) +
+    '&destination=' + encodeURIComponent(luoghi[luoghi.length - 1].q) +
+    (luoghi.length > 2 ? '&waypoints=' + encodeURIComponent(luoghi.slice(1, -1).slice(0, 8).map(l => l.q).join('|')) : '') : '';
+  return `${testaFoglio(esc(g.titolo))}
+    <p class="sottotitolo" style="margin-top:-6px">${fmtD(g.data, { weekday:'long', day:'numeric', month:'long' })} · ${esc(t.citta)}</p>
+    ${percorso ? `<div style="margin-bottom:14px">${ext(percorso, 'primary full', ic('mappa') + 'Percorso del giorno su Google Maps')}</div>` : ''}
+    <ul class="attivita">${(g.voci || []).map(x => { const l = x.l && trova('luoghi', x.l), u = linkOk(x.u);
+      return `<li>${x.ora ? `<div class="ora">${esc(x.ora)}</div>` : ''}<div class="cosa">${esc(x.t)}</div>
+        ${l || u ? `<div class="link">${l ? ext(maps(l.q), 'maps', ic('pin') + 'Mappa') : ''}${u ? ext(u, '', ic('link') + 'Sito') : ''}</div>` : ''}</li>`; }).join('')}</ul>
+    ${h ? `<div class="blocco"><div class="etichetta">Si dorme a</div><p><b>${esc(h.nome)}</b>${h.stato === 'prenotato' ? ' · prenotato' : ''}</p></div>` : ''}
+    <div class="etichetta" style="margin:16px 2px 6px">Note per tutti</div>
+    <textarea class="nota" placeholder="Scrivi qui una nota per i compagni di viaggio…" data-ed="giorni|${g.id}|note">${esc(g.note || '')}</textarea>
+    <button class="btn full" style="margin-top:14px" data-a="modGiorno" data-id="${g.id}">${ic('edit')}Modifica questo giorno</button>`;
+}
+
+/* dettaglio di luogo, hotel, volo, info */
+function foglioDettaglio(){
+  const { k, id } = S.sheet, r = trova(k, id);
+  if(!r) return testaFoglio('Elemento eliminato');
+  const modifica = `<button class="btn full" style="margin-top:12px" data-a="mod" data-k="${k}" data-id="${id}">${ic('edit')}Modifica</button>`;
+  if(k === 'luoghi'){
+    const c = CAT[r.cat] || CAT.altro, u = linkOk(r.link), chi = quantiCuori(r);
+    return `${testaFoglio(esc(r.nome))}
+      <p class="sottotitolo" style="margin-top:-6px">${esc(tappa(r.tappa).citta)} · ${c[1]}</p>
+      ${ext(maps(r.q || r.nome + ' ' + tappa(r.tappa).citta), 'primary full', ic('pin') + 'Apri su Google Maps')}
+      ${r.note ? `<div class="blocco" style="margin-top:12px"><p>${esc(r.note)}</p></div>` : ''}
+      <div class="bottoni">
+        <button class="btn ${haCuore(r) ? 'maps' : ''}" data-a="pref" data-k="luoghi" data-id="${id}">${ic('cuore')}${haCuore(r) ? 'Nei preferiti' : 'Preferito'}</button>
+        <button class="btn ${r.visto ? 'maps' : ''}" data-a="visto" data-id="${id}">${ic('ok')}${r.visto ? 'Già visto' : 'Fatto'}</button>
+        ${u ? `<a class="btn full2" href="${esc(u)}" target="_blank" rel="noopener">${ic('link')}Sito web</a>` : ''}</div>
+      ${chi.length ? `<p class="nota-pie">Piace a: ${chi.map(p => esc(nomeDi(p))).join(', ')}</p>` : ''}
+      ${modifica}`;
+  }
+  if(k === 'alloggi'){
+    const u = linkOk(r.link), att = /^attenzione/i.test(r.note || ''), chi = quantiCuori(r);
+    const n = (() => { const t = trova('tappe', r.tappa); return t ? giorniTra(t.dal, t.al) : 1; })();
+    return `${testaFoglio(esc(r.nome))}
+      <p class="sottotitolo" style="margin-top:-6px">${esc(tappa(r.tappa).citta)} · ${esc(r.camera || '')}</p>
+      ${att ? `<div class="avviso">${ic('allerta')}<span>${esc(r.note)}</span></div>` : ''}
+      <div class="blocco"><div style="display:flex;align-items:baseline;gap:10px"><span class="titolo" style="margin:0;font-size:1.6rem">${r.prezzo ? eur(r.prezzo) : '—'}</span>
+        <span class="info" style="color:var(--muted)">${n > 1 && r.prezzo ? `${eur(r.prezzo / n)} a notte` : 'soggiorno intero'}</span></div>
+        ${r.rimborsabile ? `<p style="margin-top:8px;color:var(--muted)">Cancellazione gratuita fino al <b style="color:var(--ink)">${fmtD(r.rimborsabile, { day:'numeric', month:'long', year:'numeric' })}</b></p>` : ''}
+        ${r.conferma ? `<p style="margin-top:8px;color:var(--muted)">Codice di prenotazione: <b style="color:var(--ink)">${esc(r.conferma)}</b></p>` : ''}</div>
+      <div class="etichetta" style="margin:4px 2px 8px">A che punto siamo</div>
+      <div class="stati">${[['proposta','Proposta'], ['scelto','Scelto'], ['prenotato','Prenotato']].map(([s, t]) =>
+        `<button class="${r.stato === s ? 'on ' + s : ''}" data-a="statoH" data-id="${id}" data-v="${s}">${t}</button>`).join('')}</div>
+      ${r.note && !att ? `<div class="blocco" style="margin-top:12px"><p>${esc(r.note)}</p></div>` : ''}
+      <div class="bottoni">
+        ${ext(maps(r.indirizzo || r.nome + ' ' + tappa(r.tappa).citta), 'maps', ic('pin') + 'Mappa')}
+        <button class="btn ${haCuore(r) ? 'maps' : ''}" data-a="pref" data-k="alloggi" data-id="${id}">${ic('cuore')}${haCuore(r) ? 'Preferito' : 'Preferito?'}</button>
+        ${u ? `<a class="btn full2" href="${esc(u)}" target="_blank" rel="noopener">${ic('link')}Sito dell'hotel</a>` : ''}</div>
+      ${chi.length ? `<p class="nota-pie">Piace a: ${chi.map(p => esc(nomeDi(p))).join(', ')}</p>` : ''}
+      ${modifica}`;
+  }
+  if(k === 'voli'){
+    const ora = s => s ? s.slice(11, 16) : '—';
+    const righe = [['Compagnia', [r.compagnia, r.numero].filter(Boolean).join(' ')], ['Terminal', r.terminal], ['Prenotazione', r.prenotazione], ['Bagaglio', r.bagaglio], ['Note', r.note]].filter(x => x[1]);
+    return `${testaFoglio(r.tipo === 'ritorno' ? 'Volo di ritorno' : r.tipo === 'andata' ? 'Volo di andata' : 'Volo')}
+      <p class="sottotitolo" style="margin-top:-6px">${fmtD(r.data, { weekday:'long', day:'numeric', month:'long', year:'numeric' })}</p>
+      <div class="blocco" style="display:flex;gap:12px">
+        <div style="flex:1"><div class="etichetta">Partenza</div><p><b>${esc(r.da)}</b></p><div class="titolo num" style="margin:4px 0 0;font-size:1.5rem">${ora(r.partenza)}</div></div>
+        <div style="flex:1;text-align:right"><div class="etichetta">Arrivo</div><p><b>${esc(r.a)}</b></p><div class="titolo num" style="margin:4px 0 0;font-size:1.5rem">${ora(r.arrivo)}</div></div></div>
+      ${righe.length ? `<div class="blocco">${righe.map(([e, v]) => `<div class="etichetta" style="margin-top:8px">${e}</div><p>${esc(v)}</p>`).join('')}</div>`
+        : `<div class="avviso">${ic('allerta')}<span>Mancano i dati del biglietto: tocca Modifica e inserisci compagnia, numero del volo e orari.</span></div>`}
+      ${modifica}`;
+  }
+  if(k === 'info') return `${testaFoglio(esc(r.titolo))}<div class="blocco"><p style="white-space:pre-line">${esc(r.testo)}</p></div>${modifica}`;
+  return testaFoglio('');
+}
+
+/* modifica di un giorno */
 function foglioGiorno(){
   const b = S.sheet.bozza, L = vis('luoghi');
   const ordinati = L.slice().sort((x, y) => (x.tappa === b.tappa ? 0 : 1) - (y.tappa === b.tappa ? 0 : 1) || x.nome.localeCompare(y.nome));
@@ -750,46 +737,49 @@ function foglioGiorno(){
     <div class="due"><label class="campo"><span>Data</span><input type="date" data-bz="data" value="${esc(b.data)}"></label>
       <label class="campo"><span>Città</span><select data-bz="tappa">${opzTappe().map(([k, t]) => `<option value="${k}" ${b.tappa === k ? 'selected' : ''}>${esc(t)}</option>`).join('')}</select></label></div>
     <label class="campo"><span>Titolo</span><input data-bz="titolo" value="${esc(b.titolo)}"></label>
-    <div class="sec-h" style="margin-top:8px"><h2>Programma</h2></div>
-    ${b.voci.map((x, i) => `<div class="voce-ed"><div class="riga">
-        <input placeholder="Orario" data-bz="voci.${i}.ora" value="${esc(x.ora)}" style="max-width:130px">
-        <span style="flex:1"></span>
-        <button class="btn sq" data-a="voceSu" data-i="${i}" ${i ? '' : 'disabled'} aria-label="Sposta su">${ic('freccia')}</button>
-        <button class="btn sq" data-a="voceVia" data-i="${i}" aria-label="Togli">${ic('x')}</button></div>
+    <div class="sec" style="margin-top:10px">Attività</div>
+    ${b.voci.map((x, i) => `<div class="voce-ed"><div class="riga-ed">
+        <input placeholder="Orario (es. 9:00)" data-bz="voci.${i}.ora" value="${esc(x.ora)}">
+        <button class="mini" data-a="voceSu" data-i="${i}" ${i ? '' : 'disabled'} aria-label="Sposta su">${ic('freccia')}</button>
+        <button class="mini" data-a="voceVia" data-i="${i}" aria-label="Togli">${ic('x')}</button></div>
       <textarea placeholder="Cosa si fa" data-bz="voci.${i}.t">${esc(x.t)}</textarea>
-      <select data-bz="voci.${i}.l"><option value="">Nessun luogo collegato</option>${ordinati.map(l =>
+      <select data-bz="voci.${i}.l"><option value="">Nessun luogo sulla mappa</option>${ordinati.map(l =>
         `<option value="${l.id}" ${x.l === l.id ? 'selected' : ''}>${esc(l.nome)} (${esc(tappa(l.tappa).citta)})</option>`).join('')}</select>
       <input class="link" placeholder="Link (facoltativo)" type="url" data-bz="voci.${i}.u" value="${esc(x.u || '')}"></div>`).join('')}
     <button class="btn full" data-a="voceNuova">${ic('piu')}Aggiungi attività</button>
-    <button class="btn primary full" style="margin-top:10px" data-a="salvaGiorno">Salva</button>
-    ${S.sheet.id ? `<button class="btn danger full" style="margin-top:8px" data-a="eliminaGiorno">Elimina giorno</button>` : ''}`;
+    <button class="btn primary full" style="margin-top:12px" data-a="salvaGiorno">Salva</button>
+    ${S.sheet.id ? `<button class="btn danger full" style="margin-top:10px" data-a="eliminaGiorno">Elimina giorno</button>` : ''}`;
 }
+
 function foglioImpostazioni(){
   const P = vis('viaggiatori');
+  const statoTesto = !syncAttiva() ? 'Non attiva: le modifiche restano solo su questo telefono.' :
+    S.sync.stato === 'errore' ? 'Problema: ' + S.sync.errore : S.sync.ora ? 'Attiva. Ultimo aggiornamento alle ' + new Date(S.sync.ora).toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit' }) + '.' : 'Attiva.';
   return `${testaFoglio('Impostazioni')}
-    <label class="campo"><span>Chi sei su questo telefono?</span><select data-cfg="io">
-      <option value="">Scegli…</option>${P.map(p => `<option value="${p.id}" ${io() === p.id ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select></label>
-    <div class="sec-h"><h2>Viaggiatori</h2><button class="hint" data-a="nuovoViaggiatore">${ic('piu')}aggiungi</button></div>
+    <label class="campo"><span>Chi sei?</span><select data-cfg="io">
+      <option value="">Scegli il tuo nome…</option>${P.map(p => `<option value="${p.id}" ${io() === p.id ? 'selected' : ''}>${esc(p.nome)}</option>`).join('')}</select></label>
+    <div class="sec">Nomi dei viaggiatori</div>
     ${P.map(p => `<label class="campo"><input data-ed="viaggiatori|${p.id}|nome" value="${esc(p.nome)}"></label>`).join('')}
-    <div class="sec-h"><h2>Viaggio</h2></div>
-    <div class="due"><label class="campo"><span>Cambio: 1 € in yen</span><input type="number" step="0.1" inputmode="decimal" data-ed="viaggio||cambio" value="${esc(cambio())}"></label>
-      <label class="campo"><span>Titolo</span><input data-ed="viaggio||titolo" value="${esc(D.viaggio.titolo)}"></label></div>
-    <div class="sec-h"><h2>Condivisione</h2></div>
-    <p class="nota-pie" style="margin:-4px 2px 10px">Le modifiche passano da Supabase: vanno bene lo stesso progetto e la stessa tabella di CHO. Nel cloud finiscono solo dati cifrati con il codice del viaggio.</p>
-    <label class="campo"><span>Project URL di Supabase</span><input data-cfg="url" placeholder="https://xxxx.supabase.co" value="${esc(cfg.url || '')}"></label>
-    <label class="campo"><span>Chiave pubblica (anon)</span><input data-cfg="key" value="${esc(cfg.key || '')}"></label>
+    <button class="btn full" data-a="nuovoViaggiatore">${ic('piu')}Aggiungi un viaggiatore</button>
+    <div class="sec">Condivisione con gli altri</div>
+    <div class="blocco"><p>${esc(statoTesto)}</p></div>
+    <button class="btn primary full" data-a="invita">${ic('invia')}Invita i compagni di viaggio</button>
+    <p class="nota-pie">Il link d'invito apre l'app già pronta. Mandalo solo ai compagni di viaggio, in privato.</p>
+    <div class="sec">Collegamento al cloud</div>
+    <p class="nota-pie" style="margin:-4px 2px 12px">Da compilare una volta sola, con gli stessi dati di Supabase usati da CHO.</p>
+    <label class="campo"><span>Project URL</span><input data-cfg="url" placeholder="https://xxxx.supabase.co" value="${esc(cfg.url || '')}"></label>
+    <label class="campo"><span>Chiave anon</span><input data-cfg="key" value="${esc(cfg.key || '')}"></label>
     <label class="campo"><span>Tabella</span><input data-cfg="tabella" placeholder="cho_sync" value="${esc(cfg.tabella || '')}"></label>
-    <button class="btn primary full" data-a="syncManuale">${ic('sync')}Sincronizza ora</button>
+    <button class="btn full" data-a="syncManuale">${ic('sync')}Sincronizza ora</button>
     ${S.esitoImp ? `<p class="esito">${esc(S.esitoImp)}</p>` : ''}
-    <button class="btn full" style="margin-top:8px" data-a="invita">${ic('invia')}Invita i compagni di viaggio</button>
-    <p class="nota-pie">Il link d'invito contiene il codice del viaggio e l'accesso al cloud: mandalo solo ai compagni di viaggio, in privato.</p>
-    <div class="sec-h"><h2>Copia di sicurezza</h2></div>
-    <div class="due"><button class="btn full" data-a="esporta">${ic('giu')}Esporta</button><button class="btn full" data-a="importa">${ic('su')}Importa</button></div>
-    <div class="sec-h"><h2>Questo telefono</h2></div>
-    <button class="btn danger full" data-a="esci">Esci e cancella i dati da questo telefono</button>
+    <div class="sec">Altro</div>
+    <label class="campo"><span>Cambio: quanti yen per 1 €</span><input type="number" step="0.1" inputmode="decimal" data-ed="viaggio||cambio" value="${esc(cambio())}"></label>
+    <div class="due"><button class="btn" data-a="esporta">${ic('giu')}Salva copia</button><button class="btn" data-a="importa">${ic('su')}Carica copia</button></div>
+    <button class="btn danger full" style="margin-top:12px" data-a="esci">Esci da questo telefono</button>
     <p class="nota-pie">Versione ${VERSIONE}</p>`;
 }
- 
+
+
 /* =========================== AZIONI =========================== */
 const A = {
   tab(d){ S.tab = d.v; S.animProssimo = true; render(); window.scrollTo(0, 0); },
@@ -801,9 +791,10 @@ const A = {
     try{ await applicaSeme(c); cfg.codice = c; salvaCfg(); S.attesa = false; render(); syncOra(); if(!io()) A.impostazioni(); }
     catch(e){ S.attesa = false; S.erroreBlocco = 'Codice non corretto.'; render(); }
   },
-  apriGiorno(d){ S.aperto = S.aperto === d.id ? '' : d.id; render(); },
+  apriGiorno(d){ S.sheet = { tipo:'giornoVista', id:d.id }; render(); },
+  dett(d){ S.sheet = { tipo:'dett', k:d.k, id:d.id }; render(); },
+  altre(d){ S.altre[d.v] = true; render(); },
   filtro(d){ S[d.f] = d.v; render(); },
-  soloPref(){ S.soloPref = !S.soloPref; render(); },
   pref(d){
     if(!io()){ alert('Prima scegli chi sei nelle impostazioni.'); A.impostazioni(); return; }
     const r = JSON.parse(JSON.stringify(trova(d.k, d.id))); r.pref = r.pref || {}; r.pref[io()] = !r.pref[io()];
@@ -842,7 +833,7 @@ const A = {
     const b = S.sheet.bozza; if(!b.titolo.trim()){ alert('Scrivi un titolo.'); return; }
     b.voci = b.voci.filter(v => (v.t || '').trim()).map(v => { const o = { ora:(v.ora || '').trim(), t:v.t.trim() }; if(v.l) o.l = v.l; if(linkOk(v.u)) o.u = linkOk(v.u); return o; });
     if(!b.id) b.id = uid('g');
-    salva('giorni', b); S.sheet = null; S.aperto = b.id; render();
+    salva('giorni', b); S.sheet = { tipo:'giornoVista', id:b.id }; render();
   },
   eliminaGiorno(){ if(!confirm('Eliminare questo giorno per tutti?')) return; elimina('giorni', S.sheet.id); S.sheet = null; render(); },
   impostazioni(){ S.sheet = { tipo:'impostazioni' }; S.esitoImp = ''; render(); },

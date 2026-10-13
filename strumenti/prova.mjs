@@ -44,30 +44,32 @@ await A.waitForSelector('text=Sincronizzato alle');
 await A.click('[data-a=chiudi]');
 await shot(A, '03-programma');
 await A.click('[data-a=apriGiorno][data-id=g04]');
-await A.waitForTimeout(300);
-await A.locator('.area.open').first().screenshot({ path: `${DIR}/04-giorno-aperto.png` });
-// nota condivisa
+await A.waitForSelector('.foglio');
+await A.waitForTimeout(400);
+await shot(A, '04-giorno');
 await A.fill('[data-ed="giorni|g04|note"]', 'Sveglia alle 5:45!'); await A.dispatchEvent('[data-ed="giorni|g04|note"]', 'change');
-await A.click('[data-a=tab][data-v=luoghi]'); await shot(A, '05-luoghi');
+await A.click('.foglio [data-a=modGiorno]'); await A.waitForSelector('text=Modifica giorno'); await A.waitForTimeout(300);
+await shot(A, '10-modifica-giorno');
+await A.click('[data-a=chiudi]');
+await A.click('[data-a=tab][data-v=luoghi]'); await A.waitForTimeout(400); await shot(A, '05-luoghi');
 await A.click('[data-a=pref][data-id=l13]');
-await A.click('[data-a=tab][data-v=viaggio]'); await shot(A, '06-voli-hotel');
-await A.click('[data-a=statoH][data-id=h09]');
-await A.click('[data-a=statoH][data-id=h09][data-v=prenotato]');
-await A.locator('text=Hakone').first().scrollIntoViewIfNeeded();
-await shot(A, '07-hotel-hakone');
-await A.click('[data-a=tab][data-v=todo]'); await shot(A, '08-todo');
+await A.click('[data-a=dett][data-id=l13] >> nth=1'); await A.waitForSelector('.foglio'); await A.waitForTimeout(300); await shot(A, '05b-luogo');
+await A.click('[data-a=chiudi]');
+await A.click('[data-a=tab][data-v=viaggio]'); await A.waitForTimeout(400); await shot(A, '06-voli-hotel');
+await A.click('[data-a=dett][data-id=h09]'); await A.waitForSelector('.foglio');
+await A.click('[data-a=statoH][data-id=h09][data-v=prenotato]'); await A.waitForTimeout(300);
+await shot(A, '07-hotel');
+await A.click('[data-a=chiudi]');
+await A.click('[data-a=altre][data-v=hakone]'); await A.click('[data-a=dett][data-id=h10]'); await A.waitForTimeout(300); await shot(A, '07b-hotel-avviso'); await A.click('[data-a=chiudi]');
+await A.click('[data-a=tab][data-v=todo]'); await A.waitForTimeout(400); await shot(A, '08-todo');
 await A.click('[data-a=todo][data-id=t02]');
 await A.click('[data-a=tab][data-v=spese]');
 await A.click('[data-a=nuovo][data-k=spese]');
 await A.fill('[name=descr]', 'Cena Chibo'); await A.fill('[name=importo]', '9800'); await A.selectOption('[name=valuta]', 'JPY');
 await A.click('[data-a=salvaModulo]');
-await A.waitForTimeout(2500); // sync automatica
+await A.waitForTimeout(2500);
 await shot(A, '09-spese');
-await A.click('[data-a=tab][data-v=programma]');
-await A.click('[data-a=modGiorno][data-id=g04]').catch(async () => { await A.click('[data-a=apriGiorno][data-id=g04]'); await A.click('[data-a=modGiorno][data-id=g04]'); });
-await A.waitForSelector('text=Modifica giorno');
-await shot(A, '10-modifica-giorno');
-await A.click('[data-a=chiudi]');
+await A.click('[data-a=tab][data-v=programma]'); await A.waitForTimeout(300);
 
 // --- telefono B: entra con il link d'invito e vede le modifiche di A
 const invito = await A.evaluate(() => linkInvito());

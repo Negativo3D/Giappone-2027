@@ -47,10 +47,11 @@ Usa Supabase via REST, di default sulla stessa tabella di CHO (`cho_sync`: `codi
 
 ## Stile grafico
 
-Lo stile è **Odoo**, come le app O&M dell'utente, ed è una scelta già fissata. Va mantenuto in ogni modifica:
-- fondo `#eef4f9` con superfici bianche, bordi `#e4ebf3` e accento teal `#0f8f9a`;
-- titoli in **Archivo**, testo in **IBM Plex Sans**, etichette piccole in **IBM Plex Mono** maiuscolo;
-- icone a linea SVG (oggetto `ICO`) dentro riquadri arrotondati colorati con `color-mix` del colore di categoria. Niente emoji nell'interfaccia;
-- riquadri contatori (`.kpi`), tile (`.app`), righe espandibili (`.area`) e intestazioni di sezione (`.sec-h`).
+Lo stile è **Odoo** (palette e font delle app O&M dell'utente), in versione **grande, ariosa e sempre chiara**. L'utente ha bocciato la versione densa e piccola, quindi va mantenuto così in ogni modifica:
+- **solo tema chiaro**: niente modalità scura, anche se il telefono è impostato in scuro;
+- fondo `#eef4f9`, superfici bianche, bordi `#e4ebf3`, accento teal `#0f8f9a`;
+- titoli in **Archivo**, testo in **IBM Plex Sans** a 17px; niente etichette minuscole o in monospazio;
+- **poche informazioni per schermata**: gli elenchi mostrano icona, nome, una riga di contesto e al massimo un'azione; i dettagli stanno in una scheda che si apre al tocco (`foglioDettaglio`, `foglioGiornoVista`);
+- pulsanti alti almeno 46–48px, icone a linea SVG (oggetto `ICO`) in riquadri colorati con `color-mix`, niente emoji nell'interfaccia.
 
 L'icona dell'app è originale, in stile anime: il sorgente è `strumenti/icona.svg` e i PNG si rigenerano da lì.
