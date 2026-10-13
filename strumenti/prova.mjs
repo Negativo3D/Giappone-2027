@@ -29,13 +29,13 @@ const shot = (p, n) => p.screenshot({ path: `${DIR}/${n}.png`, fullPage: false }
 
 // --- telefono A: codice sbagliato, poi giusto
 const A = await telefono('A');
-await A.goto(PAGINA);
+await A.goto(PAGINA); await A.waitForSelector('#taglio', { state:'detached' });
 await A.fill('#codice-in', 'AAAA-BBBB-CCCC-DDDD'); await A.click('[data-a=sblocca]');
 await A.waitForSelector('text=Codice non corretto');
 await shot(A, '01-blocco');
 await A.fill('#codice-in', CODICE.toLowerCase()); await A.click('[data-a=sblocca]');
-await A.waitForSelector('text=Impostazioni');
-await shot(A, '02-chi-sei');
+await A.waitForSelector('text=Giorno per giorno');
+await A.click('[data-a=impostazioni]'); await A.waitForSelector('text=Impostazioni');
 await A.selectOption('[data-cfg=io]', 'p1');
 await A.fill('[data-cfg=url]', 'https://finto.supabase.co'); await A.dispatchEvent('[data-cfg=url]', 'change');
 await A.fill('[data-cfg=key]', 'anon-finta'); await A.dispatchEvent('[data-cfg=key]', 'change');
@@ -67,12 +67,14 @@ await A.click('[data-a=tab][data-v=programma]'); await A.waitForTimeout(300);
 // --- telefono B: entra con il link d'invito e vede le modifiche di A
 const invito = await A.evaluate(() => linkInvito());
 const B = await telefono('B');
-await B.goto(invito);
-await B.waitForSelector('text=Impostazioni');
-await B.selectOption('[data-cfg=io]', 'p2');
-await B.click('[data-a=chiudi]');
+await B.goto(invito); await B.waitForSelector('#taglio', { state:'detached' });
+await B.waitForSelector('text=Giorno per giorno');
+await B.click('[data-a=tab][data-v=luoghi]');
+await B.click('[data-a=pref][data-id=l14]');
+await B.waitForSelector('text=Chi sei?'); await shot(B, '11-chi-sei');
+await B.click('[data-a=sonoIo][data-id=p2]');
 await B.waitForTimeout(1500);
-const vistaB = await B.evaluate(() => ({
+const vistaB = await B.evaluate(() => ({ sheetChiuso: !S.sheet, cuoreB: trova('luoghi', 'l14').pref,
   nota: trova('giorni', 'g04').note, pref: trova('luoghi', 'l13').pref, hakone: trova('alloggi', 'h09').stato,
   hash: location.hash
 }));
