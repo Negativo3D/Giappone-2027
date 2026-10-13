@@ -216,7 +216,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '1.9.1';
+const VERSIONE = '1.9.2';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -901,9 +901,33 @@ const A = {
   }
 };
 
+/* Salvataggio dei campi modificabili. Su iPhone toccare un pulsante spesso non
+   toglie il fuoco alla casella, quindi l'evento "change" può non arrivare mai:
+   si salva mentre si scrive (con un attimo di ritardo) e comunque prima di ogni tocco. */
+function salvaCampo(el){
+  if(!el || !el.dataset) return false;
+  if(el.dataset.ed){
+    const [k, id, campo] = el.dataset.ed.split('|');
+    let v = el.value; if(el.type === 'number') v = Number(v) || '';
+    if(k === 'viaggio'){ if(D.viaggio[campo] !== v){ salva('viaggio', { ...D.viaggio, [campo]: v }); return true; } }
+    else{ const r = trova(k, id); if(r && r[campo] !== v){ salva(k, { ...r, [campo]: v }); return true; } }
+  }
+  if(el.dataset.cfg){
+    const v = el.value.trim();
+    if(cfg[el.dataset.cfg] !== v){ cfg[el.dataset.cfg] = v; salvaCfg(); return true; }
+  }
+  return false;
+}
+let attesaCampo = null;
+function salvaCampoAttivo(){
+  clearTimeout(attesaCampo);
+  const a = document.activeElement;
+  return a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) ? salvaCampo(a) : false;
+}
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-a]'); if(!b) return;
   if(b.dataset.a === 'sfondo' && b !== e.target) return;
+  salvaCampoAttivo();
   const f = A[b.dataset.a]; if(f){ e.preventDefault(); f(b.dataset, e); }
 });
 document.addEventListener('input', e => {
@@ -913,21 +937,17 @@ document.addEventListener('input', e => {
     while(p.length > 1) o = o[p.shift()];
     o[p[0]] = el.value;
   }
+  if(el.dataset.ed || el.dataset.cfg){ clearTimeout(attesaCampo); attesaCampo = setTimeout(() => salvaCampo(el), 600); }
 });
 document.addEventListener('change', e => {
   const el = e.target;
-  if(el.dataset.ed){
-    const [k, id, campo] = el.dataset.ed.split('|');
-    let v = el.value; if(el.type === 'number') v = Number(v) || '';
-    if(k === 'viaggio'){ salva('viaggio', { ...D.viaggio, [campo]: v }); }
-    else{ const r = trova(k, id); if(r && r[campo] !== v) salva(k, { ...r, [campo]: v }); }
-    if(S.sheet) render();
-  }
-  if(el.dataset.cfg){
-    cfg[el.dataset.cfg] = el.value.trim(); salvaCfg();
-    if(el.dataset.cfg === 'io') render();
-  }
+  if(!(el.dataset.ed || el.dataset.cfg)) return;
+  clearTimeout(attesaCampo);
+  salvaCampo(el);
+  if(el.dataset.cfg === 'io' || (el.dataset.ed && S.sheet && S.sheet.tipo !== 'impostazioni')) render();
 });
+document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'hidden') salvaCampoAttivo(); });
+window.addEventListener('pagehide', salvaCampoAttivo);
 document.addEventListener('focusout', () => setTimeout(() => {
   const a = document.activeElement;
   if(S.renderInSospeso && !(a && /INPUT|TEXTAREA|SELECT/.test(a.tagName))) render();
