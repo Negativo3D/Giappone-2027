@@ -45,7 +45,7 @@ await A.click('[data-a=chiudi]');
 await shot(A, '03-programma');
 await A.click('[data-a=apriGiorno][data-id=g04]');
 await A.waitForTimeout(300);
-await A.locator('.card.giorno').nth(3).screenshot({ path: `${DIR}/04-giorno-aperto.png` });
+await A.locator('.area.open').first().screenshot({ path: `${DIR}/04-giorno-aperto.png` });
 // nota condivisa
 await A.fill('[data-ed="giorni|g04|note"]', 'Sveglia alle 5:45!'); await A.dispatchEvent('[data-ed="giorni|g04|note"]', 'change');
 await A.click('[data-a=tab][data-v=luoghi]'); await shot(A, '05-luoghi');

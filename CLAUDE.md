@@ -44,3 +44,13 @@ Usa Supabase via REST, di default sulla stessa tabella di CHO (`cho_sync`: `codi
 - Quando cambia l'app, aumenta `VERSIONE` in `index.html` e il nome di `CACHE` in `sw.js`.
 - Provala su un telefono simulato (Playwright, viewport iPhone) servendo la cartella con `python3 -m http.server`.
 - Per la sincronizzazione, intercetta le chiamate a Supabase con un finto server in memoria, come in `strumenti/prova.mjs`.
+
+## Stile grafico
+
+Lo stile è **Odoo**, come le app O&M dell'utente, ed è una scelta già fissata. Va mantenuto in ogni modifica:
+- fondo `#eef4f9` con superfici bianche, bordi `#e4ebf3` e accento teal `#0f8f9a`;
+- titoli in **Archivo**, testo in **IBM Plex Sans**, etichette piccole in **IBM Plex Mono** maiuscolo;
+- icone a linea SVG (oggetto `ICO`) dentro riquadri arrotondati colorati con `color-mix` del colore di categoria. Niente emoji nell'interfaccia;
+- riquadri contatori (`.kpi`), tile (`.app`), righe espandibili (`.area`) e intestazioni di sezione (`.sec-h`).
+
+L'icona dell'app è originale, in stile anime: il sorgente è `strumenti/icona.svg` e i PNG si rigenerano da lì.
