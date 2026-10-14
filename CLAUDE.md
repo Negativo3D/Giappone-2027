@@ -58,7 +58,10 @@ Lo stile è **Odoo** (palette e font delle app O&M dell'utente), in versione **g
 - **poche informazioni per schermata**: gli elenchi mostrano icona, nome, una riga di contesto e al massimo un'azione; i dettagli stanno in una scheda che si apre al tocco (`foglioDettaglio`, `foglioGiornoVista`);
 - pulsanti alti almeno 46–48px, icone a linea SVG (oggetto `ICO`) in riquadri colorati con `color-mix`, niente emoji nell'interfaccia.
 
-La scheda **Luoghi** si apre su una mappa Google incorporata e fissa in alto (`#mappa-box`, fuori da `#app` per non ricaricarla a ogni tocco); toccando una città o un luogo la mappa si sposta lì. Negli hotel non si mostrano i prezzi; toccando l'hotel si apre il suo sito.
+La scheda **Luoghi** è tutta mappa: una mappa Leaflet (in `vendor/leaflet`, sfondo CARTO Voyager) a schermo pieno tra barra in alto e barra delle schede (`#mappa-box`, fuori da `#app` per non ricaricarla a ogni tocco), con sopra solo i filtri per città. Niente elenco di suggerimenti: i luoghi li inseriscono gli utenti col pulsante "+" toccando un punto della mappa (campi nascosti `lat`/`lon`).
+- Sulla mappa ci sono gli hotel (colore della città, etichetta verde se prenotato) e i luoghi inseriti. I badge si adattano allo zoom: sotto 10 uno per città ("Kyoto · 4 hotel"), sotto 14 compatti, poi col nome. Toccando un badge si apre la scheda di dettaglio.
+- I quartieri (`QUARTIERI`) sono cerchi tratteggiati con il nome, visibili da zoom 11.
+- Negli hotel non si mostrano i prezzi; nell'elenco Voli e hotel toccando l'hotel si apre il suo sito.
 
 **Animazione d'apertura** (`#alba`, circa 3,3 secondi, si salta con un tocco, disattivata con Riduci movimento): è la scena dell'icona che prende vita. Il cielo passa dalla notte al tramonto, il sole sorge dietro il Fuji, il ramo di ciliegio ondeggia, cadono i petali e compare il titolo. La scena si adatta tagliando la parte alta, quindi il ramo sta in un SVG a parte agganciato in alto a sinistra. La precedente animazione con la samurai è stata bocciata: non usare personaggi né spezzoni di film.
 
