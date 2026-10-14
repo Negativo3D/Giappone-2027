@@ -198,9 +198,165 @@
   .orologi span{display:block;font-size:.85rem;font-weight:600;color:var(--muted)}
   .orologi b{display:block;font-family:var(--disp);font-weight:800;font-size:1.7rem;line-height:1.15}
   .orologi i{display:block;font-style:normal;font-size:.85rem;color:var(--muted)}
+
+  /* animazione d'apertura: il tramonto dell'icona prende vita (circa 3,3 s, si salta con un tocco) */
+  #alba{position:fixed;inset:0;z-index:100;background:#070a24;cursor:pointer;animation:a-via .6s ease 2.9s forwards}
+  #alba svg{width:100%;height:100%;display:block;stroke:none}
+  #alba svg.a-ramo-svg{position:absolute;top:calc(env(safe-area-inset-top) - 6px);left:0;width:62vw;max-width:340px;height:auto;overflow:visible}
+  #alba .a-tramonto{opacity:0;animation:a-appare 1.8s ease-in-out .1s forwards}
+  #alba .a-stelle circle{animation:a-brilla 1.6s ease-in-out infinite alternate}
+  #alba .a-stelle{animation:a-stelle 2.4s ease forwards}
+  #alba .a-sole{transform:translateY(190px);animation:a-sorge 2.2s cubic-bezier(.2,.7,.25,1) .15s forwards}
+  #alba .a-alone{opacity:0;animation:a-appare 1.4s ease 1s forwards}
+  #alba .a-nuvole{opacity:0;animation:a-nuvole 2.4s ease .8s forwards}
+  #alba .a-ramo{transform-box:fill-box;transform-origin:0 0;animation:a-ondeggia 2.6s ease-in-out infinite alternate}
+  #alba .a-petalo{opacity:0;transform:translate(var(--x),-40px) scale(var(--s));animation:a-cade var(--t) linear var(--d) forwards}
+  #alba .a-titolo{position:absolute;left:0;right:0;top:24%;text-align:center;color:#fff;opacity:0;transform:translateY(12px);
+    animation:a-titolo .9s ease 1.3s forwards;text-shadow:0 2px 18px rgba(20,10,60,.45)}
+  #alba .a-titolo b{display:block;font-family:var(--disp);font-weight:800;font-size:2.4rem;letter-spacing:-.01em}
+  #alba .a-titolo span{display:block;margin-top:6px;font-size:1rem;font-weight:500;opacity:.9}
+  @keyframes a-appare{to{opacity:1}}
+  @keyframes a-brilla{from{opacity:.25}to{opacity:1}}
+  @keyframes a-stelle{0%{opacity:1}100%{opacity:.45}}
+  @keyframes a-sorge{to{transform:translateY(0)}}
+  @keyframes a-nuvole{0%{opacity:0;transform:translateX(-30px)}100%{opacity:1;transform:none}}
+  @keyframes a-ondeggia{from{transform:rotate(-1.2deg)}to{transform:rotate(1.4deg)}}
+  @keyframes a-cade{0%{opacity:0;transform:translate(var(--x),-40px) rotate(0) scale(var(--s))}
+    10%{opacity:.95}100%{opacity:.85;transform:translate(calc(var(--x) + var(--g)),1000px) rotate(540deg) scale(var(--s))}}
+  @keyframes a-titolo{to{opacity:1;transform:none}}
+  @keyframes a-via{to{opacity:0;visibility:hidden}}
+  @media (prefers-reduced-motion:reduce){ #alba{display:none} }
 </style>
 </head>
 <body>
+<!-- Animazione d'apertura: il tramonto dell'icona prende vita. Si salta con un tocco. -->
+<div id="alba" aria-hidden="true">
+  <svg viewBox="0 0 512 1110" preserveAspectRatio="xMidYMax slice">
+    <defs>
+    <linearGradient id="a-cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f2461"/>
+      <stop offset=".34" stop-color="#5a2f86"/>
+      <stop offset=".58" stop-color="#d1477a"/>
+      <stop offset=".78" stop-color="#ff8f5e"/>
+      <stop offset="1" stop-color="#ffd59a"/>
+    </linearGradient>
+    <radialGradient id="a-alone" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff3c4" stop-opacity=".95"/>
+      <stop offset=".45" stop-color="#ffb36b" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#ff7a59" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="a-sole" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff6c9"/>
+      <stop offset="1" stop-color="#ffb259"/>
+    </linearGradient>
+    <linearGradient id="a-monte" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4b3f9e"/>
+      <stop offset=".5" stop-color="#3a2f80"/>
+      <stop offset="1" stop-color="#2a2263"/>
+    </linearGradient>
+    <linearGradient id="a-neve" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".55" stop-color="#f3e9ff"/>
+      <stop offset="1" stop-color="#c9b8f0"/>
+    </linearGradient>
+    <linearGradient id="a-colle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c3f5c"/>
+      <stop offset="1" stop-color="#0d2236"/>
+    </linearGradient>
+    <linearGradient id="a-colle2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#123049"/>
+      <stop offset="1" stop-color="#081726"/>
+    </linearGradient>
+    <clipPath id="a-disco"><circle cx="256" cy="268" r="92"/></clipPath>
+    <g id="a-fiore">
+      <g fill="#ffc6d9">
+        <ellipse cx="0" cy="-9" rx="6.5" ry="9"/>
+        <ellipse cx="0" cy="-9" rx="6.5" ry="9" transform="rotate(72)"/>
+        <ellipse cx="0" cy="-9" rx="6.5" ry="9" transform="rotate(144)"/>
+        <ellipse cx="0" cy="-9" rx="6.5" ry="9" transform="rotate(216)"/>
+        <ellipse cx="0" cy="-9" rx="6.5" ry="9" transform="rotate(288)"/>
+      </g>
+      <circle r="4.2" fill="#ff7aa5"/>
+      <circle r="1.8" fill="#ffe08a"/>
+    </g>
+    <path id="a-petalo" d="M0 -7 C5 -5 6 3 0 7 C-6 3 -5 -5 0 -7 Z" fill="#ffd3e2"/>
+    <path id="a-scintilla" d="M0 -10 L2 -2 L10 0 L2 2 L0 10 L-2 2 L-10 0 L-2 -2 Z" fill="#fff"/>
+  
+      <linearGradient id="a-notte" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#070a24"/><stop offset=".55" stop-color="#151a4a"/><stop offset="1" stop-color="#2a2a63"/>
+      </linearGradient>
+      <linearGradient id="a-tramonto" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#151a4f"/><stop offset=".35" stop-color="#2a2a6e"/><stop offset=".55" stop-color="#5a2f86"/>
+        <stop offset=".72" stop-color="#d1477a"/><stop offset=".86" stop-color="#ff8f5e"/><stop offset="1" stop-color="#ffd59a"/>
+      </linearGradient>
+    </defs>
+    <rect width="512" height="1110" fill="url(#a-notte)"/>
+    <rect class="a-tramonto" width="512" height="1110" fill="url(#a-tramonto)"/>
+    <g class="a-stelle" fill="#fff"><circle cx="175" cy="164" r="1.8" style="animation-delay:0.98s"/><circle cx="47" cy="558" r="1" style="animation-delay:0.55s"/><circle cx="39" cy="529" r="1.2" style="animation-delay:0.06s"/><circle cx="232" cy="438" r="1" style="animation-delay:0.36s"/><circle cx="292" cy="444" r="1" style="animation-delay:1.24s"/><circle cx="73" cy="238" r="2.2" style="animation-delay:1.42s"/><circle cx="305" cy="416" r="1" style="animation-delay:1.46s"/><circle cx="33" cy="146" r="1.5" style="animation-delay:0.63s"/><circle cx="286" cy="130" r="2.2" style="animation-delay:0.46s"/><circle cx="427" cy="195" r="1" style="animation-delay:0.87s"/><circle cx="337" cy="202" r="1.5" style="animation-delay:0.15s"/><circle cx="374" cy="74" r="2.2" style="animation-delay:0.09s"/><circle cx="115" cy="518" r="2.2" style="animation-delay:0.64s"/><circle cx="170" cy="486" r="2.2" style="animation-delay:1.39s"/><circle cx="195" cy="316" r="1.2" style="animation-delay:1.19s"/><circle cx="367" cy="259" r="1" style="animation-delay:0.86s"/><circle cx="278" cy="516" r="1.5" style="animation-delay:1.09s"/><circle cx="157" cy="84" r="1" style="animation-delay:0.77s"/><circle cx="94" cy="360" r="1.2" style="animation-delay:1.40s"/><circle cx="225" cy="50" r="1" style="animation-delay:1.15s"/><circle cx="303" cy="331" r="1.5" style="animation-delay:1.04s"/><circle cx="314" cy="518" r="2.2" style="animation-delay:1.20s"/><circle cx="45" cy="105" r="1.5" style="animation-delay:0.71s"/><circle cx="350" cy="76" r="1" style="animation-delay:1.10s"/><circle cx="168" cy="466" r="1.5" style="animation-delay:1.07s"/><circle cx="464" cy="365" r="1" style="animation-delay:1.41s"/><circle cx="191" cy="182" r="2.2" style="animation-delay:0.18s"/><circle cx="40" cy="233" r="1.5" style="animation-delay:0.19s"/><circle cx="136" cy="417" r="1.8" style="animation-delay:1.38s"/><circle cx="264" cy="92" r="1.2" style="animation-delay:0.67s"/><circle cx="291" cy="294" r="1.2" style="animation-delay:1.23s"/><circle cx="452" cy="295" r="1.8" style="animation-delay:1.48s"/><circle cx="359" cy="399" r="1.2" style="animation-delay:0.23s"/><circle cx="100" cy="164" r="1.2" style="animation-delay:0.99s"/><circle cx="16" cy="506" r="2.2" style="animation-delay:0.27s"/><circle cx="154" cy="14" r="1.2" style="animation-delay:0.63s"/><circle cx="199" cy="336" r="1.2" style="animation-delay:1.04s"/><circle cx="273" cy="65" r="1.8" style="animation-delay:1.35s"/><circle cx="409" cy="411" r="1.8" style="animation-delay:0.60s"/><circle cx="63" cy="503" r="1.8" style="animation-delay:0.09s"/><circle cx="44" cy="223" r="1.8" style="animation-delay:0.24s"/><circle cx="184" cy="63" r="1" style="animation-delay:0.00s"/></g>
+    <g transform="translate(0 520)">
+      <g class="a-sole">  <!-- sole con alone e fasce di luce -->
+  <circle class="a-alone" cx="256" cy="268" r="170" fill="url(#a-alone)"/>
+  <g clip-path="url(#a-disco)">
+    <rect x="150" y="170" width="212" height="200" fill="url(#a-sole)"/>
+    <g fill="#ff9a62" opacity=".55">
+      <rect x="150" y="300" width="212" height="5"/>
+      <rect x="150" y="315" width="212" height="7"/>
+      <rect x="150" y="332" width="212" height="9"/>
+      <rect x="150" y="351" width="212" height="12"/>
+    </g>
+  </g>
+</g>
+      <g class="a-nuvole">  <!-- nuvole sottili -->
+  <g fill="#ffd0b0" opacity=".55">
+    <rect x="40" y="214" width="150" height="7" rx="3.5"/>
+    <rect x="70" y="228" width="96" height="5" rx="2.5"/>
+    <rect x="330" y="198" width="140" height="7" rx="3.5"/>
+    <rect x="360" y="212" width="80" height="5" rx="2.5"/>
+  </g>
+
+</g>
+        <!-- Fuji -->
+  <path d="M-10 412 L196 250 Q256 206 316 250 L522 412 Z" fill="url(#a-monte)"/>
+  <path d="M196 250 Q256 206 316 250 L300 262 L284 252 L270 268 L256 254 L240 270 L226 254 L212 264 Z" fill="url(#a-neve)"/>
+  <path d="M256 222 L246 300 L258 262 Z" fill="#ffffff" opacity=".18"/>
+
+  <!-- colline -->
+  <path d="M-10 420 Q90 360 200 400 T420 380 T522 392 L522 522 L-10 522 Z" fill="url(#a-colle)"/>
+  <path d="M-10 460 Q110 420 230 452 T522 436 L522 522 L-10 522 Z" fill="url(#a-colle2)"/>
+
+  <!-- torii -->
+  <g transform="translate(336 352) scale(.92)">
+    <rect x="-6" y="0" width="12" height="96" fill="#e03b35"/>
+    <rect x="58" y="0" width="12" height="96" fill="#e03b35"/>
+    <rect x="-8" y="88" width="16" height="10" fill="#2a1418"/>
+    <rect x="56" y="88" width="16" height="10" fill="#2a1418"/>
+    <rect x="-12" y="22" width="88" height="9" fill="#e03b35"/>
+    <rect x="28" y="14" width="8" height="10" fill="#e03b35"/>
+    <path d="M-26 -6 Q32 4 90 -6 L86 6 Q32 14 -22 6 Z" fill="#2a1418"/>
+    <path d="M-20 4 Q32 12 84 4 L82 12 Q32 19 -18 12 Z" fill="#e03b35"/>
+  </g>
+
+
+    </g>
+    <rect x="0" y="1030" width="512" height="80" fill="#081726"/>
+    <g class="a-petali"><use href="#a-petalo" class="a-petalo" style="--x:97px;--d:0.95s;--t:3.34s;--s:1.07;--g:-51px"/><use href="#a-petalo" class="a-petalo" style="--x:467px;--d:0.49s;--t:2.65s;--s:1.08;--g:-16px"/><use href="#a-petalo" class="a-petalo" style="--x:328px;--d:0.71s;--t:2.35s;--s:1.21;--g:-1px"/><use href="#a-petalo" class="a-petalo" style="--x:265px;--d:0.88s;--t:2.30s;--s:0.76;--g:-17px"/><use href="#a-petalo" class="a-petalo" style="--x:399px;--d:0.57s;--t:3.19s;--s:0.80;--g:-58px"/><use href="#a-petalo" class="a-petalo" style="--x:125px;--d:1.53s;--t:2.83s;--s:0.79;--g:9px"/><use href="#a-petalo" class="a-petalo" style="--x:488px;--d:0.24s;--t:2.83s;--s:1.29;--g:50px"/><use href="#a-petalo" class="a-petalo" style="--x:66px;--d:1.17s;--t:2.51s;--s:0.92;--g:-39px"/><use href="#a-petalo" class="a-petalo" style="--x:202px;--d:1.28s;--t:2.84s;--s:1.17;--g:-18px"/><use href="#a-petalo" class="a-petalo" style="--x:345px;--d:0.51s;--t:3.17s;--s:1.29;--g:49px"/><use href="#a-petalo" class="a-petalo" style="--x:119px;--d:1.33s;--t:3.18s;--s:1.14;--g:-31px"/><use href="#a-petalo" class="a-petalo" style="--x:122px;--d:0.92s;--t:2.63s;--s:0.72;--g:-57px"/><use href="#a-petalo" class="a-petalo" style="--x:424px;--d:0.59s;--t:2.51s;--s:1.12;--g:-16px"/><use href="#a-petalo" class="a-petalo" style="--x:248px;--d:1.33s;--t:3.07s;--s:0.91;--g:-14px"/><use href="#a-petalo" class="a-petalo" style="--x:61px;--d:0.51s;--t:2.47s;--s:0.82;--g:-34px"/><use href="#a-petalo" class="a-petalo" style="--x:267px;--d:1.07s;--t:3.28s;--s:1.20;--g:1px"/></g>
+  </svg>
+  <svg class="a-ramo-svg" viewBox="-12 46 214 128"><g class="a-ramo">  <!-- ramo di ciliegio -->
+  <path d="M-10 70 C40 80 80 96 118 128 C140 146 160 150 186 148" stroke="#3a1f2b" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M60 86 C70 110 66 132 52 150" stroke="#3a1f2b" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M118 128 C126 104 142 92 160 86" stroke="#3a1f2b" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <use href="#a-fiore" transform="translate(30 74) scale(1.15) rotate(10)"/>
+  <use href="#a-fiore" transform="translate(76 96) scale(1.25) rotate(-12)"/>
+  <use href="#a-fiore" transform="translate(54 150) scale(1)"/>
+  <use href="#a-fiore" transform="translate(112 124) scale(1.2) rotate(25)"/>
+  <use href="#a-fiore" transform="translate(162 86) scale(1.05) rotate(-20)"/>
+  <use href="#a-fiore" transform="translate(186 148) scale(1.15) rotate(5)"/>
+  <use href="#a-fiore" transform="translate(140 152) scale(.85) rotate(40)"/>
+  <use href="#a-fiore" transform="translate(10 112) scale(.9) rotate(-30)"/>
+
+</g></svg>
+  <div class="a-titolo"><b>Giappone 2027</b><span>Osaka · Kyoto · Hakone · Tokyo</span></div>
+</div>
 <div id="app"></div>
 <div id="mappa-box" hidden><iframe id="mappa-fr" title="Mappa dei luoghi" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
 
@@ -216,7 +372,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '1.9.2';
+const VERSIONE = '2.0.0';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -956,6 +1112,8 @@ document.addEventListener('visibilitychange', () => { if(document.visibilityStat
 setInterval(() => { if(document.visibilityState === 'visible' && cfg.codice && D && !inSync) syncOra(); }, 60000);
 
 (async function avvio(){
+  const alba = document.getElementById('alba');
+  if(alba){ const via = () => alba.remove(); alba.addEventListener('click', via); setTimeout(via, 3600); }
   leggiInvito();
   if(cfg.codice){
     try{ await applicaSeme(cfg.codice); }

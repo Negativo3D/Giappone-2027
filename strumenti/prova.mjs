@@ -29,7 +29,7 @@ const shot = (p, n) => p.screenshot({ path: `${DIR}/${n}.png`, fullPage: false }
 
 // --- telefono A: codice sbagliato, poi giusto
 const A = await telefono('A');
-await A.goto(PAGINA);
+await A.goto(PAGINA); await A.waitForSelector('#alba', { state:'detached' });
 await A.fill('#codice-in', 'AAAA-BBBB-CCCC-DDDD'); await A.click('[data-a=sblocca]');
 await A.waitForSelector('text=Codice non corretto');
 await shot(A, '01-blocco');
@@ -68,7 +68,7 @@ await A.click('[data-a=tab][data-v=programma]'); await A.waitForTimeout(300);
 // --- telefono B: entra con il link d'invito e vede le modifiche di A
 const invito = await A.evaluate(() => linkInvito());
 const B = await telefono('B');
-await B.goto(invito);
+await B.goto(invito); await B.waitForSelector('#alba', { state:'detached' });
 await B.waitForSelector('text=Giorno per giorno');
 await B.click('[data-a=tab][data-v=luoghi]');
 await B.click('[data-a=pref][data-id=l14]');
