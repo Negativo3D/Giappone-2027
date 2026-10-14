@@ -64,11 +64,11 @@ await A.fill('[name=nome]', 'Caffè sul canale'); await A.selectOption('[name=ca
 await A.waitForTimeout(400); const segniDopo = await A.$$eval('.segno', e => e.length); await shot(A, '05d-nuovo-luogo');
 console.log(JSON.stringify({ segni, titoloHotel, segniDopo }));
 await A.click('[data-a=tab][data-v=viaggio]'); await A.waitForTimeout(400); await shot(A, '06-voli-hotel');
-await A.click('[data-a=dett][data-id=h09]'); await A.waitForSelector('.foglio');
-await A.click('[data-a=statoH][data-id=h09][data-v=prenotato]'); await A.waitForTimeout(300);
+await A.click('[data-a=dett][data-id=h12]'); await A.waitForSelector('.foglio');
+await A.click('[data-a=statoH][data-id=h12][data-v=prenotato]'); await A.waitForTimeout(300);
 await shot(A, '07-hotel');
 await A.click('[data-a=chiudi]');
-await A.click('[data-a=altre][data-v=hakone]'); await A.click('[data-a=dett][data-id=h10]'); await A.waitForTimeout(300); await shot(A, '07b-hotel-avviso'); await A.click('[data-a=chiudi]');
+await A.click('[data-a=altre][data-v=tokyo]'); await A.click('[data-a=dett][data-id=h13]'); await A.waitForTimeout(300); await shot(A, '07b-hotel-altre'); await A.click('[data-a=chiudi]');
 await A.waitForTimeout(2500); // sincronizzazione automatica
 await A.click('[data-a=tab][data-v=programma]'); await A.waitForTimeout(300);
 
@@ -78,13 +78,13 @@ const B = await telefono('B');
 await B.goto(invito); await B.waitForSelector('#alba', { state:'detached' });
 await B.waitForSelector('text=Giorno per giorno');
 await B.click('[data-a=tab][data-v=viaggio]');
-await B.click('[data-a=dett][data-k=alloggi][data-id=h05]'); await B.waitForSelector('.foglio');
+await B.click('[data-a=dett][data-k=alloggi][data-id=h06]'); await B.waitForSelector('.foglio');
 await B.click('.foglio [data-a=pref]');
 await B.waitForSelector('text=Chi sei?'); await shot(B, '11-chi-sei');
 await B.click('[data-a=sonoIo][data-id=p2]');
 await B.waitForTimeout(1500);
-const vistaB = await B.evaluate(() => ({ sheetChiuso: !S.sheet, cuoreB: trova('alloggi', 'h05').pref, luogoNuovo: vis('luoghi').filter(l => l.lat).map(l => l.nome),
-  nota: trova('giorni', 'g04').note, hakone: trova('alloggi', 'h09').stato,
+const vistaB = await B.evaluate(() => ({ sheetChiuso: !S.sheet, cuoreB: trova('alloggi', 'h06').pref, luogoNuovo: vis('luoghi').filter(l => l.lat).map(l => l.nome),
+  nota: trova('giorni', 'g04').note, tokyo: trova('alloggi', 'h12').stato,
   hash: location.hash
 }));
 // B modifica, A riceve
