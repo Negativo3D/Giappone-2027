@@ -54,7 +54,7 @@ await A.click('[data-a=chiudi]');
 await A.click('[data-a=tab][data-v=luoghi]'); await A.waitForSelector('.segno-in'); await A.waitForTimeout(1200); await shot(A, '05-mappa');
 const segni = await A.$$eval('.segno', e => e.length);
 await A.click('[data-a=citta][data-v=kyoto]'); await A.waitForTimeout(1300); await shot(A, '05a-mappa-kyoto');
-await A.evaluate(() => MAPPA.setZoom(16)); await A.waitForTimeout(700); await A.locator('.segno-in', { hasText: 'Gimmond' }).click(); await A.waitForSelector('.foglio'); await A.waitForTimeout(300); await shot(A, '05b-hotel-da-mappa');
+await A.evaluate(() => { const h = trova('alloggi', 'h06'); MAPPA.setView([h.lat, h.lon], 16, { animate:false }); }); await A.waitForTimeout(700); await A.locator('.segno-in', { hasText: 'Resi Stay' }).click(); await A.waitForSelector('.foglio'); await A.waitForTimeout(300); await shot(A, '05b-hotel-da-mappa');
 const titoloHotel = await A.$eval('.foglio-h h2', e => e.textContent);
 await A.click('[data-a=chiudi]');
 await A.click('#mappa-piu'); await A.waitForSelector('#mappa-aiuto:not([hidden])'); await shot(A, '05c-aggiungi');
@@ -64,11 +64,10 @@ await A.fill('[name=nome]', 'Caffè sul canale'); await A.selectOption('[name=ca
 await A.waitForTimeout(400); const segniDopo = await A.$$eval('.segno', e => e.length); await shot(A, '05d-nuovo-luogo');
 console.log(JSON.stringify({ segni, titoloHotel, segniDopo }));
 await A.click('[data-a=tab][data-v=viaggio]'); await A.waitForTimeout(400); await shot(A, '06-voli-hotel');
-await A.click('[data-a=dett][data-id=h12]'); await A.waitForSelector('.foglio');
-await A.click('[data-a=statoH][data-id=h12][data-v=prenotato]'); await A.waitForTimeout(300);
+await A.click('[data-a=dett][data-id=h03]'); await A.waitForSelector('.foglio');
+await A.click('[data-a=statoH][data-id=h03][data-v=prenotato]'); await A.waitForTimeout(300);
 await shot(A, '07-hotel');
 await A.click('[data-a=chiudi]');
-await A.click('[data-a=altre][data-v=tokyo]'); await A.click('[data-a=dett][data-id=h13]'); await A.waitForTimeout(300); await shot(A, '07b-hotel-altre'); await A.click('[data-a=chiudi]');
 await A.waitForTimeout(2500); // sincronizzazione automatica
 await A.click('[data-a=tab][data-v=programma]'); await A.waitForTimeout(300);
 
@@ -84,7 +83,7 @@ await B.waitForSelector('text=Chi sei?'); await shot(B, '11-chi-sei');
 await B.click('[data-a=sonoIo][data-id=p2]');
 await B.waitForTimeout(1500);
 const vistaB = await B.evaluate(() => ({ sheetChiuso: !S.sheet, cuoreB: trova('alloggi', 'h06').pref, luogoNuovo: vis('luoghi').filter(l => l.lat).map(l => l.nome),
-  nota: trova('giorni', 'g04').note, tokyo: trova('alloggi', 'h12').stato,
+  nota: trova('giorni', 'g04').note, osaka: trova('alloggi', 'h03').stato,
   hash: location.hash
 }));
 // B modifica, A riceve

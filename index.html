@@ -412,7 +412,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '2.6.2';
+const VERSIONE = '2.7.0';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -779,7 +779,7 @@ function segno(rec, tipo, compatto){
 const conPos = r => r.lat !== '' && r.lat != null && isFinite(r.lat) && isFinite(r.lon);
 /* da lontano un badge per città; a metà zoom segnaposto compatti; da vicino badge con il nome */
 function disegnaSegni(){
-  const hotel = vis('alloggi').filter(conPos), luoghi = vis('luoghi').filter(conPos);
+  const hotel = hotelScelti().filter(conPos), luoghi = vis('luoghi').filter(conPos);
   if(!STRATO) return { hotel, luoghi };
   STRATO.clearLayers();
   const z = MAPPA.getZoom();
@@ -908,16 +908,16 @@ function rigaGiorno(g, i, oggi){
 function vistaLuoghi(){ return ''; }
 
 /* ---------- voli e hotel ---------- */
+/* Si mostrano solo gli hotel scelti o prenotati: le alternative restano nei dati ma non si vedono. */
+const hotelScelti = () => vis('alloggi').filter(h => h.stato === 'scelto' || h.stato === 'prenotato');
 function vistaViaggio(){
   const voli = vis('voli').sort((a, b) => (a.data || '').localeCompare(b.data || ''));
   const hotel = tappeNotte().map(t => {
-    const n = giorniTra(t.dal, t.al), opz = vis('alloggi').filter(h => h.tappa === t.id).sort((a, b) => a.nome.localeCompare(b.nome));
-    const sc = alloggioDiTappa(t.id), altre = sc ? opz.filter(h => h !== sc) : opz, aperte = S.altre[t.id];
+    const n = giorniTra(t.dal, t.al), scelti = hotelScelti().filter(h => h.tappa === t.id).sort((a, b) => a.nome.localeCompare(b.nome));
     return sezione(`${esc(t.citta)} <span style="font-family:var(--sans);font-weight:500;font-size:.92rem;color:var(--muted)">${fmtD(t.dal, { day:'numeric', month:'short' })} → ${fmtD(t.al, { day:'numeric', month:'short' })} · ${n} ${n === 1 ? 'notte' : 'notti'}</span>`) +
-      (sc ? rigaAlloggio(sc) : '') +
-      (altre.length ? (sc && !aperte ? `<button class="altre" data-a="altre" data-v="${t.id}">${ic('chev')}Vedi altre ${altre.length} proposte</button>` : altre.map(rigaAlloggio).join('')) : '');
+      (scelti.map(rigaAlloggio).join('') || '<div class="vuoto">Hotel non ancora scelto.</div>');
   }).join('');
-  return `<div class="titolo">Voli e hotel</div><p class="sottotitolo">Tocca un hotel per aprire il suo sito. La freccia a destra serve per sceglierlo o segnarlo come prenotato.</p>
+  return `<div class="titolo">Voli e hotel</div><p class="sottotitolo">Tocca un hotel per aprire il suo sito. La freccia a destra apre i dettagli.</p>
     ${sezione('Voli', piu('nuovo', 'voli', 'Aggiungi'))}
     ${voli.map(rigaVolo).join('') || '<div class="vuoto">Nessun volo inserito.</div>'}
     ${sezione('Hotel', piu('nuovo', 'alloggi', 'Aggiungi'))}
@@ -957,7 +957,7 @@ const SCHEMI = {
     { k:'nome', l:'Nome', req:1 }, { k:'tappa', l:'Città', t:'sel', o:() => opzTappe(true) },
     { k:'camera', l:'Camera e trattamento' },
     { k:'rimborsabile', l:'Cancellazione gratuita fino al', t:'date' },
-    { k:'stato', l:'Stato', t:'sel', o:() => [['proposta','Proposta'], ['scelto','Scelto'], ['prenotato','Prenotato']] },
+    { k:'stato', l:'Stato', t:'sel', o:() => [['scelto','Scelto'], ['prenotato','Prenotato']] },
     { k:'conferma', l:'Codice di prenotazione' }, { k:'indirizzo', l:'Indirizzo (per Google Maps)' },
     { k:'link', l:'Sito web', t:'url' }, { k:'note', l:'Note', t:'area' } ] },
   voli:{ titolo:'volo', campi:[
@@ -1073,7 +1073,7 @@ function foglioDettaglio(){
       ${r.rimborsabile || r.conferma ? `<div class="blocco">${r.rimborsabile ? `<p style="color:var(--muted)">Cancellazione gratuita fino al <b style="color:var(--ink)">${fmtD(r.rimborsabile, { day:'numeric', month:'long', year:'numeric' })}</b></p>` : ''}
         ${r.conferma ? `<p style="margin-top:6px;color:var(--muted)">Codice di prenotazione: <b style="color:var(--ink)">${esc(r.conferma)}</b></p>` : ''}</div>` : ''}
       <div class="etichetta" style="margin:4px 2px 8px">A che punto siamo</div>
-      <div class="stati">${[['proposta','Proposta'], ['scelto','Scelto'], ['prenotato','Prenotato']].map(([s, t]) =>
+      <div class="stati">${[['scelto','Scelto'], ['prenotato','Prenotato']].map(([s, t]) =>
         `<button class="${r.stato === s ? 'on ' + s : ''}" data-a="statoH" data-id="${id}" data-v="${s}">${t}</button>`).join('')}</div>
       ${r.note && !att ? `<div class="blocco" style="margin-top:12px"><p>${esc(r.note)}</p></div>` : ''}
       <div class="bottoni">
