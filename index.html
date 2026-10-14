@@ -231,7 +231,8 @@
   .quartiere{background:rgba(255,255,255,.94);border:2px solid var(--c);border-radius:999px;box-shadow:0 2px 8px rgba(20,40,60,.14);
     font-family:var(--disp);font-weight:800;font-size:14px;letter-spacing:.01em;color:var(--c);padding:3px 11px;white-space:nowrap}
   .quartiere::before{display:none}
-  #mappa.lontano .quartiere,#mappa.lontano .area-quartiere{display:none}
+  #mappa.lontano .quartiere,#mappa.lontano .area-quartiere,#mappa.medio .quartiere{display:none}
+  #mappa.stretto .quartiere{font-size:11.5px;padding:1px 7px;border-width:1.5px}
 </style>
 </head>
 <body>
@@ -383,7 +384,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '2.4.1';
+const VERSIONE = '2.5.0';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -619,47 +620,74 @@ function render(){
 const CENTRI = { tutte:[[35.4, 137.3], 6], osaka:[[34.675, 135.502], 13], nara:[[34.685, 135.832], 14], kyoto:[[35.006, 135.765], 13],
   hakone:[[35.13, 139.05], 10], tokyo:[[35.69, 139.76], 12] };
 /* quartieri principali: centro, raggio in metri */
-const QUARTIERI = [
-  ['osaka','Namba',34.6655,135.5010,650], ['osaka','Dotonbori',34.6687,135.5025,350], ['osaka','Shinsaibashi',34.6740,135.5010,450],
-  ['osaka','Umeda',34.7025,135.4959,700], ['osaka','Shinsekai',34.6525,135.5063,350], ['osaka','Kitahama',34.6880,135.5060,450],
-  ['kyoto','Gion',35.0037,135.7751,450], ['kyoto','Higashiyama',34.9967,135.7810,600], ['kyoto','Kawaramachi',35.0040,135.7685,400],
-  ['kyoto','Karasuma',35.0060,135.7595,450], ['kyoto','Nijo',35.0142,135.7481,500], ['kyoto','Stazione di Kyoto',34.9858,135.7588,500],
-  ['kyoto','Arashiyama',35.0094,135.6720,900],
-  ['hakone','Sengokuhara',35.2580,139.0230,1600], ['hakone','Gora',35.2489,139.0479,700], ['hakone','Hakone-Yumoto',35.2329,139.1059,700],
-  ['hakone','Moto-Hakone',35.2050,139.0250,700], ['hakone','Ito',34.9658,139.0960,1300],
-  ['tokyo','Shinjuku',35.6938,139.7034,900], ['tokyo','Shibuya',35.6595,139.7005,700], ['tokyo','Harajuku',35.6702,139.7027,500],
-  ['tokyo','Asakusa',35.7130,139.7960,650], ['tokyo','Ueno',35.7138,139.7773,650], ['tokyo','Akihabara',35.6984,139.7731,500],
-  ['tokyo','Ginza',35.6717,139.7650,550], ['tokyo','Akasaka',35.6736,139.7365,500], ['tokyo','Roppongi',35.6628,139.7314,550],
-  ['tokyo','Odaiba',35.6270,139.7759,900]
-];
-/* Confini indicativi dei quartieri turistici, disegnati lungo vie, fiumi e canali principali
-   (non sono confini amministrativi). Per Hakone restano i cerchi: sono villaggi sparsi. */
+/* Quartieri: confini indicativi disegnati lungo vie, fiumi e canali principali (non amministrativi),
+   affiancati in modo da coprire il centro di ogni città. Hakone: cerchi, perché sono villaggi sparsi. */
 const R = (n, s, w, e) => [[n, w], [n, e], [s, e], [s, w]];
-const CONFINI = {
-  'Dotonbori': R(34.6693, 34.6680, 135.4975, 135.5065),
-  'Namba': R(34.6679, 34.6600, 135.4960, 135.5065),
-  'Shinsaibashi': R(34.6765, 34.6694, 135.4960, 135.5065),
-  'Umeda': R(34.7080, 34.6990, 135.4910, 135.5040),
-  'Shinsekai': R(34.6548, 34.6500, 135.5040, 135.5090),
-  'Kitahama': R(34.6915, 34.6865, 135.5025, 135.5110),
-  'Gion': [[35.0090, 135.7722], [35.0090, 135.7790], [34.9990, 135.7790], [34.9990, 135.7735], [35.0037, 135.7722]],
-  'Higashiyama': [[35.0040, 135.7791], [35.0040, 135.7840], [34.9930, 135.7868], [34.9930, 135.7791]],
-  'Kawaramachi': R(35.0105, 34.9990, 135.7660, 135.7714),
-  'Karasuma': R(35.0105, 35.0000, 135.7560, 135.7659),
-  'Nijo': R(35.0185, 35.0106, 135.7440, 135.7530),
-  'Stazione di Kyoto': R(34.9900, 34.9830, 135.7530, 135.7650),
-  'Arashiyama': [[35.0215, 135.6650], [35.0215, 135.6810], [35.0080, 135.6820], [35.0080, 135.6700], [35.0130, 135.6650]],
-  'Shinjuku': [[35.6975, 139.6950], [35.6975, 139.7075], [35.6870, 139.7075], [35.6870, 139.6900], [35.6930, 139.6900]],
-  'Shibuya': R(35.6640, 35.6555, 139.6960, 139.7060),
-  'Harajuku': [[35.6735, 139.7015], [35.6700, 139.7125], [35.6650, 139.7105], [35.6680, 139.7010]],
-  'Asakusa': R(35.7180, 35.7080, 139.7905, 139.7985),
-  'Ueno': R(35.7200, 35.7070, 139.7700, 139.7800),
-  'Akihabara': R(35.7030, 35.6965, 139.7685, 139.7745),
-  'Ginza': R(35.6760, 35.6670, 139.7605, 139.7700),
-  'Akasaka': R(35.6775, 35.6700, 139.7320, 139.7400),
-  'Roppongi': R(35.6665, 35.6590, 139.7270, 139.7360),
-  'Odaiba': [[35.6335, 139.7690], [35.6320, 139.7820], [35.6215, 139.7840], [35.6225, 139.7700]]
-};
+const C = (lat, lon, r) => ({ c:[lat, lon], r });
+const QUARTIERI = [
+  // Osaka
+  ['osaka','Umeda', R(34.7110, 34.6990, 135.4870, 135.5040)],
+  ['osaka','Tenma', R(34.7110, 34.6990, 135.5040, 135.5180)],
+  ['osaka','Nakanoshima', R(34.6990, 34.6880, 135.4850, 135.5025)],
+  ['osaka','Kitahama', R(34.6990, 34.6880, 135.5025, 135.5180)],
+  ['osaka','Honmachi', R(34.6880, 34.6765, 135.4850, 135.5180)],
+  ['osaka','Castello di Osaka', R(34.6990, 34.6790, 135.5180, 135.5340)],
+  ['osaka','Horie', R(34.6765, 34.6580, 135.4850, 135.4920)],
+  ['osaka','Amerikamura', R(34.6765, 34.6694, 135.4920, 135.5000)],
+  ['osaka','Shinsaibashi', R(34.6765, 34.6694, 135.5000, 135.5130)],
+  ['osaka','Dotonbori', R(34.6694, 34.6680, 135.4920, 135.5065)],
+  ['osaka','Namba', R(34.6680, 34.6580, 135.4920, 135.5065)],
+  ['osaka','Kuromon e Nipponbashi', R(34.6694, 34.6580, 135.5065, 135.5130)],
+  ['osaka','Shinsekai', R(34.6580, 34.6490, 135.5000, 135.5090)],
+  ['osaka','Tennoji', R(34.6580, 34.6420, 135.5090, 135.5220)],
+  ['osaka','Universal City', R(34.6720, 34.6600, 135.4260, 135.4400)],
+  ['osaka','Tempozan', R(34.6580, 34.6500, 135.4240, 135.4350)],
+  // Kyoto
+  ['kyoto','Palazzo Imperiale', R(35.0300, 35.0170, 135.7590, 135.7670)],
+  ['kyoto','Nijo', R(35.0185, 35.0105, 135.7420, 135.7530)],
+  ['kyoto','Karasuma', R(35.0170, 35.0000, 135.7530, 135.7660)],
+  ['kyoto','Kawaramachi', R(35.0170, 35.0000, 135.7660, 135.7716)],
+  ['kyoto','Shirakawa', R(35.0170, 35.0090, 135.7722, 135.7790)],
+  ['kyoto','Gion', [[35.0090, 135.7722], [35.0090, 135.7790], [34.9990, 135.7790], [34.9990, 135.7735], [35.0037, 135.7722]]],
+  ['kyoto','Okazaki', R(35.0200, 35.0090, 135.7790, 135.7960)],
+  ['kyoto','Ginkakuji', R(35.0290, 35.0200, 135.7880, 135.7990)],
+  ['kyoto','Higashiyama', [[35.0090, 135.7790], [35.0090, 135.7880], [34.9920, 135.7880], [34.9920, 135.7790]]],
+  ['kyoto','Gojo', R(35.0000, 34.9900, 135.7530, 135.7716)],
+  ['kyoto','Sanjusangendo', R(34.9990, 34.9880, 135.7716, 135.7790)],
+  ['kyoto','Stazione di Kyoto', R(34.9900, 34.9800, 135.7530, 135.7716)],
+  ['kyoto','Fushimi Inari', R(34.9700, 34.9620, 135.7690, 135.7830)],
+  ['kyoto','Kinkakuji', R(35.0420, 35.0350, 135.7240, 135.7340)],
+  ['kyoto','Arashiyama', [[35.0215, 135.6650], [35.0215, 135.6810], [35.0080, 135.6820], [35.0080, 135.6700], [35.0130, 135.6650]]],
+  // Hakone e dintorni
+  ['hakone','Sengokuhara', C(35.2580, 139.0230, 1600)], ['hakone','Gora', C(35.2489, 139.0479, 700)],
+  ['hakone','Hakone-Yumoto', C(35.2329, 139.1059, 700)], ['hakone','Moto-Hakone', C(35.2050, 139.0250, 700)],
+  ['hakone','Ito', C(34.9658, 139.0960, 1300)],
+  // Tokyo
+  ['tokyo','Ikebukuro', R(35.7350, 35.7250, 139.7050, 139.7200)],
+  ['tokyo','Shinjuku', R(35.6990, 35.6850, 139.6900, 139.7080)],
+  ['tokyo','Shinjuku Gyoen', R(35.6880, 35.6800, 139.7080, 139.7200)],
+  ['tokyo','Harajuku', R(35.6780, 35.6640, 139.6960, 139.7130)],
+  ['tokyo','Shibuya', R(35.6640, 35.6520, 139.6940, 139.7100)],
+  ['tokyo','Ebisu', R(35.6520, 35.6420, 139.7050, 139.7170)],
+  ['tokyo','Nakameguro', R(35.6520, 35.6400, 139.6930, 139.7050)],
+  ['tokyo','Shimokitazawa', R(35.6650, 35.6580, 139.6620, 139.6730)],
+  ['tokyo','Roppongi', R(35.6680, 35.6560, 139.7230, 139.7370)],
+  ['tokyo','Akasaka', R(35.6800, 35.6680, 139.7300, 139.7430)],
+  ['tokyo','Palazzo Imperiale', R(35.6920, 35.6780, 139.7480, 139.7600)],
+  ['tokyo','Marunouchi', R(35.6880, 35.6760, 139.7600, 139.7700)],
+  ['tokyo','Nihonbashi', R(35.6900, 35.6780, 139.7700, 139.7820)],
+  ['tokyo','Ginza', R(35.6760, 35.6680, 139.7600, 139.7720)],
+  ['tokyo','Shimbashi', R(35.6680, 35.6600, 139.7520, 139.7650)],
+  ['tokyo','Tsukiji', R(35.6680, 35.6600, 139.7650, 139.7760)],
+  ['tokyo','Akihabara', R(35.7040, 35.6950, 139.7660, 139.7780)],
+  ['tokyo','Ueno', R(35.7200, 35.7040, 139.7680, 139.7820)],
+  ['tokyo','Yanaka', R(35.7300, 35.7200, 139.7620, 139.7740)],
+  ['tokyo','Asakusa', R(35.7200, 35.7070, 139.7880, 139.8000)],
+  ['tokyo','Skytree', R(35.7140, 35.7060, 139.8050, 139.8170)],
+  ['tokyo','Ryogoku', R(35.7010, 35.6920, 139.7900, 139.8020)],
+  ['tokyo','Odaiba', [[35.6335, 139.7690], [35.6320, 139.7820], [35.6215, 139.7840], [35.6225, 139.7700]]],
+  ['tokyo','Toyosu', R(35.6510, 35.6410, 139.7840, 139.7980)]
+];
 let MAPPA = null, STRATO = null, ULTIMA_CITTA = null;
 function creaMappa(){
   if(!window.L) return false;
@@ -682,15 +710,15 @@ function creaMappa(){
   };
   base.on('tileerror', ripiego); nomi.on('tileerror', ripiego);
   L.control.zoom({ position:'bottomleft' }).addTo(MAPPA);
-  for(const [t, nome, lat, lon, r] of QUARTIERI){
+  for(const [t, nome, f] of QUARTIERI){
     const col = tappa(t).colore || '#0f8f9a';
-    const forma = CONFINI[nome]
-      ? L.polygon(CONFINI[nome], { color:col, weight:3, opacity:.85, fillColor:col, fillOpacity:.14, className:'area-quartiere', interactive:false })
-      : L.circle([lat, lon], { radius:r, color:col, weight:2, dashArray:'6 5', fillColor:col, fillOpacity:.13, className:'area-quartiere', interactive:false });
+    const forma = f.c
+      ? L.circle(f.c, { radius:f.r, color:col, weight:2.5, dashArray:'6 5', fillColor:col, fillOpacity:.13, className:'area-quartiere', interactive:false })
+      : L.polygon(f, { color:col, weight:2.5, opacity:.9, fillColor:col, fillOpacity:.15, className:'area-quartiere', interactive:false });
     forma.addTo(MAPPA).bindTooltip(nome, { permanent:true, direction:'center', className:'quartiere', interactive:false });
   }
   STRATO = L.layerGroup().addTo(MAPPA);
-  const zoomClasse = () => document.getElementById('mappa').classList.toggle('lontano', MAPPA.getZoom() < 11);
+  const zoomClasse = () => { const m = document.getElementById('mappa'), z = MAPPA.getZoom(); m.classList.toggle('lontano', z < 11); m.classList.toggle('medio', z < 13); m.classList.toggle('stretto', z < 14); };
   MAPPA.on('zoomend', () => { zoomClasse(); disegnaSegni(); }); zoomClasse();
   MAPPA.on('click', e => {
     if(!S.puntoNuovo) return;
