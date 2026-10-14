@@ -51,11 +51,18 @@ await A.fill('[data-ed="giorni|g04|note"]', 'Sveglia alle 5:45!'); await A.dispa
 await A.click('.foglio [data-a=modGiorno]'); await A.waitForSelector('text=Modifica giorno'); await A.waitForTimeout(300);
 await shot(A, '10-modifica-giorno');
 await A.click('[data-a=chiudi]');
-await A.click('[data-a=tab][data-v=luoghi]'); await A.waitForTimeout(400); await shot(A, '05-luoghi');
-await A.click('[data-a=pref][data-id=l13]');
-await A.click('[data-a=selLuogo][data-id=l13] >> nth=1'); await A.waitForTimeout(400); await shot(A, '05a-luogo-mappa');
-await A.click('.scelto [data-a=dett]'); await A.waitForSelector('.foglio'); await A.waitForTimeout(300); await shot(A, '05b-luogo');
+await A.click('[data-a=tab][data-v=luoghi]'); await A.waitForSelector('.segno-in'); await A.waitForTimeout(1200); await shot(A, '05-mappa');
+const segni = await A.$$eval('.segno', e => e.length);
+await A.click('[data-a=citta][data-v=kyoto]'); await A.waitForTimeout(1300); await shot(A, '05a-mappa-kyoto');
+await A.evaluate(() => MAPPA.setZoom(16)); await A.waitForTimeout(700); await A.locator('.segno-in', { hasText: 'Gimmond' }).click(); await A.waitForSelector('.foglio'); await A.waitForTimeout(300); await shot(A, '05b-hotel-da-mappa');
+const titoloHotel = await A.$eval('.foglio-h h2', e => e.textContent);
 await A.click('[data-a=chiudi]');
+await A.click('#mappa-piu'); await A.waitForSelector('#mappa-aiuto:not([hidden])'); await shot(A, '05c-aggiungi');
+const box = await A.$eval('#mappa', e => { const r = e.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
+await A.mouse.click(box.x, box.y); await A.waitForSelector('[name=nome]');
+await A.fill('[name=nome]', 'Caffè sul canale'); await A.selectOption('[name=cat]', 'mangiare'); await A.click('[data-a=salvaModulo]');
+await A.waitForTimeout(400); const segniDopo = await A.$$eval('.segno', e => e.length); await shot(A, '05d-nuovo-luogo');
+console.log(JSON.stringify({ segni, titoloHotel, segniDopo }));
 await A.click('[data-a=tab][data-v=viaggio]'); await A.waitForTimeout(400); await shot(A, '06-voli-hotel');
 await A.click('[data-a=dett][data-id=h09]'); await A.waitForSelector('.foglio');
 await A.click('[data-a=statoH][data-id=h09][data-v=prenotato]'); await A.waitForTimeout(300);
@@ -70,13 +77,14 @@ const invito = await A.evaluate(() => linkInvito());
 const B = await telefono('B');
 await B.goto(invito); await B.waitForSelector('#alba', { state:'detached' });
 await B.waitForSelector('text=Giorno per giorno');
-await B.click('[data-a=tab][data-v=luoghi]');
-await B.click('[data-a=pref][data-id=l14]');
+await B.click('[data-a=tab][data-v=viaggio]');
+await B.click('[data-a=dett][data-k=alloggi][data-id=h05]'); await B.waitForSelector('.foglio');
+await B.click('.foglio [data-a=pref]');
 await B.waitForSelector('text=Chi sei?'); await shot(B, '11-chi-sei');
 await B.click('[data-a=sonoIo][data-id=p2]');
 await B.waitForTimeout(1500);
-const vistaB = await B.evaluate(() => ({ sheetChiuso: !S.sheet, cuoreB: trova('luoghi', 'l14').pref,
-  nota: trova('giorni', 'g04').note, pref: trova('luoghi', 'l13').pref, hakone: trova('alloggi', 'h09').stato,
+const vistaB = await B.evaluate(() => ({ sheetChiuso: !S.sheet, cuoreB: trova('alloggi', 'h05').pref, luogoNuovo: vis('luoghi').filter(l => l.lat).map(l => l.nome),
+  nota: trova('giorni', 'g04').note, hakone: trova('alloggi', 'h09').stato,
   hash: location.hash
 }));
 // B modifica, A riceve
