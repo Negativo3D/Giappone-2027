@@ -58,7 +58,7 @@ Lo stile è **Odoo** (palette e font delle app O&M dell'utente), in versione **g
 - **poche informazioni per schermata**: gli elenchi mostrano icona, nome, una riga di contesto e al massimo un'azione; i dettagli stanno in una scheda che si apre al tocco (`foglioDettaglio`, `foglioGiornoVista`);
 - pulsanti alti almeno 46–48px, icone a linea SVG (oggetto `ICO`) in riquadri colorati con `color-mix`, niente emoji nell'interfaccia.
 
-La scheda **Luoghi** è tutta mappa: una mappa Leaflet (in `vendor/leaflet`, sfondo CARTO Voyager) a schermo pieno tra barra in alto e barra delle schede (`#mappa-box`, fuori da `#app` per non ricaricarla a ogni tocco), con sopra solo i filtri per città. Niente elenco di suggerimenti: i luoghi li inseriscono gli utenti col pulsante "+" toccando un punto della mappa (campi nascosti `lat`/`lon`).
+La scheda **Luoghi** è tutta mappa: una mappa Leaflet (in `vendor/leaflet`, sfondo Esri World Street Map, con ripiego su OpenStreetMap; CARTO ora chiede una chiave) a schermo pieno tra barra in alto e barra delle schede (`#mappa-box`, fuori da `#app` per non ricaricarla a ogni tocco), con sopra solo i filtri per città. Niente elenco di suggerimenti: i luoghi li inseriscono gli utenti col pulsante "+" toccando un punto della mappa (campi nascosti `lat`/`lon`).
 - Sulla mappa ci sono gli hotel (colore della città, etichetta verde se prenotato) e i luoghi inseriti. I badge si adattano allo zoom: sotto 10 uno per città ("Kyoto · 4 hotel"), sotto 14 compatti, poi col nome. Toccando un badge si apre la scheda di dettaglio.
 - I quartieri (`QUARTIERI`) sono cerchi tratteggiati con il nome, visibili da zoom 11.
 - Negli hotel non si mostrano i prezzi; nell'elenco Voli e hotel toccando l'hotel si apre il suo sito.
