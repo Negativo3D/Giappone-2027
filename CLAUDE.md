@@ -47,7 +47,7 @@ Usa Supabase via REST, di default sulla stessa tabella di CHO (`cho_sync`: `codi
 
 ## Spirito dell'app
 
-L'app è un **compagno di viaggio pratico**: dice dove andare oggi, apre la mappa, ricorda l'hotel della notte. Non deve essere assillante: niente scadenze in evidenza, contatori, avvisi rossi, promemoria o liste di cose da fare. Le schede sono tre: **Home** (conto alla rovescia, orologi Italia e Giappone, giorno per giorno), **Luoghi** e **Voli e hotel**. Le sezioni Spese e Da fare sono state tolte apposta. Prima di aggiungere qualcosa chiediti: serve davvero mentre si è in giro?
+L'app è un **compagno di viaggio pratico**: dice dove andare oggi, apre la mappa, ricorda l'hotel della notte. Non deve essere assillante: niente scadenze in evidenza, contatori, avvisi rossi, promemoria o liste di cose da fare. Le schede sono tre: **Home** (conto alla rovescia, orologi Italia e Giappone come due display digitali affiancati, giorno per giorno), **Luoghi** e **Voli e hotel**. Le sezioni Spese e Da fare sono state tolte apposta. Prima di aggiungere qualcosa chiediti: serve davvero mentre si è in giro?
 
 ## Stile grafico
 
