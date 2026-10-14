@@ -66,6 +66,22 @@
   .hero .grande{font-family:var(--disp);font-weight:800;font-size:2.1rem;line-height:1.1;letter-spacing:-.02em}
   .hero .grande b{color:var(--teal)}
   .hero .sotto{color:var(--muted);margin-top:6px;font-size:1rem}
+  .orologi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+  .quadrante{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:10px 10px 12px;text-align:center}
+  .q-nome{font-family:var(--disp);font-weight:800;font-size:1rem;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:7px}
+  .q-nome::before{content:"";width:11px;height:11px;border-radius:50%;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--line)}
+  .quadrante.it .q-nome::before{background:linear-gradient(90deg,#009246 33%,#fff 33% 66%,#ce2b37 66%)}
+  .quadrante.jp .q-nome::before{background:radial-gradient(circle,#bc002d 0 42%,#fff 46%)}
+  .q-schermo{background:linear-gradient(180deg,#16303d,#0f2430);border-radius:13px;padding:14px 4px 12px;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.45),0 1px 0 #fff;display:flex;justify-content:center}
+  .q-ora{white-space:nowrap;font-family:var(--disp);font-weight:800;font-size:clamp(1.8rem,10.4vw,2.6rem);line-height:1;letter-spacing:.01em;font-variant-numeric:tabular-nums;
+    color:#8ff5ea;text-shadow:0 0 10px rgba(80,230,215,.55)}
+  .q-ora b{font-weight:800}
+  .q-punti{font-style:normal;display:inline-block;margin:0 1px;animation:q-lampeggia 1s steps(1) infinite;position:relative;top:-.06em}
+  .quadrante.jp .q-ora{color:#ffc9a3;text-shadow:0 0 10px rgba(255,150,100,.5)}
+  .q-giorno{margin-top:8px;color:var(--muted);font-size:.92rem;text-transform:capitalize}
+  @keyframes q-lampeggia{50%{opacity:.15}}
+  @media (prefers-reduced-motion:reduce){ .q-punti{animation:none} }
   .tappe{display:flex;gap:6px;margin-top:18px}
   .tappe div{flex:1 1 0;min-width:0;border-radius:10px;padding:8px 9px;background:color-mix(in srgb,var(--c) 13%,var(--surface))}
   .tappe b{display:block;font-size:.88rem;color:color-mix(in srgb,var(--c) 75%,var(--ink));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -369,7 +385,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '2.2.1';
+const VERSIONE = '2.3.0';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -756,25 +772,30 @@ function bottoneCuore(k, rec){
   return `<button class="cuore ${haCuore(rec) ? 'on' : ''}" data-a="pref" data-k="${k}" data-id="${rec.id}" aria-label="Preferito">${ic('cuore')}${n || ''}</button>`;
 }
 
-/* ---------- orologi Italia / Giappone ---------- */
+/* ---------- orologi Italia / Giappone: due display digitali affiancati ---------- */
 const FUSI = [['it', 'Italia', 'Europe/Rome'], ['jp', 'Giappone', 'Asia/Tokyo']];
 function oraIn(tz){
-  const d = new Date();
-  return { ora: d.toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit', timeZone:tz }),
-    giorno: d.toLocaleDateString('it-IT', { weekday:'short', day:'numeric', month:'short', timeZone:tz }) };
+  const d = new Date(), p = {};
+  for(const x of new Intl.DateTimeFormat('it-IT', { hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23', timeZone:tz }).formatToParts(d)) p[x.type] = x.value;
+  return { h:p.hour, m:p.minute, s:p.second,
+    giorno: d.toLocaleDateString('it-IT', { weekday:'long', day:'numeric', month:'short', timeZone:tz }) };
 }
 function orologiHTML(){
   return `<div class="orologi">${FUSI.map(([k, nome, tz]) => { const o = oraIn(tz);
-    return `<div><span>${nome}</span><b id="ora-${k}" class="num">${o.ora}</b><i id="giorno-${k}">${o.giorno}</i></div>`; }).join('')}</div>`;
+    return `<div class="quadrante ${k}"><div class="q-nome">${nome}</div>
+      <div class="q-schermo"><span class="q-ora"><b id="oh-${k}">${o.h}</b><i class="q-punti">:</i><b id="om-${k}">${o.m}</b></span></div>
+      <div class="q-giorno" id="giorno-${k}">${o.giorno}</div></div>`; }).join('')}</div>`;
 }
 function aggiornaOrologi(){
   for(const [k, , tz] of FUSI){
-    const b = document.getElementById('ora-' + k), i = document.getElementById('giorno-' + k);
-    if(!b) return;
-    const o = oraIn(tz); b.textContent = o.ora; i.textContent = o.giorno;
+    const h = document.getElementById('oh-' + k);
+    if(!h) return;
+    const o = oraIn(tz);
+    h.textContent = o.h; document.getElementById('om-' + k).textContent = o.m;
+    document.getElementById('giorno-' + k).textContent = o.giorno;
   }
 }
-setInterval(aggiornaOrologi, 15000);
+setInterval(aggiornaOrologi, 1000);
 
 /* ---------- programma ---------- */
 function vistaProgramma(){
