@@ -369,7 +369,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '2.1.0';
+const VERSIONE = '2.1.1';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -612,8 +612,16 @@ let MAPPA = null, STRATO = null, ULTIMA_CITTA = null;
 function creaMappa(){
   if(!window.L) return false;
   MAPPA = L.map('mappa', { zoomControl:false, attributionControl:true, tap:true }).setView(CENTRI.tutte[0], CENTRI.tutte[1]);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    subdomains:'abcd', maxZoom:19, attribution:'&copy; OpenStreetMap &copy; CARTO' }).addTo(MAPPA);
+  // Sfondo Esri (gratuito, senza chiave, nomi anche in inglese); se non risponde passa a OpenStreetMap.
+  const esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom:19, maxNativeZoom:18, attribution:'&copy; Esri, OpenStreetMap' }).addTo(MAPPA);
+  let errori = 0, caricate = 0;
+  esri.on('tileload', () => caricate++);
+  esri.on('tileerror', () => {
+    if(++errori < 4 || caricate > 0 || !MAPPA.hasLayer(esri)) return;
+    MAPPA.removeLayer(esri);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'&copy; OpenStreetMap' }).addTo(MAPPA);
+  });
   L.control.zoom({ position:'bottomleft' }).addTo(MAPPA);
   for(const [t, nome, lat, lon, r] of QUARTIERI){
     const col = tappa(t).colore || '#0f8f9a';
