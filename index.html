@@ -40,7 +40,7 @@
   button{cursor:pointer;border:0;background:none;padding:0;text-align:inherit;transition:transform .12s ease}
   button:active{transform:scale(.98)}
   a{color:inherit}
-  svg{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+  svg:not(.leaflet-zoom-animated){width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
   @keyframes su{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .anim>*{animation:su .3s ease both}
   .wrap{max-width:680px;margin:0 auto;padding:0 18px}
@@ -385,7 +385,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '2.3.0';
+const VERSIONE = '2.4.0';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -634,6 +634,34 @@ const QUARTIERI = [
   ['tokyo','Ginza',35.6717,139.7650,550], ['tokyo','Akasaka',35.6736,139.7365,500], ['tokyo','Roppongi',35.6628,139.7314,550],
   ['tokyo','Odaiba',35.6270,139.7759,900]
 ];
+/* Confini indicativi dei quartieri turistici, disegnati lungo vie, fiumi e canali principali
+   (non sono confini amministrativi). Per Hakone restano i cerchi: sono villaggi sparsi. */
+const R = (n, s, w, e) => [[n, w], [n, e], [s, e], [s, w]];
+const CONFINI = {
+  'Dotonbori': R(34.6693, 34.6680, 135.4975, 135.5065),
+  'Namba': R(34.6679, 34.6600, 135.4960, 135.5065),
+  'Shinsaibashi': R(34.6765, 34.6694, 135.4960, 135.5065),
+  'Umeda': R(34.7080, 34.6990, 135.4910, 135.5040),
+  'Shinsekai': R(34.6548, 34.6500, 135.5040, 135.5090),
+  'Kitahama': R(34.6915, 34.6865, 135.5025, 135.5110),
+  'Gion': [[35.0090, 135.7722], [35.0090, 135.7790], [34.9990, 135.7790], [34.9990, 135.7735], [35.0037, 135.7722]],
+  'Higashiyama': [[35.0040, 135.7791], [35.0040, 135.7840], [34.9930, 135.7868], [34.9930, 135.7791]],
+  'Kawaramachi': R(35.0105, 34.9990, 135.7660, 135.7714),
+  'Karasuma': R(35.0105, 35.0000, 135.7560, 135.7659),
+  'Nijo': R(35.0185, 35.0106, 135.7440, 135.7530),
+  'Stazione di Kyoto': R(34.9900, 34.9830, 135.7530, 135.7650),
+  'Arashiyama': [[35.0215, 135.6650], [35.0215, 135.6810], [35.0080, 135.6820], [35.0080, 135.6700], [35.0130, 135.6650]],
+  'Shinjuku': [[35.6975, 139.6950], [35.6975, 139.7075], [35.6870, 139.7075], [35.6870, 139.6900], [35.6930, 139.6900]],
+  'Shibuya': R(35.6640, 35.6555, 139.6960, 139.7060),
+  'Harajuku': [[35.6735, 139.7015], [35.6700, 139.7125], [35.6650, 139.7105], [35.6680, 139.7010]],
+  'Asakusa': R(35.7180, 35.7080, 139.7905, 139.7985),
+  'Ueno': R(35.7200, 35.7070, 139.7700, 139.7800),
+  'Akihabara': R(35.7030, 35.6965, 139.7685, 139.7745),
+  'Ginza': R(35.6760, 35.6670, 139.7605, 139.7700),
+  'Akasaka': R(35.6775, 35.6700, 139.7320, 139.7400),
+  'Roppongi': R(35.6665, 35.6590, 139.7270, 139.7360),
+  'Odaiba': [[35.6335, 139.7690], [35.6320, 139.7820], [35.6215, 139.7840], [35.6225, 139.7700]]
+};
 let MAPPA = null, STRATO = null, ULTIMA_CITTA = null;
 function creaMappa(){
   if(!window.L) return false;
@@ -658,9 +686,10 @@ function creaMappa(){
   L.control.zoom({ position:'bottomleft' }).addTo(MAPPA);
   for(const [t, nome, lat, lon, r] of QUARTIERI){
     const col = tappa(t).colore || '#0f8f9a';
-    L.circle([lat, lon], { radius:r, color:col, weight:2, dashArray:'6 5', fillColor:col, fillOpacity:.13, className:'area-quartiere', interactive:false }).addTo(MAPPA)
-      .bindTooltip(nome, { permanent:true, direction:'center', className:'quartiere', interactive:false })
-      .getTooltip().getElement && 0;
+    const forma = CONFINI[nome]
+      ? L.polygon(CONFINI[nome], { color:col, weight:3, opacity:.85, fillColor:col, fillOpacity:.14, className:'area-quartiere', interactive:false })
+      : L.circle([lat, lon], { radius:r, color:col, weight:2, dashArray:'6 5', fillColor:col, fillOpacity:.13, className:'area-quartiere', interactive:false });
+    forma.addTo(MAPPA).bindTooltip(nome, { permanent:true, direction:'center', className:'quartiere', interactive:false });
   }
   STRATO = L.layerGroup().addTo(MAPPA);
   const zoomClasse = () => document.getElementById('mappa').classList.toggle('lontano', MAPPA.getZoom() < 11);
