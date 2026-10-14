@@ -40,7 +40,7 @@
   button{cursor:pointer;border:0;background:none;padding:0;text-align:inherit;transition:transform .12s ease}
   button:active{transform:scale(.98)}
   a{color:inherit}
-  svg:not(.leaflet-zoom-animated){width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+  svg:not(:where(.leaflet-zoom-animated)){width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
   @keyframes su{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .anim>*{animation:su .3s ease both}
   .wrap{max-width:680px;margin:0 auto;padding:0 18px}
@@ -233,6 +233,34 @@
   .quartiere::before{display:none}
   #mappa.lontano .quartiere,#mappa.lontano .area-quartiere,#mappa.medio .quartiere{display:none}
   #mappa.stretto .quartiere{font-size:11.5px;padding:1px 7px;border-width:1.5px}
+
+  /* animazione d'apertura: il tramonto dell'icona prende vita (circa 3,3 s, si salta con un tocco) */
+  #alba{position:fixed;inset:0;z-index:100;background:#070a24;cursor:pointer;animation:a-via .6s ease 2.9s forwards}
+  #alba svg{width:100%;height:100%;display:block;stroke:none}
+  #alba svg.a-ramo-svg{position:absolute;top:calc(env(safe-area-inset-top) - 6px);left:0;width:62vw;max-width:340px;height:auto;overflow:visible}
+  #alba .a-tramonto{opacity:0;animation:a-appare 1.8s ease-in-out .1s forwards}
+  #alba .a-stelle circle{animation:a-brilla 1.6s ease-in-out infinite alternate}
+  #alba .a-stelle{animation:a-stelle 2.4s ease forwards}
+  #alba .a-sole{transform:translateY(190px);animation:a-sorge 2.2s cubic-bezier(.2,.7,.25,1) .15s forwards}
+  #alba .a-alone{opacity:0;animation:a-appare 1.4s ease 1s forwards}
+  #alba .a-nuvole{opacity:0;animation:a-nuvole 2.4s ease .8s forwards}
+  #alba .a-ramo{transform-box:fill-box;transform-origin:0 0;animation:a-ondeggia 2.6s ease-in-out infinite alternate}
+  #alba .a-petalo{opacity:0;transform:translate(var(--x),-40px) scale(var(--s));animation:a-cade var(--t) linear var(--d) forwards}
+  #alba .a-titolo{position:absolute;left:0;right:0;top:24%;text-align:center;color:#fff;opacity:0;transform:translateY(12px);
+    animation:a-titolo .9s ease 1.3s forwards;text-shadow:0 2px 18px rgba(20,10,60,.45)}
+  #alba .a-titolo b{display:block;font-family:var(--disp);font-weight:800;font-size:2.4rem;letter-spacing:-.01em}
+  #alba .a-titolo span{display:block;margin-top:6px;font-size:1rem;font-weight:500;opacity:.9}
+  @keyframes a-appare{to{opacity:1}}
+  @keyframes a-brilla{from{opacity:.25}to{opacity:1}}
+  @keyframes a-stelle{0%{opacity:1}100%{opacity:.45}}
+  @keyframes a-sorge{to{transform:translateY(0)}}
+  @keyframes a-nuvole{0%{opacity:0;transform:translateX(-30px)}100%{opacity:1;transform:none}}
+  @keyframes a-ondeggia{from{transform:rotate(-1.2deg)}to{transform:rotate(1.4deg)}}
+  @keyframes a-cade{0%{opacity:0;transform:translate(var(--x),-40px) rotate(0) scale(var(--s))}
+    10%{opacity:.95}100%{opacity:.85;transform:translate(calc(var(--x) + var(--g)),1000px) rotate(540deg) scale(var(--s))}}
+  @keyframes a-titolo{to{opacity:1;transform:none}}
+  @keyframes a-via{to{opacity:0;visibility:hidden}}
+  @media (prefers-reduced-motion:reduce){ #alba{display:none} }
 </style>
 </head>
 <body>
@@ -384,7 +412,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '2.5.0';
+const VERSIONE = '2.5.1';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
