@@ -77,11 +77,9 @@
   .q-ora{white-space:nowrap;font-family:var(--disp);font-weight:800;font-size:clamp(1.8rem,10.4vw,2.6rem);line-height:1;letter-spacing:.01em;font-variant-numeric:tabular-nums;
     color:#8ff5ea;text-shadow:0 0 10px rgba(80,230,215,.55)}
   .q-ora b{font-weight:800}
-  .q-punti{font-style:normal;display:inline-block;margin:0 1px;animation:q-lampeggia 1s steps(1) infinite;position:relative;top:-.06em}
+  .q-punti{font-style:normal;display:inline-block;margin:0 1px;position:relative;top:-.06em}
   .quadrante.jp .q-ora{color:#ffc9a3;text-shadow:0 0 10px rgba(255,150,100,.5)}
   .q-giorno{margin-top:8px;color:var(--muted);font-size:.92rem;text-transform:capitalize}
-  @keyframes q-lampeggia{50%{opacity:.15}}
-  @media (prefers-reduced-motion:reduce){ .q-punti{animation:none} }
   .tappe{display:flex;gap:6px;margin-top:18px}
   .tappe div{flex:1 1 0;min-width:0;border-radius:10px;padding:8px 9px;background:color-mix(in srgb,var(--c) 13%,var(--surface))}
   .tappe b{display:block;font-size:.88rem;color:color-mix(in srgb,var(--c) 75%,var(--ink));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -385,7 +383,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '2.4.0';
+const VERSIONE = '2.4.1';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -824,7 +822,7 @@ function aggiornaOrologi(){
     document.getElementById('giorno-' + k).textContent = o.giorno;
   }
 }
-setInterval(aggiornaOrologi, 1000);
+setInterval(aggiornaOrologi, 5000);
 
 /* ---------- programma ---------- */
 function vistaProgramma(){
