@@ -29,6 +29,7 @@ Gli utenti modificano quasi tutto dall'app. Ricostruire il blocco cifrato serve 
 
 Raccolte: `viaggiatori`, `tappe`, `giorni` (con `voci` collegate ai `luoghi` tramite `l`), `alloggi`, `voli`, `luoghi`, `info`, più l'oggetto `viaggio`. Le sezioni Spese e Da fare sono state tolte su richiesta dell'utente: `todo`, `budget` e `spese` restano nei dati ma non si vedono.
 - Ogni elemento ha `id`, `agg` (ora dell'ultima modifica), `da` (chi l'ha fatta) e, se eliminato, `del: true`. Questi nomi sono riservati: non usarli come campi dei dati (i voli usano `origine` e `destinazione`).
+- I voli con scalo sono una tratta per record: `tipo` (andata, ritorno, interno) e `tratta` (1, 2, …). In Voli e hotel andata e ritorno sono una scheda con le tratte numerate sotto; ogni tratta apre il suo dettaglio con compagnia, numero e stato in tempo reale.
 - Nell'unione tra telefono, cloud e blocco cifrato vince, elemento per elemento, la modifica più recente (funzione `unisci`).
 
 ## Sincronizzazione
