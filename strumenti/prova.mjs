@@ -62,6 +62,14 @@ const box = await A.$eval('#mappa', e => { const r = e.getBoundingClientRect(); 
 await A.mouse.click(box.x, box.y); await A.waitForSelector('[name=nome]');
 await A.fill('[name=nome]', 'Caffè sul canale'); await A.selectOption('[name=cat]', 'mangiare'); await A.click('[data-a=salvaModulo]');
 await A.waitForTimeout(400); const segniDopo = await A.$$eval('.segno', e => e.length); await shot(A, '05d-nuovo-luogo');
+// elenco sotto la mappa, dettaglio e spostamento
+const righe = await A.$$eval('[data-a=vediLuogo]', e => e.map(x => x.textContent.trim().slice(0, 40)));
+await A.click('[data-a=vediLuogo]'); await A.waitForSelector('.foglio'); await A.waitForTimeout(500); await shot(A, '05e-dettaglio-luogo');
+const prima = await A.evaluate(() => vis('luoghi')[0].lat);
+await A.click('.foglio [data-a=spostaLuogo]'); await A.waitForSelector('#mappa-aiuto:not([hidden])'); await A.waitForTimeout(700);
+await A.mouse.click(box.x + 60, box.y + 40); await A.waitForSelector('.foglio'); await A.waitForTimeout(300);
+const dopo = await A.evaluate(() => vis('luoghi')[0].lat); await A.click('[data-a=chiudi]');
+console.log(JSON.stringify({ righe, spostato: prima !== dopo }));
 console.log(JSON.stringify({ segni, titoloHotel, segniDopo }));
 await A.click('[data-a=tab][data-v=viaggio]'); await A.waitForTimeout(400); await shot(A, '06-voli-hotel');
 await A.click('[data-a=dett][data-id=h03]'); await A.waitForSelector('.foglio');
@@ -87,10 +95,10 @@ const vistaB = await B.evaluate(() => ({ sheetChiuso: !S.sheet, cuoreB: trova('a
   hash: location.hash
 }));
 // B modifica, A riceve
-await B.evaluate(() => { const r = { ...trova('luoghi', 'l01') }; r.note = 'Andiamoci la prima sera'; salva('luoghi', r); });
+await B.evaluate(() => { const r = { ...vis('luoghi').find(l => l.nome === 'Caffè sul canale') }; r.note = 'Andiamoci la prima sera'; salva('luoghi', r); });
 await B.waitForTimeout(2500);
 await A.evaluate(() => syncOra(true)); await A.waitForTimeout(1500);
-const vistaA = await A.evaluate(() => ({ notaL01: trova('luoghi', 'l01').note, daChi: nomeDi(trova('luoghi', 'l01').da) }));
+const vistaA = await A.evaluate(() => { const l = vis('luoghi').find(l => l.nome === 'Caffè sul canale'); return { notaLuogo: l.note, daChi: nomeDi(l.da) }; });
 const cloud = [...db.values()][0];
 console.log(JSON.stringify({ vistaB, vistaA, cloudCifrato: !/Hakone|Ichinoyu/.test(cloud.dati), invito: invito.replace(/c=[^&]+/, 'c=…'), errori }, null, 1));
 await browser.close();
