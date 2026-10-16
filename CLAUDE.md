@@ -47,7 +47,7 @@ Usa Supabase via REST, di default sulla stessa tabella di CHO (`cho_sync`: `codi
 
 ## Spirito dell'app
 
-L'app è un **compagno di viaggio pratico**: dice dove andare oggi, apre la mappa, ricorda l'hotel della notte. Non deve essere assillante: niente scadenze in evidenza, contatori, avvisi rossi, promemoria o liste di cose da fare. Le schede sono tre: **Home** (conto alla rovescia, orologi Italia e Giappone come due display digitali affiancati, giorno per giorno), **Luoghi** e **Voli e hotel**. Le sezioni Spese e Da fare sono state tolte apposta. Prima di aggiungere qualcosa chiediti: serve davvero mentre si è in giro?
+L'app è un **compagno di viaggio pratico**: dice dove andare oggi, apre la mappa, ricorda l'hotel della notte. Non deve essere assillante: niente scadenze in evidenza, contatori, avvisi rossi, promemoria o liste di cose da fare. Le schede sono tre: **Home** (conto alla rovescia, orologi Italia e Giappone come due display digitali affiancati, giorno per giorno), **Map** (nel codice la scheda si chiama ancora `luoghi`) e **Voli e hotel**. Le sezioni Spese e Da fare sono state tolte apposta. Prima di aggiungere qualcosa chiediti: serve davvero mentre si è in giro?
 
 ## Stile grafico
 
@@ -56,10 +56,11 @@ Lo stile è **Odoo** (palette e font delle app O&M dell'utente), in versione **g
 - fondo `#eef4f9`, superfici bianche, bordi `#e4ebf3`, accento teal `#0f8f9a`;
 - titoli in **Archivo**, testo in **IBM Plex Sans** a 17px; niente etichette minuscole o in monospazio;
 - **poche informazioni per schermata**: gli elenchi mostrano icona, nome, una riga di contesto e al massimo un'azione; i dettagli stanno in una scheda che si apre al tocco (`foglioDettaglio`, `foglioGiornoVista`);
-- pulsanti alti almeno 46–48px, icone a linea SVG (oggetto `ICO`) in riquadri colorati con `color-mix`, niente emoji nell'interfaccia.
+- barra delle schede in basso compatta (icona e nome affiancati, alta 48px); pulsanti alti almeno 46–48px, icone a linea SVG (oggetto `ICO`) in riquadri colorati con `color-mix`, niente emoji nell'interfaccia.
 
-La scheda **Luoghi** ha la mappa fissa in alto (circa metà schermo) e sotto l'elenco **I nostri luoghi**. La mappa è Leaflet (in `vendor/leaflet`, sfondo chiaro Esri Light Gray con nomi in inglese, ripiego su Esri World Street Map e poi OpenStreetMap; CARTO ora chiede una chiave), sta in `#mappa-box` fuori da `#app` per non ricaricarla a ogni tocco, e ha sopra solo i filtri per città, che filtrano anche l'elenco.
-- I luoghi li inseriscono gli utenti: "+" sulla mappa o "Aggiungi" nell'elenco, poi si tocca il punto sulla mappa (campi nascosti `lat`/`lon`). Dalla scheda di dettaglio si modificano e si spostano ("Sposta sulla mappa"). Non ci sono suggerimenti precaricati e i quartieri sono stati tolti perché facevano confusione.
+La scheda **Map** (nel codice `luoghi`) è tutta mappa: Leaflet (in `vendor/leaflet`, sfondo chiaro Esri Light Gray con nomi in inglese, ripiego su Esri World Street Map e poi OpenStreetMap; CARTO ora chiede una chiave) a schermo pieno in `#mappa-box`, fuori da `#app` per non ricaricarla a ogni tocco. La barra in alto (`.topbar.sopra-mappa`) e i filtri per città galleggiano sopra la mappa.
+- L'elenco **I nostri luoghi** è un pannello in basso (`.cassetto`): chiuso mostra titolo, conteggio e filtri per tipo; trascinato in su (o toccando la maniglia) si apre fino a metà schermo. Contiene gli hotel scelti o prenotati e i luoghi; i filtri per città e per tipo (Tutti, Hotel e le categorie) valgono sia per l'elenco sia per la mappa.
+- I luoghi principali di ogni città sono precaricati con la posizione (circa 40, nel blocco cifrato); gli utenti ne aggiungono altri: "+" sulla mappa o "Aggiungi", poi si tocca il punto sulla mappa (campi nascosti `lat`/`lon`). Dalla scheda di dettaglio si modificano e si spostano ("Sposta sulla mappa"). I quartieri sono stati tolti perché facevano confusione.
 - Categorie (`CAT`): Da vedere, Ristorante, Caffè e dolci, Parchi e natura, Shopping, Altro; ognuna ha la sua icona, usata sia nell'elenco sia sulla mappa.
 - Sulla mappa ci sono solo gli hotel scelti o prenotati (colore della città, etichetta verde se prenotato) e i luoghi. I badge si adattano allo zoom: sotto 10 uno per città, sotto 14 compatti, poi col nome. Toccando un badge o una riga dell'elenco si apre la scheda di dettaglio.
 - Negli hotel non si mostrano i prezzi; nell'elenco Voli e hotel toccando l'hotel si apre il suo sito. Si vedono solo gli hotel scelti o prenotati (`hotelScelti`): le alternative restano nei dati con stato `proposta` ma non compaiono, e gli stati selezionabili sono solo Scelto e Prenotato.
