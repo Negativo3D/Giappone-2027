@@ -88,9 +88,14 @@
   .tappe span{font-size:.78rem;color:var(--muted);white-space:nowrap}
 
   /* righe grandi (elenco) */
+  #nuova{position:fixed;left:12px;right:12px;bottom:calc(60px + env(safe-area-inset-bottom));z-index:60;background:var(--ink);color:#fff;border-radius:18px;
+    padding:12px 12px 12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+  #nuova span{flex:1;line-height:1.3} #nuova small{color:#b9c6d6}
+  #nuova button{background:var(--teal);color:#fff;font-weight:700;border-radius:12px;padding:0 18px;min-height:46px}
   .viaggio-volo{background:var(--surface);border:1px solid var(--line);border-radius:18px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
   .vv-testa{display:flex;align-items:center;gap:14px;padding:14px 16px 10px}
   .vv-testa .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex:none;font-size:1.4rem;color:var(--c);background:color-mix(in srgb,var(--c) 14%,#fff)}
+  .viaggio-volo.ritorno .vv-testa svg{transform:scaleX(-1)}
   .vv-testa .nome{font-weight:700;font-size:1.08rem}
   .vv-testa .info{color:var(--muted);font-size:.95rem;margin-top:2px}
   .tratta{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:8px 16px 8px 30px;border-top:1px solid var(--line-2);text-align:left;background:none}
@@ -434,7 +439,7 @@
    file (blocco "seme") e nel cloud (Supabase, stessa tabella di CHO):
    senza il codice del viaggio nessuno li può leggere.
    ==================================================================== */
-const VERSIONE = '2.11.0';
+const VERSIONE = '2.12.0';
 const CFG_KEY = 'g27-config', DATI_KEY = 'g27-dati', SEME_KEY = 'g27-seme';
 const COLL = ['viaggiatori','tappe','giorni','alloggi','voli','luoghi','todo','budget','spese','info'];
 const SEME = (() => { try{ return JSON.parse(document.getElementById('seme').textContent); }catch(e){ return {}; } })();
@@ -847,7 +852,8 @@ function vistaProgramma(){
     <div class="hero"><div class="grande">${grande}</div><div class="sotto">${sotto}</div>${orologiHTML()}<div class="tappe">${tappe}</div></div>
     ${gOggi ? sezione('Oggi') + rigaGiorno(gOggi, giorni.indexOf(gOggi), oggi) : ''}
     ${sezione('Giorno per giorno', piu('nuovoGiorno', '', 'Aggiungi'))}
-    ${giorni.map((g, i) => rigaGiorno(g, i, oggi)).join('')}`;
+    ${giorni.map((g, i) => rigaGiorno(g, i, oggi)).join('')}
+    <p class="nota-pie" style="text-align:center;margin-top:18px">Versione ${VERSIONE}</p>`;
 }
 function rigaGiorno(g, i, oggi){
   const t = tappa(g.tappa), dd = new Date(g.data + 'T12:00:00');
@@ -916,7 +922,7 @@ function gruppiVoli(voli){
     const tr = voli.filter(v => v.tipo === tipo).sort(ordineTratte);
     if(!tr.length) continue;
     const primo = tr[0], ultimo = tr[tr.length - 1], scali = tr.slice(1).map(v => corto(v.origine));
-    html.push(`<div class="viaggio-volo" style="--c:${col}">
+    html.push(`<div class="viaggio-volo ${tipo}" style="--c:${col}">
       <div class="vv-testa"><div class="ic">${ic('aereo')}</div>
         <div class="testo"><div class="nome">${nome} · ${fmtD(primo.data, { day:'numeric', month:'long' })}</div>
           <div class="info">${esc(corto(primo.origine))} → ${esc(corto(ultimo.destinazione))}${scali.length ? ' · scalo a ' + esc(scali.join(', ')) : ''}</div></div></div>
@@ -1188,6 +1194,7 @@ const A = {
   spostaLuogo(d){ S.sposta = d.id; S.puntoNuovo = true; S.sheet = null; S.cassetto = false; window.scrollTo({ top:0, behavior:'smooth' }); render(); },
   tipo(d){ S.cat = d.v; render(); },
   cassetto(){ S.cassetto = !S.cassetto; render(); },
+  aggiornaApp(){ aggiornaApp(); },
   vediLuogo(d){
     const k = d.k || 'luoghi', r = trova(k, d.id);
     if(r && conPos(r) && MAPPA){ MAPPA.flyTo([r.lat, r.lon], Math.max(MAPPA.getZoom(), 15), { duration:.6 }); window.scrollTo({ top:0, behavior:'smooth' }); }
@@ -1348,7 +1355,33 @@ setInterval(() => { if(document.visibilityState === 'visible' && cfg.codice && D
   render();
   if(cfg.codice && D) syncOra();
   if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  setTimeout(controllaVersione, 2500);
+  setInterval(controllaVersione, 10 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') controllaVersione(); });
 })();
+
+/* ---------- nuove versioni: si legge VERSIONE dalla pagina pubblicata, saltando ogni cache ---------- */
+async function controllaVersione(){
+  if(!navigator.onLine) return;
+  try{
+    const t = await (await fetch('index.html?v=' + Date.now(), { cache:'no-store' })).text();
+    const m = t.match(/const VERSIONE = '([^']+)'/);
+    if(m && m[1] !== VERSIONE) avvisoVersione(m[1]);
+  }catch(e){}
+}
+function avvisoVersione(v){
+  let el = document.getElementById('nuova');
+  if(!el){ el = document.createElement('div'); el.id = 'nuova'; document.body.appendChild(el); }
+  el.innerHTML = `<span>È disponibile la versione <b>${esc(v)}</b><br><small>Ora hai la ${esc(VERSIONE)}</small></span><button data-a="aggiornaApp">Aggiorna</button>`;
+}
+async function aggiornaApp(){
+  const el = document.getElementById('nuova'); if(el) el.querySelector('button').textContent = 'Un attimo…';
+  try{
+    if('serviceWorker' in navigator){ const r = await navigator.serviceWorker.getRegistration(); if(r) await r.update(); }
+    if(window.caches) for(const k of await caches.keys()) await caches.delete(k);
+  }catch(e){}
+  location.replace(location.pathname + '?v=' + Date.now() + location.hash);
+}
 </script>
 </body>
 </html>

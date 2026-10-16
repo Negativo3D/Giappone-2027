@@ -42,7 +42,7 @@ Usa Supabase via REST, di default sulla stessa tabella di CHO (`cho_sync`: `codi
 ## Come lavorare
 
 - Ogni modifica in un branch `claude/...` con una PR verso `main`, come in CHO.
-- Quando cambia l'app, aumenta `VERSIONE` in `index.html` e il nome di `CACHE` in `sw.js`.
+- Quando cambia l'app, aumenta `VERSIONE` in `index.html` e il nome di `CACHE` in `sw.js`. L'app legge `VERSIONE` dalla pagina pubblicata (`controllaVersione`, all'apertura, al ritorno in primo piano e ogni 10 minuti) e, se è diversa, mostra l'avviso "È disponibile la versione…" con il pulsante Aggiorna; la versione in uso è scritta in fondo alla Home e nelle Impostazioni. Il service worker chiede sempre al server con `cache:'no-cache'`, perché GitHub Pages tiene le pagine in cache 10 minuti.
 - Provala su un telefono simulato (Playwright, viewport iPhone) servendo la cartella con `python3 -m http.server`.
 - Per la sincronizzazione, intercetta le chiamate a Supabase con un finto server in memoria, come in `strumenti/prova.mjs`.
 
