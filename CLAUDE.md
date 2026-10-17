@@ -66,7 +66,7 @@ La scheda **Map** (nel codice `luoghi`) è tutta mappa: Leaflet (in `vendor/leaf
 - Sulla mappa ci sono solo gli hotel scelti o prenotati (colore della città, etichetta verde se prenotato) e i luoghi. I badge si adattano allo zoom: sotto 10 uno per città, sotto 14 compatti, poi col nome. Toccando un badge o una riga dell'elenco si apre la scheda di dettaglio.
 - Negli hotel non si mostrano i prezzi; nell'elenco Voli e hotel toccando l'hotel si apre il suo sito. Si vedono solo gli hotel scelti o prenotati (`hotelScelti`): le alternative restano nei dati con stato `proposta` ma non compaiono, e gli stati selezionabili sono solo Scelto e Prenotato.
 
-Il programma giorno per giorno è volutamente vuoto, tranne i giorni di trasferimento (arrivo, Osaka→Kyoto, Kyoto→Tokyo, partenza) con treni e orari indicativi.
+Il programma giorno per giorno è volutamente vuoto, tranne i giorni di trasferimento (arrivo, Osaka→Kyoto, Kyoto→Hakone, Hakone→Tokyo, partenza) con treni e orari indicativi.
 
 **Animazione d'apertura** (`#alba`, circa 3,3 secondi, si salta con un tocco, disattivata con Riduci movimento): è la scena dell'icona che prende vita. Il cielo passa dalla notte al tramonto, il sole sorge dietro il Fuji, il ramo di ciliegio ondeggia, cadono i petali e compare il titolo. La scena si adatta tagliando la parte alta, quindi il ramo sta in un SVG a parte agganciato in alto a sinistra. La precedente animazione con la samurai è stata bocciata: non usare personaggi né spezzoni di film.
 
