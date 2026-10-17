@@ -64,7 +64,7 @@ La scheda **Map** (nel codice `luoghi`) è tutta mappa: Leaflet (in `vendor/leaf
 - I luoghi principali di ogni città sono precaricati con la posizione (circa 40, nel blocco cifrato); gli utenti ne aggiungono altri: "+" sulla mappa o "Aggiungi", poi si tocca il punto sulla mappa (campi nascosti `lat`/`lon`). Dalla scheda di dettaglio si modificano e si spostano ("Sposta sulla mappa"). I quartieri sono stati tolti perché facevano confusione.
 - Categorie (`CAT`): Da vedere, Ristorante, Caffè e dolci, Parchi e natura, Shopping, Altro; ognuna ha la sua icona, usata sia nell'elenco sia sulla mappa.
 - Sulla mappa ci sono solo gli hotel scelti o prenotati (colore della città, etichetta verde se prenotato) e i luoghi. I badge si adattano allo zoom: sotto 10 uno per città, sotto 14 compatti, poi col nome. Toccando un badge o una riga dell'elenco si apre la scheda di dettaglio.
-- Negli hotel non si mostrano i prezzi; nell'elenco Voli e hotel toccando l'hotel si apre il suo sito. Si vedono solo gli hotel scelti o prenotati (`hotelScelti`): le alternative restano nei dati con stato `proposta` ma non compaiono, e gli stati selezionabili sono solo Scelto e Prenotato.
+- Negli hotel non si mostrano i prezzi; nell'elenco Voli e hotel toccando l'hotel si apre il suo sito. Si vedono solo gli hotel scelti o prenotati (`hotelScelti`): le alternative restano nei dati con stato `proposta` ma non compaiono. Lo stato non si cambia dall’app: si aggiorna nel blocco cifrato su richiesta dell’utente (Osaka, Kyoto e Hakone sono prenotati).
 
 Il programma giorno per giorno è volutamente vuoto, tranne i giorni di trasferimento (arrivo, Osaka→Kyoto, Kyoto→Hakone, Hakone→Tokyo, partenza) con treni e orari indicativi.
 
