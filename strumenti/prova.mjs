@@ -76,7 +76,6 @@ console.log(JSON.stringify({ righe, spostato: prima !== dopo }));
 console.log(JSON.stringify({ segni, titoloHotel, segniDopo }));
 await A.click('[data-a=tab][data-v=viaggio]'); await A.waitForTimeout(400); await shot(A, '06-voli-hotel');
 await A.click('[data-a=dett][data-id=h03]'); await A.waitForSelector('.foglio');
-await A.click('[data-a=statoH][data-id=h03][data-v=prenotato]'); await A.waitForTimeout(300);
 await shot(A, '07-hotel');
 await A.click('[data-a=chiudi]');
 await A.waitForTimeout(2500); // sincronizzazione automatica
